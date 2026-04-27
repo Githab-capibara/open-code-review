@@ -7,13 +7,13 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/argus-review/argus/internal/agent"
-	"github.com/argus-review/argus/internal/config/rules"
-	"github.com/argus-review/argus/internal/config/template"
-	"github.com/argus-review/argus/internal/config/toolsconfig"
-	"github.com/argus-review/argus/internal/llm"
-	"github.com/argus-review/argus/internal/telemetry"
-	"github.com/argus-review/argus/internal/tool"
+	"github.com/open-code-review/open-code-review/internal/agent"
+	"github.com/open-code-review/open-code-review/internal/config/rules"
+	"github.com/open-code-review/open-code-review/internal/config/template"
+	"github.com/open-code-review/open-code-review/internal/config/toolsconfig"
+	"github.com/open-code-review/open-code-review/internal/llm"
+	"github.com/open-code-review/open-code-review/internal/telemetry"
+	"github.com/open-code-review/open-code-review/internal/tool"
 )
 
 func runReview(args []string) error {
@@ -62,7 +62,7 @@ func runReview(args []string) error {
 		return fmt.Errorf("load app config: %w", err)
 	}
 	if cfg == nil || cfg.Llm.URL == "" || cfg.Llm.AuthToken == "" {
-		return fmt.Errorf("llm.url and llm.auth_token are required in $HOME/.argus/config.json")
+		return fmt.Errorf("llm.url and llm.auth_token are required in $HOME/.open-code-review/config.json")
 	}
 	model := cfg.Llm.Model
 	tpl.ApplyLanguage(cfg.Language)

@@ -1,4 +1,4 @@
-// Argus is an AI-powered code review CLI tool.
+// OpenCodeReview is an AI-powered code review CLI tool.
 // It reads git diffs, sends them to a configurable LLM service, and generates review comments.
 package main
 
@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/argus-review/argus/internal/telemetry"
+	"github.com/open-code-review/open-code-review/internal/telemetry"
 )
 
 func main() {
@@ -50,15 +50,15 @@ func dispatch() error {
 		printTopLevelUsage()
 		return nil
 	default:
-		return fmt.Errorf("unknown command: %s\nRun 'argus' for usage", args[0])
+		return fmt.Errorf("unknown command: %s\nRun 'ocr' for usage", args[0])
 	}
 }
 
 func printTopLevelUsage() {
-	fmt.Println(`Argus - Code Review Agent CLI
+	fmt.Println(`OpenCodeReview - AI-Powered Code Review CLI
 
 Usage:
-  argus [command]
+  ocr [command]
 
 Commands:
   review, r    Start a code review
@@ -67,13 +67,13 @@ Commands:
   version      Show version information
 
 Examples:
-  argus review --from dev --to master      Review diff range
-  argus review --commit abc123             Review a single commit
-  argus config set llm.model opus-4-6      Set a config value
-  argus llm test                           Test LLM connectivity
-  argus version                            Show version info
+  ocr review --from dev --to master        Review diff range
+  ocr review --commit abc123               Review a single commit
+  ocr config set llm.model opus-4-6        Set a config value
+  ocr llm test                             Test LLM connectivity
+  ocr version                              Show version info
 
-Use "argus review -h" for more information about review.
-Use "argus config" for more information about config.
-Use "argus llm" for more information about LLM utilities.`)
+Use "ocr review -h" for more information about review.
+Use "ocr config" for more information about config.
+Use "ocr llm" for more information about LLM utilities.`)
 }

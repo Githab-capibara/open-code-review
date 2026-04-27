@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/argus-review/argus/internal/config/testconnection"
-	"github.com/argus-review/argus/internal/llm"
+	"github.com/open-code-review/open-code-review/internal/config/testconnection"
+	"github.com/open-code-review/open-code-review/internal/llm"
 )
 
 func runLLM(args []string) error {
@@ -18,7 +18,7 @@ func runLLM(args []string) error {
 	case "test":
 		return runLLMTest()
 	default:
-		return fmt.Errorf("unknown llm sub-command: %s\nRun 'argus llm' for usage", args[0])
+		return fmt.Errorf("unknown llm sub-command: %s\nRun 'ocr llm' for usage", args[0])
 	}
 }
 
@@ -72,11 +72,11 @@ func printLLMUsage() {
 	fmt.Println(`LLM utility commands.
 
 Usage:
-  argus llm <sub-command>
+  ocr llm <sub-command>
 
 Sub-commands:
   test         Send a test conversation to the configured LLM model
 
 Examples:
-  argus llm test                 Verify LLM connectivity and configuration`)
+  ocr llm test                   Verify LLM connectivity and configuration`)
 }

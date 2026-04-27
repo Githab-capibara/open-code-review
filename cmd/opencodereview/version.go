@@ -13,7 +13,7 @@ var (
 )
 
 func printVersion() {
-	fmt.Printf("argus %s", Version)
+	fmt.Printf("opencodereview %s", Version)
 	if GitCommit != "" {
 		fmt.Printf(" (%s)", GitCommit)
 	}

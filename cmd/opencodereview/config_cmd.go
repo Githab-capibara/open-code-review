@@ -8,13 +8,13 @@ import (
 	"strconv"
 )
 
-// Default config file location: ~/.argus/config.json
+// Default config file location: ~/.open-code-review/config.json
 func defaultConfigPath() string {
 	home, err := os.UserHomeDir()
 	if err != nil {
-		return "argus.json"
+		return "open-code-review.json"
 	}
-	return filepath.Join(home, ".argus", "config.json")
+	return filepath.Join(home, ".open-code-review", "config.json")
 }
 
 func runConfig(args []string) error {
@@ -66,7 +66,7 @@ func runConfigSet(key, value string) error {
 	return nil
 }
 
-// Config represents the user-level configuration file (~/.argus/config.json).
+// Config represents the user-level configuration file (~/.open-code-review/config.json).
 type Config struct {
 	Llm       LlmConfig         `json:"llm,omitempty"`
 	Language  string            `json:"language,omitempty"` // Output language, defaults to Chinese when empty

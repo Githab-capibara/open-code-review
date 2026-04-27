@@ -8,21 +8,21 @@ import (
 
 // --- custom flag set that supports short flags (-c, -f etc.) ---
 
-type argusFlagSet struct {
+type ocrFlagSet struct {
 	fs       *flag.FlagSet
 	shortMap map[string]string // maps short key "c" -> full name "commit"
 	showHelp bool
 }
 
-func newArgusFlagSet(name string) *argusFlagSet {
-	return &argusFlagSet{
+func newOcrFlagSet(name string) *ocrFlagSet {
+	return &ocrFlagSet{
 		fs:       flag.NewFlagSet(name, flag.ContinueOnError),
 		shortMap: make(map[string]string),
 	}
 }
 
 // StringVarP registers --name with optional short form -s.
-func (a *argusFlagSet) StringVarP(p *string, name, shorthand string, value, usage string) {
+func (a *ocrFlagSet) StringVarP(p *string, name, shorthand string, value, usage string) {
 	suffix := ""
 	if shorthand != "" {
 		a.shortMap[shorthand] = name
@@ -32,7 +32,7 @@ func (a *argusFlagSet) StringVarP(p *string, name, shorthand string, value, usag
 }
 
 // BoolVarP registers --name with optional short form -s.
-func (a *argusFlagSet) BoolVarP(p *bool, name, shorthand string, value bool, usage string) {
+func (a *ocrFlagSet) BoolVarP(p *bool, name, shorthand string, value bool, usage string) {
 	suffix := ""
 	if shorthand != "" {
 		a.shortMap[shorthand] = name
@@ -41,27 +41,27 @@ func (a *argusFlagSet) BoolVarP(p *bool, name, shorthand string, value bool, usa
 	a.fs.BoolVar(p, name, value, usage+suffix)
 }
 
-func (a *argusFlagSet) StringVar(p *string, name string, value string, usage string) {
+func (a *ocrFlagSet) StringVar(p *string, name string, value string, usage string) {
 	a.fs.StringVar(p, name, value, usage)
 }
 
-func (a *argusFlagSet) BoolVar(p *bool, name string, value bool, usage string) {
+func (a *ocrFlagSet) BoolVar(p *bool, name string, value bool, usage string) {
 	a.fs.BoolVar(p, name, value, usage)
 }
 
-func (a *argusFlagSet) IntVar(p *int, name string, value int, usage string) {
+func (a *ocrFlagSet) IntVar(p *int, name string, value int, usage string) {
 	a.fs.IntVar(p, name, value, usage)
 }
 
-func (a *argusFlagSet) DurationVar(p *time.Duration, name string, value time.Duration, usage string) {
+func (a *ocrFlagSet) DurationVar(p *time.Duration, name string, value time.Duration, usage string) {
 	a.fs.DurationVar(p, name, value, usage)
 }
 
-func (a *argusFlagSet) PrintDefaults() {
+func (a *ocrFlagSet) PrintDefaults() {
 	a.fs.PrintDefaults()
 }
 
-func (a *argusFlagSet) Parse(arguments []string) error {
+func (a *ocrFlagSet) Parse(arguments []string) error {
 	expanded := expandShortFlags(arguments, a.shortMap)
 
 	for _, arg := range expanded {
@@ -107,7 +107,7 @@ type reviewOptions struct {
 }
 
 func parseReviewFlags(args []string) (reviewOptions, error) {
-	a := newArgusFlagSet("argus review")
+	a := newOcrFlagSet("ocr review")
 
 	opts := reviewOptions{}
 
@@ -149,26 +149,26 @@ func parseReviewFlags(args []string) (reviewOptions, error) {
 }
 
 func printReviewUsage() {
-	fmt.Println(`Argus - Code Review Agent CLI
+	fmt.Println(`OpenCodeReview - AI-Powered Code Review CLI
 
 Usage:
-  argus review [flags]
-  argus r [flags]              (alias)
+  ocr review [flags]
+  ocr r [flags]                (alias)
 
 Examples:
   # Review staged + unstaged + untracked changes in current workspace
-  argus review
+  ocr review
 
   # Review a branch against its base (merge-base mode)
-  argus review --from master --to dev-ref
+  ocr review --from master --to dev-ref
 
   # Review a specific commit
-  argus review --commit abc123
-  argus review -c abc123
+  ocr review --commit abc123
+  ocr review -c abc123
 
   # Output JSON format
-  argus review --format json
-  argus review -f json
+  ocr review --format json
+  ocr review -f json
 
 Flags:`)
 	fs := flag.NewFlagSet("print", flag.ContinueOnError)
@@ -193,14 +193,14 @@ type configAction struct {
 
 func parseConfigArgs(args []string) (configAction, error) {
 	if len(args) == 0 {
-		return configAction{}, fmt.Errorf("usage: argus config set <key> <value>\ne.g., argus config set llm.provider idealab")
+		return configAction{}, fmt.Errorf("usage: ocr config set <key> <value>\ne.g., ocr config set llm.provider idealab")
 	}
 
 	subCmd := args[0]
 	switch subCmd {
 	case "set":
 		if len(args) < 3 {
-			return configAction{}, fmt.Errorf("usage: argus config set <key> <value>\ne.g., argus config set llm.model claude-opus-4-6")
+			return configAction{}, fmt.Errorf("usage: ocr config set <key> <value>\ne.g., ocr config set llm.model claude-opus-4-6")
 		}
 		return configAction{
 			subCmd: "set",
@@ -216,13 +216,13 @@ func printConfigUsage() {
 	fmt.Println(`Configuration management.
 
 Usage:
-  argus config set <key> <value>
+  ocr config set <key> <value>
 
 Examples:
-  argus config set llm.provider idealab
-  argus config set llm.url https://xx/v1/openai/chat/completions
-  argus config set llm.auth_token xxxxxxxxxx
-  argus config set llm.model claude-opus-4-6
+  ocr config set llm.provider idealab
+  ocr config set llm.url https://xx/v1/openai/chat/completions
+  ocr config set llm.auth_token xxxxxxxxxx
+  ocr config set llm.model claude-opus-4-6
 
 Supported keys: llm.provider, llm.url, llm.auth_token, llm.model`)
 }
