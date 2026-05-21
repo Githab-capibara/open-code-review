@@ -57,7 +57,7 @@ build-all: build-linux-amd64 build-linux-arm64 build-darwin-amd64 build-darwin-a
 
 # Generate SHA256 checksums for all release binaries
 sha256sum: build-all
-	cd $(DIST_DIR) && shasum -a 256 $(BINARY_NAME)-$(VERSION)-* | sort > sha256sum-$(VERSION).txt
+	cd $(DIST_DIR) && shasum -a 256 $(BINARY_NAME)-$(VERSION)-* | sort > sha256sum.txt
 
 # Full release: clean → build all platforms → checksums
 dist: clean build-all sha256sum
