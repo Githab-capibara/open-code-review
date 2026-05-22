@@ -186,10 +186,11 @@ type FunctionDef struct {
 
 // ClientConfig holds configuration for connecting to an LLM service.
 type ClientConfig struct {
-	URL     string        // Full API endpoint URL
-	APIKey  string        // Bearer token / API key
-	Model   string        // Default model override
-	Timeout time.Duration // Request timeout
+	URL       string         // Full API endpoint URL
+	APIKey    string         // Bearer token / API key
+	Model     string         // Default model override
+	Timeout   time.Duration  // Request timeout
+	ExtraBody map[string]any // Vendor-specific fields merged into every request body
 }
 
 // --- Factory ---
@@ -198,9 +199,10 @@ type ClientConfig struct {
 // protocol: "anthropic" -> AnthropicClient, anything else -> OpenAIClient.
 func NewLLMClient(ep ResolvedEndpoint) LLMClient {
 	cfg := ClientConfig{
-		URL:    ep.URL,
-		APIKey: ep.Token,
-		Model:  ep.Model,
+		URL:       ep.URL,
+		APIKey:    ep.Token,
+		Model:     ep.Model,
+		ExtraBody: ep.ExtraBody,
 	}
 	if ep.Protocol == "anthropic" {
 		return NewAnthropicClient(cfg)
@@ -362,6 +364,9 @@ func (c *OpenAIClient) StreamCompletion(req ChatRequest, cb func(chunk []byte) e
 		b, _ := json.Marshal(req)
 		json.Unmarshal(b, &body)
 		body["model"] = model
+		for k, v := range c.cfg.ExtraBody {
+			body[k] = v
+		}
 
 		payload, _ := json.Marshal(body)
 		httpReq, err := http.NewRequest(http.MethodPost, c.cfg.URL, bytes.NewReader(payload))
@@ -417,7 +422,10 @@ func (c *OpenAIClient) doRequestCtx(ctx context.Context, model string, req ChatR
 		model = c.cfg.Model
 	}
 	req.Model = model
-	payload, _ := json.Marshal(req)
+	payload, err := mergeExtraBody(req, c.cfg.ExtraBody)
+	if err != nil {
+		return nil, fmt.Errorf("marshal request body: %w", err)
+	}
 	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, c.cfg.URL, bytes.NewReader(payload))
 	if err != nil {
 		return nil, fmt.Errorf("create request: %w", err)
@@ -527,7 +535,7 @@ func (c *AnthropicClient) StreamCompletion(req ChatRequest, cb func(chunk []byte
 		body := c.buildRequestBody(model, req)
 		body.Stream = true
 
-		payload, err := json.Marshal(body)
+		payload, err := mergeExtraBody(body, c.cfg.ExtraBody)
 		if err != nil {
 			return fmt.Errorf("marshal request body: %w", err)
 		}
@@ -628,7 +636,7 @@ func (c *AnthropicClient) doRequestCtx(ctx context.Context, model string, req Ch
 	}
 
 	body := c.buildRequestBody(model, req)
-	payload, err := json.Marshal(body)
+	payload, err := mergeExtraBody(body, c.cfg.ExtraBody)
 	if err != nil {
 		return nil, fmt.Errorf("marshal request body: %w", err)
 	}
@@ -772,6 +780,24 @@ func (c *AnthropicClient) buildRequestBody(model string, req ChatRequest) anthro
 		Stream:      false,
 		Temperature: req.Temperature,
 	}
+}
+
+func mergeExtraBody(base any, extraBody map[string]any) ([]byte, error) {
+	if len(extraBody) == 0 {
+		return json.Marshal(base)
+	}
+	b, err := json.Marshal(base)
+	if err != nil {
+		return nil, err
+	}
+	var m map[string]any
+	if err := json.Unmarshal(b, &m); err != nil {
+		return nil, err
+	}
+	for k, v := range extraBody {
+		m[k] = v
+	}
+	return json.Marshal(m)
 }
 
 // parseResponse converts Anthropic JSON response into ChatResponse.

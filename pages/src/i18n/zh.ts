@@ -112,6 +112,7 @@ export const zh: TranslationKeys = {
   'docs.configKeyToken': 'API 密钥',
   'docs.configKeyModel': '模型名称',
   'docs.configKeyAnthropic': '是否使用 Anthropic SDK',
+  'docs.configKeyExtraBody': '厂商特定的请求体字段（JSON）',
   'docs.configKeyLanguage': '输出语言',
   'docs.configKeyTelemetry': '数据上报',
   'docs.configVerify': '验证配置',

@@ -112,6 +112,7 @@ export const en: TranslationKeys = {
   'docs.configKeyToken': 'API Key',
   'docs.configKeyModel': 'Model Name',
   'docs.configKeyAnthropic': 'Use Anthropic SDK',
+  'docs.configKeyExtraBody': 'Vendor-specific request body fields (JSON)',
   'docs.configKeyLanguage': 'Output Language',
   'docs.configKeyTelemetry': 'Telemetry',
   'docs.configVerify': 'Verify Configuration',

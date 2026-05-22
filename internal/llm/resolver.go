@@ -11,11 +11,12 @@ import (
 
 // ResolvedEndpoint holds the resolved LLM endpoint configuration.
 type ResolvedEndpoint struct {
-	URL      string
-	Token    string
-	Model    string
-	Protocol string // "anthropic" or "openai"
-	Source   string // human-readable config source label
+	URL       string
+	Token     string
+	Model     string
+	Protocol  string         // "anthropic" or "openai"
+	Source    string         // human-readable config source label
+	ExtraBody map[string]any // vendor-specific request body fields
 }
 
 // Environment variable names for OCR-specific configuration.
@@ -86,10 +87,11 @@ func tryOCREnv() (ResolvedEndpoint, bool, error) {
 
 // llmFileConfig represents the llm section in config.json.
 type llmFileConfig struct {
-	URL          string `json:"url,omitempty"`
-	AuthToken    string `json:"auth_token,omitempty"`
-	Model        string `json:"model,omitempty"`
-	UseAnthropic *bool  `json:"use_anthropic,omitempty"` // pointer to distinguish unset from false
+	URL          string         `json:"url,omitempty"`
+	AuthToken    string         `json:"auth_token,omitempty"`
+	Model        string         `json:"model,omitempty"`
+	UseAnthropic *bool          `json:"use_anthropic,omitempty"` // pointer to distinguish unset from false
+	ExtraBody    map[string]any `json:"extra_body,omitempty"`
 }
 
 type configFile struct {
@@ -125,7 +127,7 @@ func tryOCRConfig(path string) (ResolvedEndpoint, bool, error) {
 		protocol = "openai"
 	}
 
-	return ResolvedEndpoint{URL: cfg.Llm.URL, Token: cfg.Llm.AuthToken, Model: cfg.Llm.Model, Protocol: protocol, Source: "OCR config file"}, true, nil
+	return ResolvedEndpoint{URL: cfg.Llm.URL, Token: cfg.Llm.AuthToken, Model: cfg.Llm.Model, Protocol: protocol, Source: "OCR config file", ExtraBody: cfg.Llm.ExtraBody}, true, nil
 }
 
 // tryCCEnv reads Claude Code environment variables.

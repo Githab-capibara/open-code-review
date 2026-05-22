@@ -247,6 +247,7 @@ const DocsPage: React.FC = () => {
                 { key: 'llm.auth_token', descKey: 'docs.configKeyToken' },
                 { key: 'llm.model', descKey: 'docs.configKeyModel' },
                 { key: 'llm.use_anthropic', descKey: 'docs.configKeyAnthropic' },
+                { key: 'llm.extra_body', descKey: 'docs.configKeyExtraBody' },
                 { key: 'language', descKey: 'docs.configKeyLanguage' },
                 { key: 'telemetry.enabled', descKey: 'docs.configKeyTelemetry' },
               ].map(({ key, descKey }) => (

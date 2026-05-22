@@ -74,10 +74,11 @@ type Config struct {
 }
 
 type LlmConfig struct {
-	URL          string `json:"url,omitempty"`
-	AuthToken    string `json:"auth_token,omitempty"`
-	Model        string `json:"model,omitempty"`
-	UseAnthropic *bool  `json:"use_anthropic,omitempty"` // nil = default true; false = OpenAI protocol
+	URL          string         `json:"url,omitempty"`
+	AuthToken    string         `json:"auth_token,omitempty"`
+	Model        string         `json:"model,omitempty"`
+	UseAnthropic *bool          `json:"use_anthropic,omitempty"` // nil = default true; false = OpenAI protocol
+	ExtraBody    map[string]any `json:"extra_body,omitempty"`
 }
 
 // TelemetryConfig holds telemetry-specific settings.
@@ -155,8 +156,14 @@ func setConfigValue(cfg *Config, key, value string) error {
 		}
 		cfg.ensureTelemetry()
 		cfg.Telemetry.ContentLog = b
+	case "llm.extra_body", "llm.ExtraBody":
+		var m map[string]any
+		if err := json.Unmarshal([]byte(value), &m); err != nil {
+			return fmt.Errorf("invalid JSON for llm.extra_body: %w", err)
+		}
+		cfg.Llm.ExtraBody = m
 	default:
-		return fmt.Errorf("unknown config key: %s\nSupported keys: llm.url, llm.auth_token, llm.model, llm.use_anthropic, language, telemetry.enabled, telemetry.exporter, telemetry.otlp_endpoint, telemetry.content_logging", key)
+		return fmt.Errorf("unknown config key: %s\nSupported keys: llm.url, llm.auth_token, llm.model, llm.use_anthropic, llm.extra_body, language, telemetry.enabled, telemetry.exporter, telemetry.otlp_endpoint, telemetry.content_logging", key)
 	}
 	return nil
 }
