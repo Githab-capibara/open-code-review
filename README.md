@@ -22,13 +22,35 @@ npm install -g @alibaba-group/open-code-review
 
 After installation, the `ocr` command is available globally.
 
+### From GitHub Release
+
+Download the latest binary from [GitHub Releases](https://github.com/alibaba/open-code-review/releases):
+
+```bash
+# macOS (Apple Silicon)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-darwin-arm64
+chmod +x ocr && sudo mv ocr /usr/local/bin/ocr
+
+# macOS (Intel)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-darwin-amd64
+chmod +x ocr && sudo mv ocr /usr/local/bin/ocr
+
+# Linux (x86_64)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-linux-amd64
+chmod +x ocr && sudo mv ocr /usr/local/bin/ocr
+
+# Linux (ARM64)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-linux-arm64
+chmod +x ocr && sudo mv ocr /usr/local/bin/ocr
+```
+
 ### From Source
 
 ```bash
 git clone https://github.com/alibaba/open-code-review.git
 cd open-code-review
 make build
-sudo cp dist/ocr-*/ocr /usr/local/bin/ocr
+sudo cp dist/opencodereview /usr/local/bin/ocr
 ```
 
 ## Quick Start

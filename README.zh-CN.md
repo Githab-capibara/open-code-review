@@ -22,13 +22,35 @@ npm install -g @alibaba-group/open-code-review
 
 安装后，`ocr` 命令即可全局使用。
 
+### 从 GitHub Release 下载
+
+从 [GitHub Releases](https://github.com/alibaba/open-code-review/releases) 下载最新二进制文件：
+
+```bash
+# macOS (Apple Silicon)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-darwin-arm64
+chmod +x ocr && sudo mv ocr /usr/local/bin/ocr
+
+# macOS (Intel)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-darwin-amd64
+chmod +x ocr && sudo mv ocr /usr/local/bin/ocr
+
+# Linux (x86_64)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-linux-amd64
+chmod +x ocr && sudo mv ocr /usr/local/bin/ocr
+
+# Linux (ARM64)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-linux-arm64
+chmod +x ocr && sudo mv ocr /usr/local/bin/ocr
+```
+
 ### 从源码构建
 
 ```bash
 git clone https://github.com/alibaba/open-code-review.git
 cd open-code-review
 make build
-sudo cp dist/ocr-*/ocr /usr/local/bin/ocr
+sudo cp dist/opencodereview /usr/local/bin/ocr
 ```
 
 ## 快速开始
