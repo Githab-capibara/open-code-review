@@ -41,6 +41,10 @@ type Args struct {
 	// SystemRule holds path-based review rules loaded from a JSON config.
 	SystemRule rules.Resolver
 
+	// FileFilter holds user-configured include/exclude path patterns from rule.json.
+	// When nil, only the default extension and path filters apply.
+	FileFilter *rules.FileFilter
+
 	// LLM client for model inference.
 	LLMClient llm.LLMClient
 
@@ -230,8 +234,7 @@ func (a *Agent) Run(ctx context.Context) ([]model.LlmComment, error) {
 	reviewCount := a.countReviewable(a.diffs)
 	fmt.Fprintf(stdout.Writer(), "[ocr] %d file(s) changed, reviewing %d in %s\n", totalChanged, reviewCount, a.args.RepoDir)
 
-	a.diffs = a.filterUnsupportedExts(a.diffs)
-	a.diffs = a.filterExcludedPaths(a.diffs)
+	a.diffs = a.filterDiffs(a.diffs)
 
 	if len(a.diffs) == 0 {
 		fmt.Fprintln(stdout.Writer(), "[ocr] No supported files changed. Skipping review.")
@@ -568,7 +571,7 @@ func (a *Agent) filterLargeDiffs(diffs []model.Diff) []model.Diff {
 	return kept
 }
 
-// countReviewable counts diffs that will survive both filters and are not pure deletions.
+// countReviewable counts diffs that will survive all filters and are not pure deletions.
 func (a *Agent) countReviewable(diffs []model.Diff) int {
 	count := 0
 	for _, d := range diffs {
@@ -576,11 +579,7 @@ func (a *Agent) countReviewable(diffs []model.Diff) int {
 		if path == "/dev/null" {
 			path = d.OldPath
 		}
-		ext := a.extFromPath(path)
-		if ext != "" && !allowedext.IsAllowedExt(ext) {
-			continue
-		}
-		if allowedext.IsExcludedPath(path) {
+		if !a.shouldReview(path) {
 			continue
 		}
 		if d.IsDeleted {
@@ -591,33 +590,39 @@ func (a *Agent) countReviewable(diffs []model.Diff) int {
 	return count
 }
 
-// filterUnsupportedExts drops diffs whose file extensions are not in the supported types allowlist.
-func (a *Agent) filterUnsupportedExts(diffs []model.Diff) []model.Diff {
-	var kept []model.Diff
-	skipped := 0
+// shouldReview applies the four-gate filter algorithm:
+//  1. User exclude → skip
+//  2. Default extension check → skip if not allowed
+//  3. User include → keep (penetrates default path exclusion)
+//  4. Default path exclusion → skip
+//
+// If none of the gates trigger, the file is kept for review.
+func (a *Agent) shouldReview(path string) bool {
+	f := a.args.FileFilter
 
-	for _, d := range diffs {
-		path := d.NewPath
-		if path == "/dev/null" {
-			path = d.OldPath
-		}
-		ext := a.extFromPath(path)
-		if ext != "" && !allowedext.IsAllowedExt(ext) {
-			fmt.Fprintf(stdout.Writer(), "[ocr] Skipping %s — extension %q not in supported file types\n", d.NewPath, ext)
-			skipped++
-			continue
-		}
-		kept = append(kept, d)
+	if f != nil && f.IsUserExcluded(path) {
+		return false
 	}
 
-	if skipped > 0 {
-		fmt.Fprintf(stdout.Writer(), "[ocr] Skipped %d file(s) with unsupported extensions\n", skipped)
+	ext := a.extFromPath(path)
+	if ext != "" && !allowedext.IsAllowedExt(ext) {
+		return false
 	}
-	return kept
+
+	if f != nil && f.HasInclude() && f.IsUserIncluded(path) {
+		return true
+	}
+
+	if allowedext.IsExcludedPath(path) {
+		return false
+	}
+
+	return true
 }
 
-// filterExcludedPaths drops diffs whose file paths match any default exclude pattern.
-func (a *Agent) filterExcludedPaths(diffs []model.Diff) []model.Diff {
+// filterDiffs drops diffs that should not be reviewed based on user-configured
+// include/exclude patterns and default extension/path filters.
+func (a *Agent) filterDiffs(diffs []model.Diff) []model.Diff {
 	var kept []model.Diff
 	skipped := 0
 
@@ -626,8 +631,8 @@ func (a *Agent) filterExcludedPaths(diffs []model.Diff) []model.Diff {
 		if path == "/dev/null" {
 			path = d.OldPath
 		}
-		if allowedext.IsExcludedPath(path) {
-			fmt.Fprintf(stdout.Writer(), "[ocr] Skipping %s — matches exclude pattern\n", path)
+		if !a.shouldReview(path) {
+			fmt.Fprintf(stdout.Writer(), "[ocr] Skipping %s — filtered by path/extension rules\n", path)
 			skipped++
 			continue
 		}
@@ -635,7 +640,7 @@ func (a *Agent) filterExcludedPaths(diffs []model.Diff) []model.Diff {
 	}
 
 	if skipped > 0 {
-		fmt.Fprintf(stdout.Writer(), "[ocr] Excluded %d file(s) by pattern\n", skipped)
+		fmt.Fprintf(stdout.Writer(), "[ocr] Filtered %d file(s) by include/exclude rules\n", skipped)
 	}
 	return kept
 }

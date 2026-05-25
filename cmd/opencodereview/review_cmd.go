@@ -45,7 +45,7 @@ func runReview(args []string) error {
 		return fmt.Errorf("resolve repo: %w", err)
 	}
 
-	resolver, err := rules.NewResolver(repoDir, opts.rulePath)
+	resolver, fileFilter, err := rules.NewResolver(repoDir, opts.rulePath)
 	if err != nil {
 		return fmt.Errorf("load rules: %w", err)
 	}
@@ -92,6 +92,7 @@ func runReview(args []string) error {
 		DiffMap:               diffMap,
 		Template:              *tpl,
 		SystemRule:            resolver,
+		FileFilter:            fileFilter,
 		LLMClient:             llmClient,
 		Tools:                 tools,
 		PlanToolDefs:          planToolDefs,

@@ -176,7 +176,8 @@ func truncate(s string, maxLen int) string {
 }
 
 func TestNewResolver_DefaultOnly(t *testing.T) {
-	resolver, err := NewResolver(t.TempDir(), "")
+	resolver, _, err := NewResolver(t.TempDir(), "")
+
 	if err != nil {
 		t.Fatalf("NewResolver: %v", err)
 	}
@@ -187,7 +188,8 @@ func TestNewResolver_DefaultOnly(t *testing.T) {
 }
 
 func TestNewResolver_ProjectFileMissing(t *testing.T) {
-	resolver, err := NewResolver(t.TempDir(), "")
+	resolver, _, err := NewResolver(t.TempDir(), "")
+
 	if err != nil {
 		t.Fatalf("NewResolver should not fail when project rule is missing: %v", err)
 	}
@@ -208,7 +210,7 @@ func TestNewResolver_ProjectRuleHighestPriority(t *testing.T) {
 		t.Fatalf("write rule.json: %v", err)
 	}
 
-	resolver, err := NewResolver(dir, "")
+	resolver, _, err := NewResolver(dir, "")
 	if err != nil {
 		t.Fatalf("NewResolver: %v", err)
 	}
@@ -241,7 +243,7 @@ func TestNewResolver_ProjectRuleFallsBackToSystem(t *testing.T) {
 		t.Fatalf("write rule.json: %v", err)
 	}
 
-	resolver, err := NewResolver(dir, "")
+	resolver, _, err := NewResolver(dir, "")
 	if err != nil {
 		t.Fatalf("NewResolver: %v", err)
 	}
@@ -260,7 +262,7 @@ func TestNewResolver_CustomRuleOverridesDefault(t *testing.T) {
 		t.Fatalf("write custom rule: %v", err)
 	}
 
-	resolver, err := NewResolver(t.TempDir(), customPath)
+	resolver, _, err := NewResolver(t.TempDir(), customPath)
 	if err != nil {
 		t.Fatalf("NewResolver: %v", err)
 	}
@@ -296,7 +298,7 @@ func TestNewResolver_CustomOverridesProject(t *testing.T) {
 		t.Fatalf("write rule.json: %v", err)
 	}
 
-	resolver, err := NewResolver(repoDir, customPath)
+	resolver, _, err := NewResolver(repoDir, customPath)
 	if err != nil {
 		t.Fatalf("NewResolver: %v", err)
 	}
@@ -330,9 +332,192 @@ func TestNewResolver_ProjectFileMalformed(t *testing.T) {
 		t.Fatalf("write: %v", err)
 	}
 
-	_, err := NewResolver(dir, "")
+	_, _, err := NewResolver(dir, "")
 	if err == nil {
 		t.Errorf("expected error for malformed project rule.json")
+	}
+}
+
+func TestFileFilter_IsUserExcluded(t *testing.T) {
+	f := &FileFilter{
+		Exclude: []string{"**/generated/**", "**/*.pb.go", "vendor/**/*.{go,js}"},
+	}
+
+	tests := []struct {
+		path string
+		want bool
+	}{
+		{"src/generated/api.java", true},
+		{"pkg/foo.pb.go", true},
+		{"vendor/lib/util.go", true},
+		{"vendor/lib/util.js", true},
+		{"src/main.go", false},
+		{"src/generated.go", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.path, func(t *testing.T) {
+			if got := f.IsUserExcluded(tt.path); got != tt.want {
+				t.Errorf("IsUserExcluded(%q) = %v, want %v", tt.path, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFileFilter_IsUserIncluded(t *testing.T) {
+	f := &FileFilter{
+		Include: []string{"src/**/*.java", "src/**/*.{kt,kts}"},
+	}
+
+	tests := []struct {
+		path string
+		want bool
+	}{
+		{"src/main/foo.java", true},
+		{"src/main/bar.kt", true},
+		{"src/build.kts", true},
+		{"test/main.java", false},
+		{"src/main/util.go", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.path, func(t *testing.T) {
+			if got := f.IsUserIncluded(tt.path); got != tt.want {
+				t.Errorf("IsUserIncluded(%q) = %v, want %v", tt.path, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFileFilter_IsUserIncluded_EmptyInclude(t *testing.T) {
+	f := &FileFilter{}
+	if f.IsUserIncluded("anything.java") {
+		t.Errorf("expected false when include is empty")
+	}
+}
+
+func TestFileFilter_CaseInsensitive(t *testing.T) {
+	f := &FileFilter{
+		Include: []string{"src/**/*.java"},
+		Exclude: []string{"**/generated/**"},
+	}
+
+	if !f.IsUserIncluded("SRC/Main/Foo.Java") {
+		t.Errorf("expected case-insensitive include match")
+	}
+	if !f.IsUserExcluded("SRC/Generated/Api.java") {
+		t.Errorf("expected case-insensitive exclude match")
+	}
+}
+
+func TestNewResolver_FileFilterMerged(t *testing.T) {
+	repoDir := t.TempDir()
+	ocrDir := filepath.Join(repoDir, ".open-code-review")
+	if err := os.MkdirAll(ocrDir, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	projJSON := `{"rules":[],"include":["src/**/*.java"],"exclude":["**/generated/**"]}`
+	if err := os.WriteFile(filepath.Join(ocrDir, "rule.json"), []byte(projJSON), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	_, filter, err := NewResolver(repoDir, "")
+	if err != nil {
+		t.Fatalf("NewResolver: %v", err)
+	}
+	if filter == nil {
+		t.Fatal("expected non-nil FileFilter")
+	}
+	if !filter.HasInclude() {
+		t.Error("expected HasInclude to be true")
+	}
+	if !filter.IsUserIncluded("src/main/foo.java") {
+		t.Error("expected src/main/foo.java to be included")
+	}
+	if !filter.IsUserExcluded("src/generated/api.java") {
+		t.Error("expected src/generated/api.java to be excluded")
+	}
+}
+
+func TestNewResolver_FileFilterNilWhenEmpty(t *testing.T) {
+	_, filter, err := NewResolver(t.TempDir(), "")
+	if err != nil {
+		t.Fatalf("NewResolver: %v", err)
+	}
+	if filter != nil {
+		t.Errorf("expected nil FileFilter when no include/exclude configured, got %+v", filter)
+	}
+}
+
+func TestNewResolver_FileFilterPriorityOverride(t *testing.T) {
+	repoDir := t.TempDir()
+	ocrDir := filepath.Join(repoDir, ".open-code-review")
+	if err := os.MkdirAll(ocrDir, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	projJSON := `{"rules":[],"include":["src/**/*.java"],"exclude":["**/gen/**"]}`
+	if err := os.WriteFile(filepath.Join(ocrDir, "rule.json"), []byte(projJSON), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	customDir := t.TempDir()
+	customJSON := `{"rules":[],"include":["lib/**/*.kt"],"exclude":["**/tmp/**"]}`
+	customPath := filepath.Join(customDir, "custom.json")
+	if err := os.WriteFile(customPath, []byte(customJSON), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	_, filter, err := NewResolver(repoDir, customPath)
+	if err != nil {
+		t.Fatalf("NewResolver: %v", err)
+	}
+	if filter == nil {
+		t.Fatal("expected non-nil FileFilter")
+	}
+
+	// Custom (--rule) has highest priority, so only its patterns take effect
+	if !filter.IsUserIncluded("lib/util.kt") {
+		t.Error("expected custom include to be active")
+	}
+	if !filter.IsUserExcluded("lib/tmp/cache.kt") {
+		t.Error("expected custom exclude to be active")
+	}
+
+	// Project patterns should NOT be active since custom overrides
+	if filter.IsUserIncluded("src/main/foo.java") {
+		t.Error("project include should not be active when custom is present")
+	}
+	if filter.IsUserExcluded("src/gen/api.java") {
+		t.Error("project exclude should not be active when custom is present")
+	}
+}
+
+func TestNewResolver_FileFilterFallsToProject(t *testing.T) {
+	repoDir := t.TempDir()
+	ocrDir := filepath.Join(repoDir, ".open-code-review")
+	if err := os.MkdirAll(ocrDir, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	projJSON := `{"rules":[],"include":["src/**/*.java"],"exclude":["**/gen/**"]}`
+	if err := os.WriteFile(filepath.Join(ocrDir, "rule.json"), []byte(projJSON), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	// Custom rule has no include/exclude — should fall through to project
+	customDir := t.TempDir()
+	customJSON := `{"rules":[{"path":"**/*.go","rule":"custom-go"}]}`
+	customPath := filepath.Join(customDir, "custom.json")
+	if err := os.WriteFile(customPath, []byte(customJSON), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	_, filter, err := NewResolver(repoDir, customPath)
+	if err != nil {
+		t.Fatalf("NewResolver: %v", err)
+	}
+	if filter == nil {
+		t.Fatal("expected non-nil FileFilter from project layer")
+	}
+	if !filter.IsUserIncluded("src/main/foo.java") {
+		t.Error("expected project include to take effect when custom has none")
 	}
 }
 
@@ -347,7 +532,7 @@ func TestNewResolver_BraceExpansionInProjectRule(t *testing.T) {
 		t.Fatalf("write: %v", err)
 	}
 
-	resolver, err := NewResolver(dir, "")
+	resolver, _, err := NewResolver(dir, "")
 	if err != nil {
 		t.Fatalf("NewResolver: %v", err)
 	}

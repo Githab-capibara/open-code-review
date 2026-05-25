@@ -142,7 +142,53 @@ type ProjectRuleEntry struct {
 
 // ProjectRule holds rules loaded from <repoDir>/.open-code-review/rule.json.
 type ProjectRule struct {
-	Rules []ProjectRuleEntry `json:"rules"`
+	Rules   []ProjectRuleEntry `json:"rules"`
+	Include []string           `json:"include,omitempty"`
+	Exclude []string           `json:"exclude,omitempty"`
+}
+
+// FileFilter holds the merged user-configured include/exclude glob patterns
+// collected from all rule.json layers (custom, project, global).
+type FileFilter struct {
+	Include []string
+	Exclude []string
+}
+
+// HasInclude reports whether any include patterns are configured.
+func (f *FileFilter) HasInclude() bool {
+	return len(f.Include) > 0
+}
+
+// IsUserExcluded reports whether the given path matches any user exclude pattern.
+func (f *FileFilter) IsUserExcluded(path string) bool {
+	lowerPath := strings.ToLower(path)
+	for _, pattern := range f.Exclude {
+		expanded := expandBraces(pattern)
+		for _, p := range expanded {
+			if matched, _ := doublestar.Match(p, lowerPath); matched {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// IsUserIncluded reports whether the given path matches any user include pattern.
+// Returns false when Include is empty (no user include restriction defined).
+func (f *FileFilter) IsUserIncluded(path string) bool {
+	if !f.HasInclude() {
+		return false
+	}
+	lowerPath := strings.ToLower(path)
+	for _, pattern := range f.Include {
+		expanded := expandBraces(pattern)
+		for _, p := range expanded {
+			if matched, _ := doublestar.Match(p, lowerPath); matched {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // composedResolver implements Resolver with layered priority.
@@ -158,17 +204,19 @@ type composedResolver struct {
 //  2. Project-local .open-code-review/rule.json (first match wins)
 //  3. Global ~/.open-code-review/rule.json (first match wins)
 //  4. Embedded system default rules
-func NewResolver(repoDir, customRulePath string) (Resolver, error) {
+//
+// It also returns a FileFilter with the merged include/exclude patterns from all layers.
+func NewResolver(repoDir, customRulePath string) (Resolver, *FileFilter, error) {
 	sysRule, err := LoadDefault()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	var customRule *ProjectRule
 	if customRulePath != "" {
 		cr, err := loadRuleFile(customRulePath)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 		customRule = cr
 	}
@@ -177,17 +225,41 @@ func NewResolver(repoDir, customRulePath string) (Resolver, error) {
 	if repoDir != "" {
 		pr, err := loadProjectRule(repoDir)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 		projectRule = pr
 	}
 
 	globalRule, err := loadGlobalRule()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return &composedResolver{custom: customRule, project: projectRule, global: globalRule, system: sysRule}, nil
+	filter := buildFileFilter(customRule, projectRule, globalRule)
+
+	return &composedResolver{custom: customRule, project: projectRule, global: globalRule, system: sysRule}, filter, nil
+}
+
+// buildFileFilter picks the highest-priority layer that has any include/exclude
+// configured. Priority order: custom (--rule) > project > global.
+func buildFileFilter(layers ...*ProjectRule) *FileFilter {
+	for _, pr := range layers {
+		if pr == nil {
+			continue
+		}
+		if len(pr.Include) == 0 && len(pr.Exclude) == 0 {
+			continue
+		}
+		f := &FileFilter{}
+		for _, p := range pr.Include {
+			f.Include = append(f.Include, strings.ToLower(p))
+		}
+		for _, p := range pr.Exclude {
+			f.Exclude = append(f.Exclude, strings.ToLower(p))
+		}
+		return f
+	}
+	return nil
 }
 
 func loadGlobalRule() (*ProjectRule, error) {
