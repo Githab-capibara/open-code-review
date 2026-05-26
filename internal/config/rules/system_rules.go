@@ -2,7 +2,7 @@
 package rules
 
 import (
-	_ "embed"
+	"embed"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -80,14 +80,30 @@ func (r *SystemRule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-//go:embed system_rules.json
-var defaultSystemRules []byte
+//go:embed system_rules.json rule_docs/*
+var rulesFS embed.FS
 
-// LoadDefault parses the embedded system_rules.json.
+// LoadDefault parses the embedded system_rules.json and resolves rule file references.
 func LoadDefault() (*SystemRule, error) {
+	data, err := rulesFS.ReadFile("system_rules.json")
+	if err != nil {
+		return nil, fmt.Errorf("read embedded system_rules.json: %w", err)
+	}
 	var rule SystemRule
-	if err := json.Unmarshal(defaultSystemRules, &rule); err != nil {
+	if err := json.Unmarshal(data, &rule); err != nil {
 		return nil, fmt.Errorf("unmarshal default system rules: %w", err)
+	}
+	content, err := rulesFS.ReadFile("rule_docs/" + rule.DefaultRule)
+	if err != nil {
+		return nil, fmt.Errorf("read default rule file %q: %w", rule.DefaultRule, err)
+	}
+	rule.DefaultRule = strings.TrimRight(string(content), "\n")
+	for i := range rule.PathRules {
+		content, err := rulesFS.ReadFile("rule_docs/" + rule.PathRules[i].Rule)
+		if err != nil {
+			return nil, fmt.Errorf("read rule file %q for pattern %q: %w", rule.PathRules[i].Rule, rule.PathRules[i].Pattern, err)
+		}
+		rule.PathRules[i].Rule = strings.TrimRight(string(content), "\n")
 	}
 	return &rule, nil
 }

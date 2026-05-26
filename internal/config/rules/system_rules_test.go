@@ -59,8 +59,6 @@ func TestResolve_DefaultRules(t *testing.T) {
 	}{
 		{"src/main/java/com/example/foo.java", "逻辑错误识别"},
 		{"foo.java", "逻辑错误识别"},
-		{"internal/agent/agent.go", "逻辑问题"},
-		{"scripts/deploy.py", "逻辑问题"},
 		{"src/main/resources/mapper/usermapper.xml", "SQL逻辑错误识别"},
 		{"src/main/resources/dao/userdao.xml", "SQL逻辑错误识别"},
 		{"pom.xml", "snapshot"},
@@ -74,7 +72,6 @@ func TestResolve_DefaultRules(t *testing.T) {
 		{"app.kt", "空安全"},
 		{"src/main/handler.cpp", "智能指针"},
 		{"driver.c", "malloc"},
-		{"ios/ViewController.m", "数组越界"},
 	}
 
 	for _, tt := range tests {
@@ -99,6 +96,9 @@ func TestResolve_FallbackToDefault(t *testing.T) {
 		"docs/architecture.txt",
 		"Makefile",
 		"src/unknown.rs",
+		"internal/agent/agent.go",
+		"scripts/deploy.py",
+		"ios/ViewController.m",
 	}
 
 	for _, path := range paths {
@@ -249,8 +249,8 @@ func TestNewResolver_ProjectRuleFallsBackToSystem(t *testing.T) {
 	}
 
 	got := resolver.Resolve("other/main.go")
-	if !strings.Contains(got, "逻辑问题") {
-		t.Errorf("expected system go rule, got %q", truncate(got, 80))
+	if !strings.Contains(got, "Correctness") {
+		t.Errorf("expected system default rule, got %q", truncate(got, 80))
 	}
 }
 
@@ -273,7 +273,7 @@ func TestNewResolver_CustomRuleOverridesDefault(t *testing.T) {
 	}
 	// --rule not matched → falls through to system default
 	got = resolver.Resolve("readme.md")
-	if !strings.Contains(got, "错别字") {
+	if !strings.Contains(got, "Correctness") {
 		t.Errorf("expected system default rule, got %q", truncate(got, 80))
 	}
 }
@@ -310,7 +310,7 @@ func TestNewResolver_CustomOverridesProject(t *testing.T) {
 		{"force-api/src/foo.java", "custom-java-rule"}, // --rule wins (highest priority)
 		{"other/src/bar.java", "custom-java-rule"},     // --rule wins
 		{"main.go", "project-go-rule"},                 // --rule misses → project wins
-		{"readme.md", "错别字"},                           // all miss → system default
+		{"readme.md", "Correctness"},                   // all miss → system default
 	}
 	for _, tt := range tests {
 		t.Run(tt.path, func(t *testing.T) {
@@ -543,7 +543,7 @@ func TestNewResolver_BraceExpansionInProjectRule(t *testing.T) {
 	}{
 		{"src/main/foo.java", "jvm-rule"},
 		{"src/main/bar.kt", "jvm-rule"},
-		{"src/main/baz.go", "逻辑问题"},
+		{"src/main/baz.go", "Correctness"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.path, func(t *testing.T) {
