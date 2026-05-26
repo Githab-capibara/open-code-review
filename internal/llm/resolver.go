@@ -42,8 +42,8 @@ func ResolveEndpoint(configPath string) (ResolvedEndpoint, error) {
 		name string
 		fn   func() (ResolvedEndpoint, bool, error)
 	}{
-		{"OCR environment", tryOCREnv},
 		{"OCR config file", func() (ResolvedEndpoint, bool, error) { return tryOCRConfig(configPath) }},
+		{"OCR environment", tryOCREnv},
 		{"Claude Code environment", tryCCEnv},
 		{"Shell rc file", tryShellRC},
 	}
@@ -55,6 +55,7 @@ func ResolveEndpoint(configPath string) (ResolvedEndpoint, error) {
 		}
 		if ok && ep.URL != "" && ep.Token != "" && ep.Model != "" {
 			ep.Source = s.name
+			ep.Model = stripModelSuffix(ep.Model)
 			return ep, nil
 		}
 	}
@@ -177,6 +178,12 @@ func shellRCFiles() []string {
 }
 
 var exportRe = regexp.MustCompile(`^export\s+(ANTHROPIC_\w+)\s*=\s*(?:"([^"]*)"|'([^']*)'|(.+))\s*$`)
+
+var modelSuffixRe = regexp.MustCompile(`\[\d+m\]$`)
+
+func stripModelSuffix(model string) string {
+	return modelSuffixRe.ReplaceAllString(model, "")
+}
 
 func parseShellRC(path string) (ResolvedEndpoint, bool, error) {
 	data, err := os.ReadFile(path)
