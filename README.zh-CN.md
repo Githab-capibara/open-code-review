@@ -117,6 +117,7 @@ ocr review --commit abc123
 | `--from` | — | — | 源引用（如 `main`） |
 | `--to` | — | — | 目标引用（如 `feature-branch`） |
 | `--commit` | `-c` | — | 审查单个提交 |
+| `--preview` | `-p` | `false` | 预览将被审查的文件列表，不调用 LLM |
 | `--format` | `-f` | `text` | 输出格式：`text` 或 `json` |
 | `--concurrency` | — | `8` | 最大并发文件审查数 |
 | `--timeout` | — | `10` | 并发任务超时时间（分钟） |
@@ -127,6 +128,10 @@ ocr review --commit abc123
 ## 示例
 
 ```bash
+# 预览将被审查的文件（不调用 LLM）
+ocr review --preview
+ocr review -c abc123 -p
+
 # 使用默认设置审查工作区变更
 ocr review
 

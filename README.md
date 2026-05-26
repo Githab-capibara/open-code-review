@@ -117,6 +117,7 @@ ocr review --commit abc123
 | `--from` | — | — | Source ref (e.g., `main`) |
 | `--to` | — | — | Target ref (e.g., `feature-branch`) |
 | `--commit` | `-c` | — | Single commit to review |
+| `--preview` | `-p` | `false` | Preview which files will be reviewed without running the LLM |
 | `--format` | `-f` | `text` | Output format: `text` or `json` |
 | `--concurrency` | — | `8` | Max concurrent file reviews |
 | `--timeout` | — | `10` | Concurrent task timeout in minutes |
@@ -127,6 +128,10 @@ ocr review --commit abc123
 ## Examples
 
 ```bash
+# Preview which files will be reviewed (no LLM calls)
+ocr review --preview
+ocr review -c abc123 -p
+
 # Review workspace changes with default settings
 ocr review
 
