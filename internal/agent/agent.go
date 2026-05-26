@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/open-code-review/open-code-review/internal/config/allowlist"
 	"github.com/open-code-review/open-code-review/internal/config/rules"
 	"github.com/open-code-review/open-code-review/internal/config/template"
 	"github.com/open-code-review/open-code-review/internal/config/toolsconfig"
@@ -575,11 +574,7 @@ func (a *Agent) filterLargeDiffs(diffs []model.Diff) []model.Diff {
 func (a *Agent) countReviewable(diffs []model.Diff) int {
 	count := 0
 	for _, d := range diffs {
-		path := d.NewPath
-		if path == "/dev/null" {
-			path = d.OldPath
-		}
-		if !a.shouldReview(path) {
+		if !a.shouldReview(effectivePath(d)) {
 			continue
 		}
 		if d.IsDeleted {
@@ -590,34 +585,9 @@ func (a *Agent) countReviewable(diffs []model.Diff) int {
 	return count
 }
 
-// shouldReview applies the four-gate filter algorithm:
-//  1. User exclude → skip
-//  2. Default extension check → skip if not allowed
-//  3. User include → keep (penetrates default path exclusion)
-//  4. Default path exclusion → skip
-//
-// If none of the gates trigger, the file is kept for review.
+// shouldReview applies the four-gate filter algorithm via whyExcluded.
 func (a *Agent) shouldReview(path string) bool {
-	f := a.args.FileFilter
-
-	if f != nil && f.IsUserExcluded(path) {
-		return false
-	}
-
-	ext := a.extFromPath(path)
-	if ext != "" && !allowedext.IsAllowedExt(ext) {
-		return false
-	}
-
-	if f != nil && f.HasInclude() && f.IsUserIncluded(path) {
-		return true
-	}
-
-	if allowedext.IsExcludedPath(path) {
-		return false
-	}
-
-	return true
+	return a.whyExcluded(path) == ExcludeNone
 }
 
 // filterDiffs drops diffs that should not be reviewed based on user-configured
@@ -627,10 +597,7 @@ func (a *Agent) filterDiffs(diffs []model.Diff) []model.Diff {
 	skipped := 0
 
 	for _, d := range diffs {
-		path := d.NewPath
-		if path == "/dev/null" {
-			path = d.OldPath
-		}
+		path := effectivePath(d)
 		if !a.shouldReview(path) {
 			fmt.Fprintf(stdout.Writer(), "[ocr] Skipping %s — filtered by path/extension rules\n", path)
 			skipped++

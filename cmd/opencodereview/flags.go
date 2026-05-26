@@ -105,6 +105,7 @@ type reviewOptions struct {
 	background     string // --background: optional requirement context
 	concurrency    int
 	perFileTimeout int
+	preview        bool
 	showHelp       bool
 }
 
@@ -124,6 +125,7 @@ func parseReviewFlags(args []string) (reviewOptions, error) {
 	a.IntVar(&opts.perFileTimeout, "timeout", 10, "concurrent task timeout in minutes")
 	a.StringVar(&opts.audience, "audience", "human", "output audience: human (show progress) or agent (summary only)")
 	a.StringVarP(&opts.background, "background", "b", "", "optional requirement/business context for the review")
+	a.BoolVarP(&opts.preview, "preview", "p", false, "preview which files will be reviewed without running the LLM")
 
 	if err := a.Parse(args); err != nil {
 		return opts, fmt.Errorf("parse flags: %w", err)
@@ -183,6 +185,10 @@ Examples:
   # Agent mode (summary only, no progress lines)
   ocr review --audience agent
 
+  # Preview which files will be reviewed
+  ocr review --preview
+  ocr review -c abc123 -p
+
 Flags:
   --audience string       output audience: human (show progress) or agent (summary only) (default "human")
   -b, --background string optional requirement/business context for the review
@@ -190,6 +196,7 @@ Flags:
   -f, --format string     output format: text or json (default "text")
   --concurrency int       max concurrent file reviews (default 8)
   --from string           source ref to start diff from (e.g., 'main')
+  -p, --preview           preview which files will be reviewed without running the LLM
   --repo string           root directory of the git repository (default: current dir)
   --rule string           path to JSON file with system review rules
   --timeout int           concurrent task timeout in minutes (default 10)

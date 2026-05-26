@@ -50,6 +50,10 @@ func runReview(args []string) error {
 		return fmt.Errorf("load rules: %w", err)
 	}
 
+	if opts.preview {
+		return runPreview(repoDir, opts, fileFilter)
+	}
+
 	toolEntries, err := toolsconfig.Load(opts.toolConfigPath)
 	if err != nil {
 		return fmt.Errorf("load tools: %w", err)
@@ -195,6 +199,24 @@ func requireGitRepo(dir string) error {
 	if err != nil || len(out) == 0 {
 		return fmt.Errorf("%s is not a git repository, code review requires a valid git repository", repoDir)
 	}
+	return nil
+}
+
+func runPreview(repoDir string, opts reviewOptions, fileFilter *rules.FileFilter) error {
+	ag := agent.New(agent.Args{
+		RepoDir:    repoDir,
+		From:       opts.from,
+		To:         opts.to,
+		Commit:     opts.commit,
+		FileFilter: fileFilter,
+	})
+
+	preview, err := ag.Preview()
+	if err != nil {
+		return fmt.Errorf("preview failed: %w", err)
+	}
+
+	outputPreviewText(preview)
 	return nil
 }
 

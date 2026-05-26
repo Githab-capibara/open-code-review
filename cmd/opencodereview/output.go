@@ -162,9 +162,9 @@ func buildDiffLines(comment model.LlmComment) []suggestdiff.DiffLine {
 }
 
 type jsonOutput struct {
-	Status   string              `json:"status"`
-	Message  string              `json:"message,omitempty"`
-	Comments []model.LlmComment  `json:"comments"`
+	Status   string               `json:"status"`
+	Message  string               `json:"message,omitempty"`
+	Comments []model.LlmComment   `json:"comments"`
 	Warnings []agent.AgentWarning `json:"warnings,omitempty"`
 }
 
@@ -215,4 +215,66 @@ func outputJSONNoFiles() error {
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
 	return enc.Encode(out)
+}
+
+func outputPreviewText(p *agent.DiffPreview) {
+	if p.TotalFiles == 0 {
+		fmt.Println("No files changed.")
+		return
+	}
+
+	maxPathLen := 0
+	for _, e := range p.Entries {
+		if len(e.Path) > maxPathLen {
+			maxPathLen = len(e.Path)
+		}
+	}
+	if maxPathLen < 20 {
+		maxPathLen = 20
+	}
+	pathFmt := fmt.Sprintf("%%-%ds", maxPathLen)
+
+	fmt.Printf("\nPreview: %d file(s) changed  |  \033[32m+%d\033[0m  \033[31m-%d\033[0m\n",
+		p.TotalFiles, p.TotalInsertions, p.TotalDeletions)
+
+	if p.ReviewableCount > 0 {
+		fmt.Printf("\n\033[1mWill review (%d):\033[0m\n", p.ReviewableCount)
+		for _, e := range p.Entries {
+			if !e.WillReview {
+				continue
+			}
+			fmt.Printf("  %s  "+pathFmt+" \033[32m+%-4d\033[0m \033[31m-%-4d\033[0m\n",
+				statusBadge(e.Status), e.Path, e.Insertions, e.Deletions)
+		}
+	}
+
+	if p.ExcludedCount > 0 {
+		fmt.Printf("\n\033[1mExcluded from review (%d):\033[0m\n", p.ExcludedCount)
+		for _, e := range p.Entries {
+			if e.WillReview {
+				continue
+			}
+			fmt.Printf("  %s  "+pathFmt+" \033[2m(%s)\033[0m\n",
+				statusBadge(e.Status), e.Path, e.ExcludeReason)
+		}
+	}
+
+	fmt.Println()
+}
+
+func statusBadge(status string) string {
+	switch status {
+	case "added":
+		return "\033[32m[A]\033[0m"
+	case "modified":
+		return "\033[33m[M]\033[0m"
+	case "deleted":
+		return "\033[31m[D]\033[0m"
+	case "renamed":
+		return "\033[36m[R]\033[0m"
+	case "binary":
+		return "\033[35m[B]\033[0m"
+	default:
+		return "[?]"
+	}
 }
