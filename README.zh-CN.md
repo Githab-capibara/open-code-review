@@ -1,9 +1,8 @@
 <p align="center">
   <a href="https://github.com/alibaba/open-code-review">
-    <img src="imgs/logo.svg" alt="OpenCodeReview logo" width="120" height="120">
+    <img src="imgs/logo.svg" alt="OpenCodeReview logo" width="240" height="240">
   </a>
 </p>
-<p align="center"><b>OpenCodeReview</b></p>
 <p align="center">The open source AI code review agent.</p>
 <p align="center">
   <a href="https://www.npmjs.com/package/@alibaba-group/open-code-review"><img alt="npm" src="https://img.shields.io/npm/v/@alibaba-group/open-code-review?style=flat-square" /></a>
