@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import HeroSection from './HeroSection';
+import HighlightsSection from './HighlightsSection';
 import WhySection from './WhySection';
 import FeaturesSection from './FeaturesSection';
 import BenchmarkSection from './BenchmarkSection';
@@ -25,6 +26,7 @@ const LandingPage: React.FC = () => {
     <div className="min-h-screen bg-dark-900 noise-overlay">
       <Navbar />
       <HeroSection />
+      <HighlightsSection />
       <WhySection />
       <FeaturesSection />
       <BenchmarkSection />

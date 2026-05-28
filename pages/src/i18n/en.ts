@@ -22,6 +22,18 @@ export const en: TranslationKeys = {
   'hero.terminal': 'ocr terminal',
   'hero.badgeLabel': 'Benchmark #1',
 
+  // Highlights
+  'highlights.stat1Label': 'Active Users',
+  'highlights.stat1Value': '20K+',
+  'highlights.stat1Caption': 'Battle-tested inside Alibaba Group',
+  'highlights.stat2Label': 'Real-World Tasks',
+  'highlights.stat2Value': '1M+',
+  'highlights.stat2Caption': 'Code review tasks executed',
+  'highlights.stat3Label': 'Token Cost',
+  'highlights.stat3Caption': 'vs. generic Agent + Skills',
+  'highlights.stat4Label': 'AACR-Bench',
+  'highlights.stat4Caption': 'SEM.F1 benchmark score',
+
   // Why Section
   'why.sectionLabel': 'Use Cases',
   'why.title': 'Who Is Open Code Review For?',

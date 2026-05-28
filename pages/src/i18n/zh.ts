@@ -22,6 +22,18 @@ export const zh: TranslationKeys = {
   'hero.terminal': 'ocr 终端',
   'hero.badgeLabel': '基准榜第 #1',
 
+  // Highlights
+  'highlights.stat1Label': '活跃用户',
+  'highlights.stat1Value': '20K+',
+  'highlights.stat1Caption': '阿里集团内部生产验证',
+  'highlights.stat2Label': '真实场景',
+  'highlights.stat2Value': '1M+',
+  'highlights.stat2Caption': '累计运行代码评审任务',
+  'highlights.stat3Label': 'Token 效率',
+  'highlights.stat3Caption': '相比通用 Agent + Skills 方案',
+  'highlights.stat4Label': 'AACR-Bench',
+  'highlights.stat4Caption': 'SEM.F1 基准测试得分',
+
   // Why Section
   'why.sectionLabel': '适用场景',
   'why.title': 'Open Code Review 适合谁？',
