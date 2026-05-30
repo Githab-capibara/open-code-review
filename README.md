@@ -15,15 +15,53 @@
 
 ---
 
-AI-powered code review CLI that reads Git diffs, sends changed files to a configurable LLM via an agent with tool-use capabilities, and generates structured review comments with line-level precision.
+## What is Open Code Review?
 
-The agent can read full file contents, search the codebase, inspect other changed files for context, and produce deep reviews — not just surface-level diff feedback.
+Open Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and identified millions of code defects. After thorough validation at massive scale, we incubated it into an open source project for the community. Simply configure a model endpoint to get started.
 
-![Open Benchmark](imgs/open-benchmark.png)
+It reads Git diffs, sends changed files to a configurable LLM via an agent with tool-use capabilities, and generates structured review comments with line-level precision. The agent can read full file contents, search the codebase, inspect other changed files for context, and produce deep reviews — not just surface-level diff feedback.
 
-## Install
+![Highlights](imgs/highlights-en.png)
 
-### Via NPM (Recommended)
+## Why Open Code Review?
+
+### The Problem with General-Purpose Agents
+
+If you've used general-purpose agents like Claude Code with Skills for code review, you've likely encountered these pain points:
+
+- **Incomplete coverage** — On larger changesets, agents tend to "cut corners," selectively reviewing only some files and missing others.
+- **Position drift** — Reported issues frequently don't match the actual code location, with line numbers or file references drifting off target.
+- **Unstable quality** — Natural-language-driven Skills are hard to debug, and review quality fluctuates significantly with minor prompt variations.
+
+The root cause: a purely language-driven architecture lacks hard constraints on the review process.
+
+### Core Design: Deterministic Engineering × Agent Hybrid
+
+Open Code Review's core philosophy is to combine deterministic engineering with an agent, each handling what it does best.
+
+**Deterministic Engineering — Hard Constraints**
+
+For review steps that *must not go wrong*, engineering logic — not the language model — guarantees correctness:
+
+- **Precise file selection** — Determines exactly which files need review and which should be filtered, ensuring no important change is missed.
+- **Smart file bundling** — Groups related files into a single review unit (e.g., `message_en.properties` and `message_zh.properties` are bundled together). Each bundle runs as a sub-agent with isolated context — a divide-and-conquer strategy that stays stable on very large changesets and naturally supports concurrent review.
+- **Fine-grained rule matching** — Matches review rules to each file's characteristics, keeping the model's attention sharply focused and eliminating information noise at the source. Compared to purely language-driven rule guidance, template-engine-based rule matching is more stable and predictable.
+- **External positioning and reflection modules** — Independent comment-positioning and comment-reflection modules systematically improve both the location accuracy and content accuracy of AI feedback.
+
+**Agent — Dynamic Decision-Making**
+
+The agent's strengths are concentrated where they matter most — dynamic decisions and dynamic context retrieval:
+
+- **Scenario-tuned prompts** — Prompt templates deeply optimized for code review, improving effectiveness while reducing token consumption.
+- **Scenario-tuned toolset** — Distilled from deep analysis of tool-call traces in large-scale production data — including call frequency distributions, per-tool repetition rates, and the impact of new tools on the overall call chain — resulting in a purpose-built toolset that is more stable and predictable for code review than a generic agent toolkit.
+
+## How to Use
+
+### CLI
+
+#### Install
+
+**Via NPM (Recommended)**
 
 ```bash
 npm install -g @alibaba-group/open-code-review
@@ -31,7 +69,7 @@ npm install -g @alibaba-group/open-code-review
 
 After installation, the `ocr` command is available globally.
 
-### From GitHub Release
+**From GitHub Release**
 
 Download the latest binary from [GitHub Releases](https://github.com/alibaba/open-code-review/releases):
 
@@ -53,7 +91,7 @@ curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/downloa
 chmod +x ocr && sudo mv ocr /usr/local/bin/ocr
 ```
 
-### From Source
+**From Source**
 
 ```bash
 git clone https://github.com/alibaba/open-code-review.git
@@ -62,9 +100,9 @@ make build
 sudo cp dist/opencodereview /usr/local/bin/ocr
 ```
 
-## Quick Start
+#### Quick Start
 
-### 1. Configure LLM
+**1. Configure LLM**
 
 **You must configure an LLM before reviewing code.**
 
@@ -84,15 +122,15 @@ export OCR_USE_ANTHROPIC=true
 
 Config is stored in `~/.opencodereview/config.json`.
 
-The tool also falls back to Claude Code environment variables (`ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_MODEL`) and parses `~/.zshrc` / `~/.bashrc` for those exports.
+It is also compatible with Claude Code environment variables (`ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_MODEL`) and parses `~/.zshrc` / `~/.bashrc` for those exports.
 
-### 2. Test Connectivity
+**2. Test Connectivity**
 
 ```bash
 ocr llm test
 ```
 
-### 3. Review
+**3. Review**
 
 ```bash
 cd your-project
@@ -106,6 +144,91 @@ ocr review --from main --to feature-branch
 # Single commit
 ocr review --commit abc123
 ```
+
+### Integrate with Your Coding Agent
+
+OCR is designed to work seamlessly with coding agents. Use the `--audience agent` flag to produce structured, machine-readable output optimized for agent consumption.
+
+#### Claude Code
+
+OCR provides a ready-to-use [Claude Code slash command](https://docs.anthropic.com/en/docs/claude-code/slash-commands). Create the following file in your project:
+
+`.claude/commands/open-code-review.md`:
+
+~~~markdown
+# /open-code-review
+
+Invoke the professional code review Agent CLI tool OpenCodeReview (OCR) to review current code changes, and let the Agent autonomously decide whether to apply fixes.
+
+## Workflow
+
+### Step 1: Run Code Review
+
+Run the OCR command:
+
+```bash
+ocr review --audience agent [user-args]
+```
+- Default (no user arguments): reviews staged, unstaged, and untracked changes (workspace mode).
+- If the user provides `--commit` or `--c`: pass through as-is.
+- If the user provides `--from` and `--to`: pass through as-is.
+- (Optional) Provide `--background "requirement context"` to review whether the requirements are correctly implemented.
+- Capture full stdout. Set a 5-minute timeout.
+- If the `ocr` command is not found, install it by running `npm i -g @alibaba-group/open-code-review`.
+
+### Step 2: Filter and Evaluate
+
+For each comment, assess its validity and quality:
+
+- **High**: Obvious bugs, security issues, clear mistakes, or well-founded suggestions with precise fix proposals
+- **Medium**: Reasonable concerns but context-dependent, style/performance suggestions, or fixes that require manual implementation
+- **Low**: Likely false positives, lacking sufficient context, nitpicks, or meaningless suggestions
+
+Silently discard low-confidence comments. Display the remaining comments.
+
+### Step 3: Fix
+
+Automatically fix issues and suggestions that are worth adopting.
+~~~
+
+Then use `/open-code-review` in Claude Code to run a review. The slash command will run OCR, filter and evaluate each comment, and automatically fix issues worth adopting.
+
+#### Cursor / Windsurf
+
+Add the following instruction to your `.cursorrules` or `.windsurfrules` file:
+
+```
+## Code Review
+
+When asked to review code, run the following command:
+
+ocr review --audience agent
+
+Parse the output and evaluate each comment by confidence level:
+- High: Obvious bugs, security issues, clear mistakes — fix these automatically.
+- Medium: Reasonable concerns — present to the user for decision.
+- Low: Likely false positives or nitpicks — silently discard.
+
+If the `ocr` command is not found, install it: npm i -g @alibaba-group/open-code-review
+```
+
+#### Other Coding Agents
+
+Any coding agent that can execute shell commands can integrate with OCR:
+
+```bash
+# Machine-readable output for agent consumption
+ocr review --audience agent
+
+# With requirement context for targeted review
+ocr review --audience agent --background "describe what the changes should do"
+
+# Review specific commit or branch range
+ocr review --audience agent --commit abc123
+ocr review --audience agent --from main --to feature-branch
+```
+
+The `--audience agent` flag suppresses progress UI and outputs a concise structured summary. The `--background` flag provides requirement context so OCR can verify whether the implementation matches intent.
 
 ## Commands
 
@@ -196,20 +319,6 @@ Layers 1–3 share the same JSON format:
 - Within each layer, rules are evaluated in declaration order — the first match wins.
 - If a rule file does not exist, it is silently skipped.
 
-## Architecture
-
-The review agent follows a **three-phase workflow**:
-
-1. **Plan Phase** — For changes exceeding 50 lines, the agent performs risk analysis before reviewing. Smaller diffs skip directly to the main phase.
-2. **Main Task Loop** — Each changed file gets its own goroutine. The LLM interacts with built-in tools (read files, search code, read diffs, submit comments) in a conversation loop until it calls `task_done`.
-3. **Memory Compression** — When prompt context exceeds token thresholds (60% async, 80% sync), the agent uses three-zone partitioning (frozen / compress / active) to manage context window size.
-
-### Key Design Decisions
-
-- **Concurrent per-file processing** — Files are reviewed in parallel (default 8 workers). Timeout prevents any single file from blocking others.
-- **Dual protocol support** — Both Anthropic Messages API and OpenAI Chat Completions API are supported, with automatic URL normalization.
-- **Tool-use agent** — The LLM has access to domain-specific tools (`code_search`, `file_read`, `code_comment`, `file_find`, `file_read_diff`), enabling cross-referential context-aware reviews rather than isolated diff scanning.
-
 ## Configuration Reference
 
 Config file: `~/.opencodereview/config.json`
@@ -247,38 +356,6 @@ Internal defaults defined in `internal/config/template/task_template.json`:
 | `MAX_TOOL_REQUEST_TIMES` | 20 | Max tool-use iterations per file |
 | `PLAN_MODE_LINE_THRESHOLD` | 50 | Skip plan phase below this line count |
 | `TOOL_REQUEST_WAIT_TIME_MS` | 10000 | Per-tool-request timeout |
-
-## Built-in Tools
-
-Tools the LLM agent can invoke during review:
-
-| Tool | Phases | Purpose |
-|------|--------|---------|
-| `task_done` | main_task | Terminate the review (DONE/FAILED) |
-| `code_comment` | main_task | Submit a line-level review comment |
-| `file_read` | main_task | Read file content at a line range |
-| `code_search` | plan + main | Search text/regex across files |
-| `file_read_diff` | plan + main | View diff content for other changed files |
-| `file_find` | plan + main | Find files by filename keyword |
-
-## System Review Rules
-
-Built-in glob-pattern-matched review checklists per file type, defined in `internal/config/rules/system_rules.json`:
-
-| Pattern | Focus Areas |
-|---------|-------------|
-| `*.java` | NPE risks, dead loops, switch fallthrough, N+1 queries, thread safety |
-| `*.{ts,js,tsx,jsx}` | Quality, React best practices, async norms, XSS/security |
-| `*.kt` | Null safety, coroutine usage, idiomatic patterns |
-| `*{go,py,ets,lua,dart,swift,groovy}` | Logic bugs, typos |
-| `*{cpp,cc,hpp}` | Smart pointers, RAII, STL, const correctness |
-| `*.c` | malloc/free pairing, buffer overflow |
-| `pom.xml` / `build.gradle` | SNAPSHOT version prevention |
-| `package.json` | Latest/wildcard versions, dependency conflicts |
-| `*mapper*.xml` / `*dao*.xml` | SQL injection, performance, logic errors |
-| `*.properties` | Typo detection, duplicate keys, security issues |
-
-Override with `--rule path/to/rules.json`.
 
 ## Telemetry
 
