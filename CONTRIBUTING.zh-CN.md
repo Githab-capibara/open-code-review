@@ -151,7 +151,6 @@ make build
 | `README.zh-CN.md`       | 中文翻译             |
 | `CONTRIBUTING.md`       | 贡献指南（英文）     |
 | `CONTRIBUTING.zh-CN.md` | 贡献指南（中文）     |
-| `NPM-README.md`         | npm 发布页展示的说明 |
 
 ## 提交变更
 

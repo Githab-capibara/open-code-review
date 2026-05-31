@@ -151,7 +151,6 @@ Documentation is a crucial part of OpenCodeReview. We welcome improvements to RE
 | `README.zh-CN.md`       | Chinese translation                  |
 | `CONTRIBUTING.md`       | Contribution guide (English)         |
 | `CONTRIBUTING.zh-CN.md` | Contribution guide (Chinese)         |
-| `NPM-README.md`         | Description shown on npm registry    |
 
 ## Submitting Changes
 
