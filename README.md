@@ -192,6 +192,24 @@ curl -o ~/.claude/commands/open-code-review.md \
 
 > **Prerequisite**: All integration methods require the `ocr` CLI to be installed and an LLM configured. See [Install](#install) and [Configure LLM](#1-configure-llm) above.
 
+### CI/CD Integration
+
+OCR can be integrated into CI/CD pipelines to automate code review on Merge Requests / Pull Requests.
+
+The core command for CI integration:
+
+```bash
+ocr review \
+  --from "origin/main" \
+  --to "origin/feature-branch" \
+  --format json \
+  --audience agent
+```
+
+The `--format json` and `--audience agent` flags output machine-readable results suitable for parsing in CI scripts.
+
+See the [`examples/`](./examples/) directory for integration examples, including GitHub Actions and GitLab CI.
+
 ## Commands
 
 | Command | Alias | Description |
