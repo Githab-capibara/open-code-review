@@ -21,6 +21,10 @@ jobs:
             goarch: amd64
           - goos: darwin
             goarch: arm64
+          - goos: windows
+            goarch: amd64
+          - goos: windows
+            goarch: arm64
     steps:
       - uses: actions/checkout@v4
 
@@ -38,12 +42,17 @@ jobs:
           GIT_COMMIT=$(git rev-parse --short HEAD)
           BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           LD_FLAGS="-s -w -X main.Version=${VERSION} -X main.GitCommit=${GIT_COMMIT} -X main.BuildDate=${BUILD_DATE}"
-          go build -ldflags "${LD_FLAGS}" -o opencodereview-${{ matrix.goos }}-${{ matrix.goarch }} ./cmd/opencodereview
+          BIN_NAME=opencodereview-${{ matrix.goos }}-${{ matrix.goarch }}
+          if [ "${{ matrix.goos }}" = "windows" ]; then
+            BIN_NAME="${BIN_NAME}.exe"
+          fi
+          go build -ldflags "${LD_FLAGS}" -o "${BIN_NAME}" ./cmd/opencodereview
+          echo "bin_name=${BIN_NAME}" >> $GITHUB_ENV
 
       - uses: actions/upload-artifact@v4
         with:
           name: binary-${{ matrix.goos }}-${{ matrix.goarch }}
-          path: opencodereview-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: ${{ env.bin_name }}
 
   release:
     needs: build

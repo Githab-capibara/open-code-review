@@ -17,9 +17,11 @@ const {
   computeChecksum,
 } = require("./install.js");
 
+const IS_WINDOWS = process.platform === "win32";
+const BINARY_NAME = IS_WINDOWS ? "opencodereview.exe" : "opencodereview";
 const packageRoot = path.join(__dirname, "..");
 const binDir = path.join(packageRoot, "bin");
-const binaryPath = path.join(binDir, "opencodereview");
+const binaryPath = path.join(binDir, BINARY_NAME);
 const stateDir = path.join(os.homedir(), ".opencodereview");
 const tsFile = path.join(stateDir, "last-update-check");
 const lockFile = path.join(stateDir, "update.lock");
@@ -160,11 +162,16 @@ async function main() {
     const config = pkg.ocrConfig;
 
     const vars = { version: latestVersion, os: platform, arch };
-    const downloadUrl = buildUrl(config.urlPattern, vars);
+    let downloadUrl = buildUrl(config.urlPattern, vars);
+    if (IS_WINDOWS) {
+      downloadUrl += ".exe";
+    }
 
     const tempPath = path.join(binDir, `.opencodereview.tmp.${process.pid}`);
     await downloadBinary(downloadUrl, tempPath);
-    fs.chmodSync(tempPath, 0o755);
+    if (!IS_WINDOWS) {
+      fs.chmodSync(tempPath, 0o755);
+    }
 
     if (config.checksumPattern) {
       try {

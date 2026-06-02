@@ -6,7 +6,8 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 
-const binaryPath = path.join(__dirname, "opencodereview");
+const IS_WINDOWS = process.platform === "win32";
+const binaryPath = path.join(__dirname, IS_WINDOWS ? "opencodereview.exe" : "opencodereview");
 
 if (!process.env.OCR_NO_UPDATE) {
   const stateDir = path.join(os.homedir(), ".opencodereview");

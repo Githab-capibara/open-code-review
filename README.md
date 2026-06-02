@@ -89,6 +89,12 @@ chmod +x ocr && sudo mv ocr /usr/local/bin/ocr
 # Linux (ARM64)
 curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-linux-arm64
 chmod +x ocr && sudo mv ocr /usr/local/bin/ocr
+
+# Windows (x86_64)
+curl -Lo ocr.exe https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-windows-amd64.exe
+
+# Windows (ARM64)
+curl -Lo ocr.exe https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-windows-arm64.exe
 ```
 
 **From Source**

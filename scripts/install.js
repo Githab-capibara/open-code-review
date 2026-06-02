@@ -6,7 +6,8 @@ const path = require("path");
 const https = require("https");
 const crypto = require("crypto");
 
-const BINARY_NAME = "opencodereview";
+const IS_WINDOWS = process.platform === "win32";
+const BINARY_NAME = IS_WINDOWS ? "opencodereview.exe" : "opencodereview";
 
 const packageRoot = path.join(__dirname, "..");
 const binDir = path.join(packageRoot, "bin");
@@ -25,7 +26,7 @@ function error(msg) {
 }
 
 function detectPlatform() {
-  const os = process.platform;
+  let os = process.platform;
   let arch = process.arch;
 
   switch (arch) {
@@ -41,10 +42,17 @@ function detectPlatform() {
       );
   }
 
-  if (os !== "linux" && os !== "darwin") {
-    throw new Error(
-      `Unsupported operating system: ${os}. Supported: linux, darwin`
-    );
+  switch (os) {
+    case "linux":
+    case "darwin":
+      break;
+    case "win32":
+      os = "windows";
+      break;
+    default:
+      throw new Error(
+        `Unsupported operating system: ${os}. Supported: linux, darwin, win32`
+      );
   }
 
   return { os, arch };
@@ -157,21 +165,28 @@ async function main() {
     fs.mkdirSync(binDir, { recursive: true });
   }
 
-  const jsWrapper = path.join(binDir, "ocr.js");
-  if (fs.existsSync(jsWrapper)) {
-    try {
-      fs.chmodSync(jsWrapper, 0o755);
-    } catch (e) {
-      warn(`Could not make ocr.js executable: ${e.message}`);
+  if (!IS_WINDOWS) {
+    const jsWrapper = path.join(binDir, "ocr.js");
+    if (fs.existsSync(jsWrapper)) {
+      try {
+        fs.chmodSync(jsWrapper, 0o755);
+      } catch (e) {
+        warn(`Could not make ocr.js executable: ${e.message}`);
+      }
     }
   }
 
   const vars = { version, os, arch };
-  const downloadUrl = buildUrl(config.urlPattern, vars);
+  let downloadUrl = buildUrl(config.urlPattern, vars);
+  if (IS_WINDOWS) {
+    downloadUrl += ".exe";
+  }
   info(`Downloading ${downloadUrl} ...`);
 
   await downloadBinary(downloadUrl, binaryDest);
-  fs.chmodSync(binaryDest, 0o755);
+  if (!IS_WINDOWS) {
+    fs.chmodSync(binaryDest, 0o755);
+  }
 
   if (config.checksumPattern) {
     try {

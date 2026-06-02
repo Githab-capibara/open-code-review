@@ -89,30 +89,40 @@ func TestReleaseYmlMatchesURLPattern(t *testing.T) {
 	pkg := loadPackageJSON(t)
 	yml := loadFile(t, ".github/workflows/release.yml")
 
-	// Match: -o opencodereview-${{ matrix.goos }}-${{ matrix.goarch }}
-	re := regexp.MustCompile(`go build[^\n]*-o\s+(opencodereview[^\n]*\}\})`)
+	// Match: BIN_NAME=opencodereview-${{ matrix.goos }}-${{ matrix.goarch }}
+	re := regexp.MustCompile(`BIN_NAME=(opencodereview[^\n]*\}\})`)
 	m := re.FindStringSubmatch(yml)
 	if m == nil {
-		t.Fatal("cannot find 'go build -o' output pattern in release.yml")
+		t.Fatal("cannot find BIN_NAME pattern in release.yml")
 	}
-	outputTemplate := strings.TrimSpace(strings.Split(m[1], " ./")[0])
+	baseTemplate := strings.TrimSpace(m[1])
+
+	hasWindowsExe := strings.Contains(yml, `BIN_NAME="${BIN_NAME}.exe"`)
 
 	platforms := []struct{ os, arch string }{
 		{"linux", "amd64"},
 		{"linux", "arm64"},
 		{"darwin", "amd64"},
 		{"darwin", "arm64"},
+		{"windows", "amd64"},
+		{"windows", "arm64"},
 	}
 	for _, p := range platforms {
-		rendered := outputTemplate
+		rendered := baseTemplate
 		rendered = strings.ReplaceAll(rendered, "${{ matrix.goos }}", p.os)
 		rendered = strings.ReplaceAll(rendered, "${{ matrix.goarch }}", p.arch)
+		if p.os == "windows" && hasWindowsExe {
+			rendered += ".exe"
+		}
 
 		url := pkg.OcrConfig.URLPattern
 		url = strings.ReplaceAll(url, "{version}", "1.0.7")
 		url = strings.ReplaceAll(url, "{os}", p.os)
 		url = strings.ReplaceAll(url, "{arch}", p.arch)
 		expected := extractFilenameFromURL(url)
+		if p.os == "windows" {
+			expected += ".exe"
+		}
 
 		if rendered != expected {
 			t.Errorf("release.yml produces %q, urlPattern expects %q", rendered, expected)

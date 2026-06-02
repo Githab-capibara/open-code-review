@@ -1,6 +1,7 @@
 .PHONY: build test clean run help \
 	build-all dist sha256sum version-info \
-	build-linux-amd64 build-linux-arm64 build-darwin-amd64 build-darwin-arm64
+	build-linux-amd64 build-linux-arm64 build-darwin-amd64 build-darwin-arm64 \
+	build-windows-amd64 build-windows-arm64
 
 BINARY_NAME := opencodereview
 GO          := go
@@ -53,7 +54,17 @@ build-darwin-amd64:
 build-darwin-arm64:
 	$(call BUILD_PLATFORM,darwin,arm64)
 
-build-all: build-linux-amd64 build-linux-arm64 build-darwin-amd64 build-darwin-arm64
+build-windows-amd64:
+	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 $(GO) build -ldflags "$(LD_FLAGS)" \
+		-o $(DIST_DIR)/$(BINARY_NAME)-windows-amd64.exe \
+		./cmd/opencodereview
+
+build-windows-arm64:
+	GOOS=windows GOARCH=arm64 CGO_ENABLED=0 $(GO) build -ldflags "$(LD_FLAGS)" \
+		-o $(DIST_DIR)/$(BINARY_NAME)-windows-arm64.exe \
+		./cmd/opencodereview
+
+build-all: build-linux-amd64 build-linux-arm64 build-darwin-amd64 build-darwin-arm64 build-windows-amd64 build-windows-arm64
 
 # Generate SHA256 checksums for all release binaries
 sha256sum: build-all
