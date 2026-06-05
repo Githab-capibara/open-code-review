@@ -42,7 +42,7 @@ func (p *CodeSearchProvider) Execute(args map[string]any) (string, error) {
 	return result, nil
 }
 
-func (p *CodeSearchProvider) gitGrep(searchText string, caseSensitive bool, usePerlRegexp bool, pathspec []string) (string, error) {
+func (p *CodeSearchProvider) buildGrepArgs(searchText string, caseSensitive bool, usePerlRegexp bool, pathspec []string) []string {
 	cmdArgs := []string{"--no-pager", "grep"}
 
 	if !caseSensitive {
@@ -57,22 +57,34 @@ func (p *CodeSearchProvider) gitGrep(searchText string, caseSensitive bool, useP
 	cmdArgs = append(cmdArgs, "-n", "--no-color")
 	cmdArgs = append(cmdArgs, "--max-count", fmt.Sprintf("%d", gitGrepMaxCount))
 
-	// In range/commit mode, specify the ref so git grep searches at that ref instead of working tree.
+	cmdArgs = append(cmdArgs, "-e", searchText)
+
 	if ref := p.FileReader.Ref; ref != "" {
 		cmdArgs = append(cmdArgs, ref)
 	}
 
-	cmdArgs = append(cmdArgs, "--", searchText)
+	cmdArgs = append(cmdArgs, "--")
 	cmdArgs = append(cmdArgs, pathspec...)
+
+	return cmdArgs
+}
+
+func (p *CodeSearchProvider) gitGrep(searchText string, caseSensitive bool, usePerlRegexp bool, pathspec []string) (string, error) {
+	cmdArgs := p.buildGrepArgs(searchText, caseSensitive, usePerlRegexp, pathspec)
 
 	cmd := exec.Command("git", cmdArgs...)
 	cmd.Dir = p.FileReader.RepoDir
 
-	output, err := cmd.CombinedOutput()
+	output, err := cmd.Output()
 	outStr := string(output)
 
-	if err != nil && outStr == "" {
-		return "No matches found", nil
+	if err != nil {
+		if outStr == "" {
+			// git grep exits with code 1 for zero matches; treat as normal.
+			return "No matches found", nil
+		}
+		// Rare: non-zero exit but stdout has partial output (e.g. signal
+		// during execution). Process whatever was captured.
 	}
 
 	lines := strings.Split(strings.TrimRight(outStr, "\n"), "\n")
