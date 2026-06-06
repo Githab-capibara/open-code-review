@@ -1,11 +1,14 @@
 package tool
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/open-code-review/open-code-review/internal/gitcmd"
@@ -101,4 +104,111 @@ func (fr *FileReader) readFromGitShow(parentCtx context.Context, path string) (s
 		return "", fmt.Errorf("git show %s:%s: %w", fr.Ref, path, err)
 	}
 	return string(output), nil
+}
+
+// ReadLines returns a window of lines from the file plus the total line count.
+// startLine is 1-based; maxLines is the maximum number of lines to collect.
+func (fr *FileReader) ReadLines(ctx context.Context, path string, startLine, maxLines int) ([]string, int, error) {
+	switch fr.Mode {
+	case ModeWorkspace:
+		return fr.readLinesFromDisk(path, startLine, maxLines)
+	case ModeRange, ModeCommit:
+		innerCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
+		defer cancel()
+		return fr.readLinesFromGitShow(innerCtx, path, startLine, maxLines)
+	default:
+		return fr.readLinesFromDisk(path, startLine, maxLines)
+	}
+}
+
+// scanLines reads from r line by line, collecting at most maxLines lines
+// starting from startLine (1-based), while counting the total number of lines.
+// The behavior matches strings.Split(content, "\n") for trailing-newline files.
+func scanLines(r io.Reader, startLine, maxLines int) ([]string, int, error) {
+	br := bufio.NewReader(r)
+	var collected []string
+	lineNum := 0
+	lastHadNewline := false
+
+	for {
+		line, err := br.ReadString('\n')
+		if len(line) > 0 {
+			lineNum++
+			lastHadNewline = line[len(line)-1] == '\n'
+			trimmed := strings.TrimSuffix(line, "\n")
+			trimmed = strings.TrimSuffix(trimmed, "\r")
+			if lineNum >= startLine && len(collected) < maxLines {
+				collected = append(collected, trimmed)
+			}
+		}
+		if err != nil {
+			if err != io.EOF {
+				return nil, 0, err
+			}
+			break
+		}
+	}
+
+	if lastHadNewline {
+		lineNum++
+		if lineNum >= startLine && len(collected) < maxLines {
+			collected = append(collected, "")
+		}
+	}
+
+	return collected, lineNum, nil
+}
+
+func (fr *FileReader) readLinesFromDisk(path string, startLine, maxLines int) ([]string, int, error) {
+	fullPath := filepath.Join(fr.RepoDir, path)
+	f, err := os.Open(fullPath)
+	if err != nil {
+		return nil, 0, fmt.Errorf("read file %q: %w", path, err)
+	}
+	defer f.Close()
+
+	return scanLines(f, startLine, maxLines)
+}
+
+func (fr *FileReader) readLinesFromGitShow(ctx context.Context, path string, startLine, maxLines int) ([]string, int, error) {
+	args := []string{"-c", "core.quotepath=false", "show", fr.Ref + ":" + path}
+
+	var collected []string
+	var totalLines int
+
+	if fr.Runner != nil {
+		err := fr.Runner.Stream(ctx, fr.RepoDir, func(stdout io.Reader) error {
+			var scanErr error
+			collected, totalLines, scanErr = scanLines(stdout, startLine, maxLines)
+			return scanErr
+		}, args...)
+		if err != nil {
+			return nil, 0, fmt.Errorf("git show %s:%s: %w", fr.Ref, path, err)
+		}
+		return collected, totalLines, nil
+	}
+
+	cmd := exec.CommandContext(ctx, "git", args...)
+	cmd.Dir = fr.RepoDir
+	stdoutPipe, err := cmd.StdoutPipe()
+	if err != nil {
+		return nil, 0, fmt.Errorf("git show %s:%s: %w", fr.Ref, path, err)
+	}
+	if err := cmd.Start(); err != nil {
+		return nil, 0, fmt.Errorf("git show %s:%s: %w", fr.Ref, path, err)
+	}
+
+	collected, totalLines, scanErr := scanLines(stdoutPipe, startLine, maxLines)
+	if scanErr != nil {
+		cmd.Process.Kill()
+	}
+	waitErr := cmd.Wait()
+
+	if scanErr != nil {
+		return nil, 0, fmt.Errorf("git show %s:%s: %w", fr.Ref, path, scanErr)
+	}
+	if waitErr != nil {
+		return nil, 0, fmt.Errorf("git show %s:%s: %w", fr.Ref, path, waitErr)
+	}
+	return collected, totalLines, nil
 }

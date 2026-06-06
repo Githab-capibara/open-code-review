@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"os/exec"
 )
 
@@ -80,4 +81,47 @@ func (r *Runner) RunSplit(ctx context.Context, repoDir string, args ...string) (
 
 	err := cmd.Run()
 	return stdout.String(), stderr.String(), err
+}
+
+// Stream acquires the semaphore, starts a git command, and passes its stdout
+// as an io.Reader to consume. The semaphore is held for the full duration.
+// consume MUST fully drain the stdout reader before returning nil;
+// otherwise cmd.Wait() may block or return a broken-pipe error.
+func (r *Runner) Stream(ctx context.Context, repoDir string, consume func(stdout io.Reader) error, args ...string) error {
+	if err := r.acquire(ctx); err != nil {
+		return err
+	}
+	defer r.release()
+
+	cmd := exec.CommandContext(ctx, "git", args...)
+	cmd.Dir = repoDir
+
+	var stderrBuf bytes.Buffer
+	cmd.Stderr = &stderrBuf
+
+	stdoutPipe, err := cmd.StdoutPipe()
+	if err != nil {
+		return err
+	}
+
+	if err := cmd.Start(); err != nil {
+		return err
+	}
+
+	consumeErr := consume(stdoutPipe)
+	if consumeErr != nil {
+		cmd.Process.Kill()
+	}
+	waitErr := cmd.Wait()
+
+	if consumeErr != nil {
+		return consumeErr
+	}
+	if waitErr != nil {
+		if stderrBuf.Len() > 0 {
+			return fmt.Errorf("%w: %s", waitErr, stderrBuf.String())
+		}
+		return waitErr
+	}
+	return nil
 }
