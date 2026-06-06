@@ -2,13 +2,18 @@ package tool
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"os/exec"
 	"strconv"
 	"strings"
+	"time"
 )
 
-const gitGrepMaxCount = 100
+const (
+	gitGrepMaxCount = 100
+	gitGrepTimeout  = 10 * time.Second
+)
 
 // CodeSearchProvider performs text search across the repository using git grep.
 type CodeSearchProvider struct {
@@ -70,10 +75,11 @@ func (p *CodeSearchProvider) buildGrepArgs(searchText string, caseSensitive bool
 	return cmdArgs
 }
 
-func (p *CodeSearchProvider) gitGrep(searchText string, caseSensitive bool, usePerlRegexp bool, pathspec []string) (string, error) {
-	cmdArgs := p.buildGrepArgs(searchText, caseSensitive, usePerlRegexp, pathspec)
+func (p *CodeSearchProvider) runGitGrep(cmdArgs []string) (string, string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), gitGrepTimeout)
+	defer cancel()
 
-	cmd := exec.Command("git", cmdArgs...)
+	cmd := exec.CommandContext(ctx, "git", cmdArgs...)
 	cmd.Dir = p.FileReader.RepoDir
 
 	var stdout, stderr bytes.Buffer
@@ -81,14 +87,26 @@ func (p *CodeSearchProvider) gitGrep(searchText string, caseSensitive bool, useP
 	cmd.Stderr = &stderr
 
 	err := cmd.Run()
-	outStr := stdout.String()
+	if ctx.Err() == context.DeadlineExceeded && err != nil && cmd.ProcessState != nil && cmd.ProcessState.ExitCode() == -1 {
+		return "", "", context.DeadlineExceeded
+	}
+	return stdout.String(), stderr.String(), err
+}
+
+func (p *CodeSearchProvider) gitGrep(searchText string, caseSensitive bool, usePerlRegexp bool, pathspec []string) (string, error) {
+	cmdArgs := p.buildGrepArgs(searchText, caseSensitive, usePerlRegexp, pathspec)
+
+	outStr, errStr, err := p.runGitGrep(cmdArgs)
 
 	if err != nil {
+		if err == context.DeadlineExceeded {
+			return "code_search timed out. Try narrowing file_patterns to a more specific path.", nil
+		}
 		if outStr == "" {
-			if stderr.Len() == 0 {
+			if errStr == "" {
 				return "No matches found", nil
 			}
-			return fmt.Sprintf("Error: %s", strings.TrimSpace(stderr.String())), nil
+			return fmt.Sprintf("Error: %s", strings.TrimSpace(errStr)), nil
 		}
 	}
 
@@ -148,8 +166,8 @@ func (p *CodeSearchProvider) gitGrep(searchText string, caseSensitive bool, useP
 		sb.WriteString("\n")
 	}
 
-	if err != nil && stderr.Len() > 0 {
-		sb.WriteString(fmt.Sprintf("Warning: %s\n", strings.TrimSpace(stderr.String())))
+	if err != nil && errStr != "" {
+		sb.WriteString(fmt.Sprintf("Warning: %s\n", strings.TrimSpace(errStr)))
 	}
 
 	return sb.String(), nil
