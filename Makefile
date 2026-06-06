@@ -47,7 +47,10 @@ fmt:
 vet:
 	$(GO) vet ./...
 
-check: fmt vet
+check:
+	$(GO) mod tidy
+	$(GO) fmt ./...
+	$(GO) vet ./...
 	@echo "check passed"
 
 # ── Cross-platform targets ───────────────────────────────────────────────────
