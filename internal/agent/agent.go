@@ -580,7 +580,117 @@ func (a *Agent) executeSubtask(ctx context.Context, d model.Diff) error {
 		return nil
 	}
 
-	return a.performLlmCodeReview(ctx, messages, newPath)
+	err := a.performLlmCodeReview(ctx, messages, newPath)
+	if err == nil {
+		if a.args.CommentWorkerPool != nil {
+			a.args.CommentWorkerPool.Await()
+		}
+		a.executeReviewFilter(ctx, d, newPath)
+	}
+	return err
+}
+
+// executeReviewFilter runs the REVIEW_FILTER_TASK to remove comments that are
+// provably incorrect based solely on the diff. Errors are logged and silently ignored.
+func (a *Agent) executeReviewFilter(ctx context.Context, d model.Diff, newPath string) {
+	ft := a.args.Template.ReviewFilterTask
+	if ft == nil || len(ft.Messages) == 0 {
+		return
+	}
+
+	comments := a.args.CommentCollector.CommentsForPath(newPath)
+	if len(comments) == 0 {
+		return
+	}
+
+	commentsJSON := buildFilterCommentsJSON(comments)
+
+	messages := make([]llm.Message, 0, len(ft.Messages))
+	for _, m := range ft.Messages {
+		content := m.Content
+		content = strings.ReplaceAll(content, "{{path}}", newPath)
+		content = strings.ReplaceAll(content, "{{diff}}", d.Diff)
+		content = strings.ReplaceAll(content, "{{comments}}", commentsJSON)
+		messages = append(messages, llm.NewTextMessage(m.Role, content))
+	}
+
+	if ft.Timeout > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, time.Duration(ft.Timeout)*time.Second)
+		defer cancel()
+	}
+
+	fs := a.session.GetOrCreateFileSession(newPath)
+	rec := fs.AppendTaskRecord(session.ReviewFilterTask, messages)
+	startTime := time.Now()
+
+	resp, err := a.args.LLMClient.CompletionsWithCtx(ctx, llm.ChatRequest{
+		Model:     a.args.Model,
+		Messages:  messages,
+		MaxTokens: a.args.Template.MaxTokens,
+	})
+	if err != nil {
+		rec.SetError(err, time.Since(startTime))
+		fmt.Fprintf(stdout.Writer(), "[ocr] Review filter failed for %s: %v\n", newPath, err)
+		return
+	}
+	rec.SetResponse(resp, time.Since(startTime))
+	if resp.Usage != nil {
+		atomic.AddInt64(&a.totalInputTokens, resp.Usage.PromptTokens)
+		atomic.AddInt64(&a.totalOutputTokens, resp.Usage.CompletionTokens)
+		atomic.AddInt64(&a.totalCacheReadTokens, resp.Usage.CacheReadTokens)
+		atomic.AddInt64(&a.totalCacheWriteTokens, resp.Usage.CacheWriteTokens)
+	}
+
+	indices := parseFilterResponse(resp.Content(), len(comments))
+	if len(indices) == 0 {
+		return
+	}
+
+	a.args.CommentCollector.RemoveByPathAndIndices(newPath, indices)
+	fmt.Fprintf(stdout.Writer(), "[ocr] Review filter removed %d comment(s) for %s\n", len(indices), newPath)
+}
+
+// buildFilterCommentsJSON serializes comments into a JSON array with generated IDs.
+func buildFilterCommentsJSON(comments []model.LlmComment) string {
+	type filterComment struct {
+		ID           string `json:"id"`
+		Content      string `json:"content"`
+		ExistingCode string `json:"existing_code,omitempty"`
+	}
+	items := make([]filterComment, len(comments))
+	for i, cm := range comments {
+		items[i] = filterComment{
+			ID:           fmt.Sprintf("c-%d", i),
+			Content:      cm.Content,
+			ExistingCode: cm.ExistingCode,
+		}
+	}
+	data, _ := json.Marshal(items)
+	return string(data)
+}
+
+// parseFilterResponse extracts comment indices from the LLM filter response.
+// Returns a set of 0-based indices. Invalid IDs or out-of-range indices are ignored.
+func parseFilterResponse(raw string, total int) map[int]struct{} {
+	raw = stripMarkdownFences(raw)
+	var ids []string
+	if err := json.Unmarshal([]byte(raw), &ids); err != nil {
+		preview := raw
+		if len(preview) > 200 {
+			preview = preview[:200] + "..."
+		}
+		fmt.Fprintf(stdout.Writer(), "[ocr] Review filter: failed to parse LLM response: %v, raw: %s\n", err, preview)
+		return nil
+	}
+	indices := make(map[int]struct{})
+	for _, id := range ids {
+		var idx int
+		if _, err := fmt.Sscanf(id, "c-%d", &idx); err == nil && idx >= 0 && idx < total {
+			indices[idx] = struct{}{}
+		}
+	}
+	return indices
 }
 
 // buildChangeFilesExcept returns a formatted list of changed files except the given path.
