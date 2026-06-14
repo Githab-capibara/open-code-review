@@ -283,12 +283,7 @@ func (p *Provider) untrackedFileDiffs(ctx context.Context) ([]string, error) {
 
 	var results []string
 	for _, f := range files {
-		fullPath := filepath.Join(p.repoDir, f)
-		stat, serr := os.Stat(fullPath)
-		if serr != nil || stat.IsDir() {
-			continue
-		}
-		content, rerr := os.ReadFile(fullPath)
+		content, rerr := readWorkspaceFileForDiff(p.repoDir, f)
 		if rerr != nil {
 			continue
 		}

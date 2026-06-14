@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
@@ -119,8 +118,7 @@ func finalizeDiff(ctx context.Context, d *model.Diff, repoDir string, ref string
 		d.NewFileContent = string(output)
 		return
 	}
-	fullPath := filepath.Join(repoDir, d.NewPath)
-	content, err := os.ReadFile(fullPath)
+	content, err := readWorkspaceFileForDiff(repoDir, d.NewPath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "[ocr] WARNING: cannot read file %s for review: %v\n", d.NewPath, err)
 		return

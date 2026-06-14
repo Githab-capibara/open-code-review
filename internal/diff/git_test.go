@@ -148,6 +148,100 @@ func TestCommitDiffTreatsOptionLikeRefAsRevision(t *testing.T) {
 	}
 }
 
+func TestWorkspaceUntrackedSymlinkDoesNotReadExternalTarget(t *testing.T) {
+	repo := t.TempDir()
+	runGitTest(t, repo, "init", "-q")
+	runGitTest(t, repo, "config", "user.email", "test@example.com")
+	runGitTest(t, repo, "config", "user.name", "Test User")
+	runGitTest(t, repo, "config", "commit.gpgsign", "false")
+
+	if err := os.WriteFile(filepath.Join(repo, "base.txt"), []byte("base\n"), 0o644); err != nil {
+		t.Fatalf("write base.txt: %v", err)
+	}
+	runGitTest(t, repo, "add", "base.txt")
+	runGitTest(t, repo, "commit", "-q", "-m", "initial commit")
+
+	secret := "TOP_SECRET_ISSUE123_SHOULD_NOT_LEAK\n"
+	outside := filepath.Join(t.TempDir(), "secret.txt")
+	if err := os.WriteFile(outside, []byte(secret), 0o644); err != nil {
+		t.Fatalf("write external secret: %v", err)
+	}
+	if err := os.Symlink(outside, filepath.Join(repo, "leaked_link")); err != nil {
+		t.Skipf("symlink not supported: %v", err)
+	}
+
+	provider := NewWorkspaceProvider(repo, gitcmd.New(0))
+	diffs, err := provider.GetDiff(context.Background())
+	if err != nil {
+		t.Fatalf("GetDiff returned error: %v", err)
+	}
+
+	var found bool
+	for _, d := range diffs {
+		if strings.Contains(d.Diff, secret) || strings.Contains(d.NewFileContent, secret) {
+			t.Fatalf("workspace diff leaked external symlink target content: %+v", d)
+		}
+		if d.NewPath == "leaked_link" {
+			found = true
+			if d.NewFileContent != outside {
+				t.Fatalf("NewFileContent = %q, want symlink target %q", d.NewFileContent, outside)
+			}
+		}
+	}
+	if !found {
+		t.Fatal("expected diff for untracked symlink")
+	}
+}
+
+func TestWorkspaceTrackedFileChangedToSymlinkDoesNotReadExternalTarget(t *testing.T) {
+	repo := t.TempDir()
+	runGitTest(t, repo, "init", "-q")
+	runGitTest(t, repo, "config", "user.email", "test@example.com")
+	runGitTest(t, repo, "config", "user.name", "Test User")
+	runGitTest(t, repo, "config", "commit.gpgsign", "false")
+
+	victim := filepath.Join(repo, "victim.txt")
+	if err := os.WriteFile(victim, []byte("original\n"), 0o644); err != nil {
+		t.Fatalf("write victim.txt: %v", err)
+	}
+	runGitTest(t, repo, "add", "victim.txt")
+	runGitTest(t, repo, "commit", "-q", "-m", "initial commit")
+
+	secret := "TRACKED_SYMLINK_SECRET_SHOULD_NOT_LEAK\n"
+	outside := filepath.Join(t.TempDir(), "secret.txt")
+	if err := os.WriteFile(outside, []byte(secret), 0o644); err != nil {
+		t.Fatalf("write external secret: %v", err)
+	}
+	if err := os.Remove(victim); err != nil {
+		t.Fatalf("remove victim.txt: %v", err)
+	}
+	if err := os.Symlink(outside, victim); err != nil {
+		t.Skipf("symlink not supported: %v", err)
+	}
+
+	provider := NewWorkspaceProvider(repo, gitcmd.New(0))
+	diffs, err := provider.GetDiff(context.Background())
+	if err != nil {
+		t.Fatalf("GetDiff returned error: %v", err)
+	}
+
+	var foundSymlinkAdd bool
+	for _, d := range diffs {
+		if strings.Contains(d.Diff, secret) || strings.Contains(d.NewFileContent, secret) {
+			t.Fatalf("workspace diff leaked external symlink target content: %+v", d)
+		}
+		if d.NewPath == "victim.txt" && d.IsNew {
+			foundSymlinkAdd = true
+			if d.NewFileContent != outside {
+				t.Fatalf("NewFileContent = %q, want symlink target %q", d.NewFileContent, outside)
+			}
+		}
+	}
+	if !foundSymlinkAdd {
+		t.Fatal("expected new-file diff for tracked file changed to symlink")
+	}
+}
+
 // TestRangeDiffDetectsRename guards against issue #99: when a file is renamed
 // on the target branch, `ocr review --from master --to BRANCH` must recognize
 // the rename and read content at the NEW path. Before the fix the rename could
