@@ -56,6 +56,18 @@ var registry = []Provider{
 		},
 	},
 	{
+		Name:        "volcengine",
+		DisplayName: "Volcano Engine Ark API",
+		Protocol:    "openai",
+		BaseURL:     "https://ark.cn-beijing.volces.com/api/v3",
+		EnvVar:      "ARK_API_KEY",
+		Models: []string{
+			"doubao-seed-2-0-lite-260428",
+			"doubao-seed-2-0-mini-260428",
+			"doubao-seed-2-0-pro-260215",
+		},
+	},
+	{
 		Name:        "deepseek",
 		DisplayName: "DeepSeek API",
 		Protocol:    "openai",
@@ -64,6 +76,18 @@ var registry = []Provider{
 		Models: []string{
 			"deepseek-v4-pro",
 			"deepseek-v4-flash",
+		},
+	},
+	{
+		Name:        "kimi",
+		DisplayName: "Kimi Moonshot API",
+		Protocol:    "openai",
+		BaseURL:     "https://api.moonshot.cn/v1",
+		EnvVar:      "MOONSHOT_API_KEY",
+		Models: []string{
+			"kimi-k2.7-code",
+			"kimi-k2.6",
+			"kimi-k2.5",
 		},
 	},
 	{
