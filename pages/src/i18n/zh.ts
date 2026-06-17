@@ -59,7 +59,7 @@ export const zh: TranslationKeys = {
   'features.feat5Title': '智能记忆压缩',
   'features.feat5Desc': '面向代码评审场景的智能记忆压缩，三层分区（frozen/compress/active）上下文管理，突破 token 限制，确保深度评审。',
   'features.feat6Title': '内置评审规则',
-  'features.feat6Desc': '经过线上海量真实场景验证迭代而来的评审规则，覆盖 Java、TypeScript、Go、Python、Kotlin、C++、C 等 10+ 语言，专项规则涵盖 NPE、线程安全、XSS、SQL 注入等常见风险类型。',
+  'features.feat6Desc': '经过线上海量真实场景验证迭代而来的评审规则，覆盖 Java、TypeScript、Go、Python、Kotlin、Rust、C++、C 等 10+ 语言，专项规则涵盖 NPE、线程安全、XSS、SQL 注入等常见风险类型。',
 
   // Benchmark Section
   'benchmark.sectionLabel': '开放基准测试',

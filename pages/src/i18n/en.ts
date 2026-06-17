@@ -59,7 +59,7 @@ export const en: TranslationKeys = {
   'features.feat5Title': 'Smart Memory Compression',
   'features.feat5Desc': 'Purpose-built memory compression for code review with 3-tier partitioning (frozen/compress/active) context management, breaking token limits for deep review.',
   'features.feat6Title': 'Built-in Review Rules',
-  'features.feat6Desc': 'Review rules validated through massive real-world scenarios, covering 10+ languages including Java, TypeScript, Go, Python, Kotlin, C++, C, with specialized rules for NPE, thread safety, XSS, SQL injection, and more.',
+  'features.feat6Desc': 'Review rules validated through massive real-world scenarios, covering 10+ languages including Java, TypeScript, Go, Python, Kotlin, Rust, C++, C, with specialized rules for NPE, thread safety, XSS, SQL injection, and more.',
 
   // Benchmark Section
   'benchmark.sectionLabel': 'Open Benchmark',
