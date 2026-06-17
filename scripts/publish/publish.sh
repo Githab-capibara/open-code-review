@@ -235,7 +235,7 @@ do_publish() {
     fi
 
     info "Publishing ${pkg_name}@${NPM_VERSION} ..."
-    npm publish ${registry_args[@]+"${registry_args[@]}"}
+    npm publish ${registry_args[@]+"${registry_args[@]}"} || die "npm publish failed"
     success "Published ${pkg_name}@${NPM_VERSION}"
 }
 
