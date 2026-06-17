@@ -201,8 +201,15 @@ patch_package_json() {
     fi
 
     if [ -n "${OCR_PKG_NAME:-}" ]; then
-        jq --arg n "$OCR_PKG_NAME" '.name = $n' "$tmp" > "${tmp}.new" && mv "${tmp}.new" "$tmp"
+        local new_scope="${OCR_PKG_NAME%%/*}"
+        jq --arg n "$OCR_PKG_NAME" --arg s "$new_scope" '
+          .name = $n |
+          if .optionalDependencies then
+            .optionalDependencies |= with_entries(.key |= sub("^@[^/]+"; $s))
+          else . end
+        ' "$tmp" > "${tmp}.new" && mv "${tmp}.new" "$tmp"
         info "  name → ${OCR_PKG_NAME}"
+        info "  optionalDependencies scope → ${new_scope}"
     fi
 
     if [ -n "${OCR_PUBLISH_REGISTRY:-}" ]; then
