@@ -16,7 +16,21 @@ const PLATFORM_PKG = {
 };
 
 function getPlatformPackageName() {
-  return PLATFORM_PKG[`${process.platform}-${process.arch}`] || null;
+  const key = `${process.platform}-${process.arch}`;
+
+  try {
+    const parentPkg = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8")
+    );
+    const optDeps = parentPkg.optionalDependencies || {};
+    for (const name of Object.keys(optDeps)) {
+      if (name.endsWith(`-${key}`)) {
+        return name;
+      }
+    }
+  } catch (_) {}
+
+  return PLATFORM_PKG[key] || null;
 }
 
 function resolveNativeBinary() {

@@ -31,6 +31,12 @@ if [ -n "${OCR_PUBLISH_REGISTRY:-}" ]; then
     REGISTRY_ARGS=(--registry "$OCR_PUBLISH_REGISTRY")
 fi
 
+# Derive scope override from OCR_PKG_NAME (e.g. @ali/open-code-review → @ali)
+SCOPE_OVERRIDE=""
+if [ -n "${OCR_PKG_NAME:-}" ]; then
+    SCOPE_OVERRIDE="${OCR_PKG_NAME%%/*}"
+fi
+
 # Pre-check all binaries exist before publishing anything
 for entry in "${PLATFORMS[@]}"; do
     IFS=':' read -r _ dist_binary _ <<< "$entry"
@@ -75,7 +81,13 @@ for entry in "${PLATFORMS[@]}"; do
     CURRENT_BIN_DIR="$bin_dir"
     cp "$pkg_json" "$CURRENT_BACKUP"
 
-    jq --arg v "$NPM_VERSION" '.version = $v' "$pkg_json" > "${pkg_json}.tmp" && mv "${pkg_json}.tmp" "$pkg_json" || { rm -f "${pkg_json}.tmp"; false; }
+    if [ -n "$SCOPE_OVERRIDE" ]; then
+        jq --arg v "$NPM_VERSION" --arg s "$SCOPE_OVERRIDE" \
+            '.version = $v | .name = (.name | sub("^@[^/]+"; $s))' \
+            "$pkg_json" > "${pkg_json}.tmp" && mv "${pkg_json}.tmp" "$pkg_json" || { rm -f "${pkg_json}.tmp"; false; }
+    else
+        jq --arg v "$NPM_VERSION" '.version = $v' "$pkg_json" > "${pkg_json}.tmp" && mv "${pkg_json}.tmp" "$pkg_json" || { rm -f "${pkg_json}.tmp"; false; }
+    fi
 
     pkg_name=$(jq -r '.name' "$pkg_json")
     already=$(npm view "${pkg_name}@${NPM_VERSION}" version ${REGISTRY_ARGS[@]+"${REGISTRY_ARGS[@]}"} 2>/dev/null || true)
