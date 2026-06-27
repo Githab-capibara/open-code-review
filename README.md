@@ -570,6 +570,45 @@ Layers 1–3 share the same JSON format:
 - Within each layer, rules are evaluated in declaration order — the first match wins.
 - If a rule file does not exist, it is silently skipped.
 
+**The `rule` field supports both inline content and file paths.** The system auto-detects which one you mean:
+
+1. If the value contains newlines → **inline content** (multi-line rules are never file paths).
+2. If the value is a single line, contains no spaces, and ends with `.md` / `.txt` / `.markdown` → **file path**.
+   - Absolute paths (starting with `/`) are used directly.
+   - Relative paths are resolved against the project root. Path traversal (e.g. `../../etc/passwd.md`) is blocked. If not found, a `[WARN]` is emitted and the rule is cleared (no fallback to inline).
+   - The file must pass validation: whitelisted extension, ≤ 512 KB, and resolved symlink target must also be a whitelisted extension. If validation fails, the rule is cleared.
+3. Otherwise → **inline content**.
+
+```json
+{
+  "rules": [
+    {
+      "path": "**/*mapper*.xml",
+      "rule": "docs/sql-rules.md"
+    },
+    {
+      "path": "**/*.java",
+      "rule": "Always check for null safety and resource leaks"
+    },
+    {
+      "path": "**/*.go",
+      "rule": "shared/go-concurrency.md"
+    },
+    {
+      "path": "**/*.py",
+      "rule": "/Users/me/team-rules/python.md"
+    }
+  ]
+}
+```
+
+- `docs/sql-rules.md` — relative path, resolved from `<project>/docs/sql-rules.md`.
+- `Always check for null safety…` — inline string, used directly.
+- `shared/go-concurrency.md` — relative path, same resolution.
+- `/Users/me/team-rules/python.md` — absolute path, used directly.
+
+> Absolute paths can access files outside the project directory — this is intentional. `rule.json` is authored by project maintainers, i.e. trusted input. Teams can store shared rules at a common path (e.g. `/opt/company-rules/`) instead of copying them into every project.
+
 ### Path Filtering
 
 Rule files also support `include` and `exclude` fields to control which files enter the review scope:
