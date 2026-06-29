@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import { useTranslation } from '../i18n';
 import { useResponsive } from '../hooks/useResponsive';
+import { useSectionTitleStyle } from '../hooks/useResponsiveStyle';
 import iconCase1 from '../assets/icons/icon-usecase-developer.svg';
 import iconCase2a from '../assets/icons/icon-usecase-platform-a.svg';
 import iconCase2b from '../assets/icons/icon-usecase-platform-b.svg';
@@ -10,6 +11,7 @@ import iconCase3 from '../assets/icons/icon-usecase-researcher.svg';
 const UseCasesSection: React.FC = () => {
   const { t } = useTranslation();
   const { isMobile, isTablet } = useResponsive();
+  const titleStyle = useSectionTitleStyle();
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>, index: number) => {
@@ -62,10 +64,10 @@ const UseCasesSection: React.FC = () => {
           <h2
             style={{
               color: '#FFFFFF',
-              fontSize: isMobile ? 28 : 48,
+              fontSize: titleStyle.fontSize,
               fontWeight: 500,
               textAlign: 'center',
-              lineHeight: isMobile ? '34px' : '52px',
+              lineHeight: titleStyle.lineHeight,
               letterSpacing: '0.96px',
               margin: 0,
             }}

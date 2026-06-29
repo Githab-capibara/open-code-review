@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from '../i18n';
 import { useResponsive } from '../hooks/useResponsive';
+import { useSectionTitleStyle } from '../hooks/useResponsiveStyle';
 import icon1 from '../assets/icons/icon-feature-architecture.svg';
 import icon2 from '../assets/icons/icon-feature-positioning.svg';
 import icon3 from '../assets/icons/icon-feature-multi-model.svg';
@@ -11,6 +12,7 @@ import icon6 from '../assets/icons/icon-feature-rules.svg';
 const FeaturesSection: React.FC = () => {
   const { t } = useTranslation();
   const { isMobile, isTablet } = useResponsive();
+  const titleStyle = useSectionTitleStyle();
 
   const features = [
     { icon: icon1, title: t('features.feat1Title'), desc: t('features.feat1Desc') },
@@ -38,7 +40,7 @@ const FeaturesSection: React.FC = () => {
           <span style={{ color: '#2BDE5E', fontSize: 16, fontWeight: 500, lineHeight: '22px', letterSpacing: '0.48px' }}>
             {t('features.sectionBadge')}
           </span>
-          <h2 style={{ color: '#FFFFFF', fontSize: isMobile ? 28 : 48, fontWeight: 500, textAlign: 'center', lineHeight: isMobile ? '34px' : '52px', letterSpacing: '0.96px', margin: 0, maxWidth: 758 }}>
+          <h2 style={{ color: '#FFFFFF', fontSize: titleStyle.fontSize, fontWeight: 500, textAlign: 'center', lineHeight: titleStyle.lineHeight, letterSpacing: '0.96px', margin: 0, maxWidth: 758 }}>
             {t('features.title')}
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 16, textAlign: 'center', lineHeight: '24px', margin: 0, maxWidth: 646 }}>
