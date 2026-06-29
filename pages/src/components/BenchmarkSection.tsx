@@ -1,13 +1,8 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from '../i18n';
 import { useResponsive } from '../hooks/useResponsive';
-import ocrIcon1 from '../assets/images/provider-1.svg';
-import ocrIcon2 from '../assets/images/provider-2.svg';
-import ocrIcon3 from '../assets/images/provider-3.svg';
-import ocrIcon4 from '../assets/images/provider-4.svg';
-import ocrIcon5 from '../assets/images/provider-5.svg';
-import ocrIcon6 from '../assets/images/provider-6.svg';
-import ocrIcon7 from '../assets/images/provider-7.svg';
+import { useSectionTitleStyle } from '../hooks/useResponsiveStyle';
+import ocrSourceIcon from '../assets/images/icon-ocr-source.svg';
 import claudeCodeIcon from '../assets/images/icon-claude-code.svg';
 import codexIcon from '../assets/images/icon-codex.svg';
 import sortIcon from '../assets/icons/icon-sort.svg';
@@ -41,13 +36,13 @@ type SortField = 'f1' | 'precision' | 'recall';
 type SortOrder = 'desc' | 'asc';
 
 const rawRows: BenchmarkRow[] = [
-  { model: 'Claude-4.6-Opus', provider: 'Anthropic', source: 'Open Code Review', sourceIcon: ocrIcon1, f1: '25.10%', f1Value: 25.10, precision: '33.90%', precisionValue: 33.90, precisionDetail: '301/889', recall: '20.00%', recallValue: 20.00, recallDetail: '301/1505', avgTime: '1m23s', avgToken: '385K', tokenDetail: '375K / 10K', precisionMedal: 1 },
-  { model: 'GLM-5.2', provider: 'Zhipu AI', source: 'Open Code Review', sourceIcon: ocrIcon2, f1: '21.30%', f1Value: 21.30, precision: '32.30%', precisionValue: 32.30, precisionDetail: '239/741', recall: '15.90%', recallValue: 15.90, recallDetail: '239/1505', avgTime: '7m58s', avgToken: '682K', tokenDetail: '624K / 58K', precisionMedal: 2 },
-  { model: 'Qwen3.7-Max', provider: 'Alibaba', source: 'Open Code Review', sourceIcon: ocrIcon3, f1: '21.20%', f1Value: 21.20, precision: '25.20%', precisionValue: 25.20, precisionDetail: '276/1096', recall: '18.30%', recallValue: 18.30, recallDetail: '276/1505', avgTime: '4m41s', avgToken: '625K', tokenDetail: '587K / 38K' },
-  { model: 'GPT-5.5', provider: 'OpenAI', source: 'Open Code Review', sourceIcon: ocrIcon4, f1: '21.00%', f1Value: 21.00, precision: '32.10%', precisionValue: 32.10, precisionDetail: '234/728', recall: '15.50%', recallValue: 15.50, recallDetail: '234/1505', avgTime: '2m51s', avgToken: '422K', tokenDetail: '409K / 13K' },
-  { model: 'GLM-5.1', provider: 'Zhipu AI', source: 'Open Code Review', sourceIcon: ocrIcon5, f1: '20.40%', f1Value: 20.40, precision: '28.90%', precisionValue: 28.90, precisionDetail: '237/820', recall: '15.70%', recallValue: 15.70, recallDetail: '237/1505', avgTime: '4m11s', avgToken: '743K', tokenDetail: '707K / 36K' },
-  { model: 'Claude-4.8-Opus', provider: 'Anthropic', source: 'Open Code Review', sourceIcon: ocrIcon6, f1: '17.90%', f1Value: 17.90, precision: '37.80%', precisionValue: 37.80, precisionDetail: '176/465', recall: '11.70%', recallValue: 11.70, recallDetail: '176/1505', avgTime: '1m6s', avgToken: '352K', tokenDetail: '342K / 11K', precisionMedal: 0 },
-  { model: 'Deepseek-V4-Pro', provider: 'DeepSeek', source: 'Open Code Review', sourceIcon: ocrIcon7, f1: '17.90%', f1Value: 17.90, precision: '30.60%', precisionValue: 30.60, precisionDetail: '191/624', recall: '12.70%', recallValue: 12.70, recallDetail: '191/1505', avgTime: '6m28s', avgToken: '394K', tokenDetail: '350K / 44K' },
+  { model: 'Claude-4.6-Opus', provider: 'Anthropic', source: 'Open Code Review', sourceIcon: ocrSourceIcon, f1: '25.10%', f1Value: 25.10, precision: '33.90%', precisionValue: 33.90, precisionDetail: '301/889', recall: '20.00%', recallValue: 20.00, recallDetail: '301/1505', avgTime: '1m23s', avgToken: '385K', tokenDetail: '375K / 10K', precisionMedal: 1 },
+  { model: 'GLM-5.2', provider: 'Zhipu AI', source: 'Open Code Review', sourceIcon: ocrSourceIcon, f1: '21.30%', f1Value: 21.30, precision: '32.30%', precisionValue: 32.30, precisionDetail: '239/741', recall: '15.90%', recallValue: 15.90, recallDetail: '239/1505', avgTime: '7m58s', avgToken: '682K', tokenDetail: '624K / 58K', precisionMedal: 2 },
+  { model: 'Qwen3.7-Max', provider: 'Alibaba', source: 'Open Code Review', sourceIcon: ocrSourceIcon, f1: '21.20%', f1Value: 21.20, precision: '25.20%', precisionValue: 25.20, precisionDetail: '276/1096', recall: '18.30%', recallValue: 18.30, recallDetail: '276/1505', avgTime: '4m41s', avgToken: '625K', tokenDetail: '587K / 38K' },
+  { model: 'GPT-5.5', provider: 'OpenAI', source: 'Open Code Review', sourceIcon: ocrSourceIcon, f1: '21.00%', f1Value: 21.00, precision: '32.10%', precisionValue: 32.10, precisionDetail: '234/728', recall: '15.50%', recallValue: 15.50, recallDetail: '234/1505', avgTime: '2m51s', avgToken: '422K', tokenDetail: '409K / 13K' },
+  { model: 'GLM-5.1', provider: 'Zhipu AI', source: 'Open Code Review', sourceIcon: ocrSourceIcon, f1: '20.40%', f1Value: 20.40, precision: '28.90%', precisionValue: 28.90, precisionDetail: '237/820', recall: '15.70%', recallValue: 15.70, recallDetail: '237/1505', avgTime: '4m11s', avgToken: '743K', tokenDetail: '707K / 36K' },
+  { model: 'Claude-4.8-Opus', provider: 'Anthropic', source: 'Open Code Review', sourceIcon: ocrSourceIcon, f1: '17.90%', f1Value: 17.90, precision: '37.80%', precisionValue: 37.80, precisionDetail: '176/465', recall: '11.70%', recallValue: 11.70, recallDetail: '176/1505', avgTime: '1m6s', avgToken: '352K', tokenDetail: '342K / 11K', precisionMedal: 0 },
+  { model: 'Deepseek-V4-Pro', provider: 'DeepSeek', source: 'Open Code Review', sourceIcon: ocrSourceIcon, f1: '17.90%', f1Value: 17.90, precision: '30.60%', precisionValue: 30.60, precisionDetail: '191/624', recall: '12.70%', recallValue: 12.70, recallDetail: '191/1505', avgTime: '6m28s', avgToken: '394K', tokenDetail: '350K / 44K' },
   { model: 'Claude-4.8-Opus', provider: 'Anthropic', source: 'Claude Code', sourceIcon: claudeCodeIcon, f1: '14.13%', f1Value: 14.13, precision: '15.93%', precisionValue: 15.93, precisionDetail: '191/1200', recall: '12.70%', recallValue: 12.70, recallDetail: '191/1505', avgTime: '5m38s', avgToken: '2,062K', tokenDetail: '2,039K / 23K' },
   { model: 'Qwen3.7-Max', provider: 'Alibaba', source: 'Claude Code', sourceIcon: claudeCodeIcon, f1: '12.17%', f1Value: 12.17, precision: '8.23%', precisionValue: 8.23, precisionDetail: '351/4260', recall: '23.37%', recallValue: 23.37, recallDetail: '351/1505', avgTime: '8m6s', avgToken: '5,153K', tokenDetail: '5,108K / 44K', recallMedal: 1 },
   { model: 'GLM-5.1', provider: 'Zhipu AI', source: 'Claude Code', sourceIcon: claudeCodeIcon, f1: '11.93%', f1Value: 11.93, precision: '8.37%', precisionValue: 8.37, precisionDetail: '313/3742', recall: '20.80%', recallValue: 20.80, recallDetail: '313/1505', avgTime: '14m10s', avgToken: '4,038K', tokenDetail: '3,998K / 39K', recallMedal: 2 },
@@ -61,6 +56,7 @@ const MEDAL_RANKS = ['🥇', '🥈', '🥉'];
 const BenchmarkSection: React.FC = () => {
   const { t } = useTranslation();
   const { isMobile, isTablet } = useResponsive();
+  const titleStyle = useSectionTitleStyle();
   const [sortField, setSortField] = useState<SortField>('f1');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
 
@@ -105,7 +101,7 @@ const BenchmarkSection: React.FC = () => {
           <span style={{ color: '#2BDE5E', fontSize: 16, fontWeight: 500, letterSpacing: '0.48px' }}>
             {t('benchmark.sectionLabel')}
           </span>
-          <h2 style={{ color: '#FFFFFF', fontSize: isMobile ? 28 : 48, fontWeight: 500, textAlign: 'center', lineHeight: isMobile ? '34px' : '52px', letterSpacing: '0.96px', margin: 0, maxWidth: 758 }}>
+          <h2 style={{ color: '#FFFFFF', fontSize: titleStyle.fontSize, fontWeight: 500, textAlign: 'center', lineHeight: titleStyle.lineHeight, letterSpacing: '0.96px', margin: 0, maxWidth: 758 }}>
             {t('benchmark.title')}
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 16, textAlign: 'center', lineHeight: '24px', margin: 0, maxWidth: 646 }}>

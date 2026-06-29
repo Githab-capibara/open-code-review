@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useTranslation } from '../i18n';
 import { useResponsive } from '../hooks/useResponsive';
+import { useSectionTitleStyle } from '../hooks/useResponsiveStyle';
 import copyIcon from '../assets/icons/icon-copy.svg';
 import chevronDown from '../assets/icons/icon-chevron-down.svg';
 import chevronRight from '../assets/icons/icon-chevron-right.svg';
@@ -65,6 +66,7 @@ const CodeBlock: React.FC<{ label: string; code: string; multiline?: boolean; on
 const QuickStartSection: React.FC = () => {
   const { t } = useTranslation();
   const { isMobile, isTablet } = useResponsive();
+  const titleStyle = useSectionTitleStyle();
   const [toastVisible, setToastVisible] = useState(false);
 
   const handleCopy = useCallback((text: string) => {
@@ -108,7 +110,7 @@ const QuickStartSection: React.FC = () => {
           <span style={{ color: '#2BDE5E', fontSize: 16, fontWeight: 500, letterSpacing: '0.48px' }}>
             {t('quickstart.sectionLabel')}
           </span>
-          <h2 style={{ color: '#FFFFFF', fontSize: isMobile ? 28 : 48, fontWeight: 500, textAlign: 'center', lineHeight: isMobile ? '34px' : '52px', letterSpacing: '0.96px', margin: 0, maxWidth: 758 }}>
+          <h2 style={{ color: '#FFFFFF', fontSize: titleStyle.fontSize, fontWeight: 500, textAlign: 'center', lineHeight: titleStyle.lineHeight, letterSpacing: '0.96px', margin: 0, maxWidth: 758 }}>
             {t('quickstart.title')}
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 16, textAlign: 'center', lineHeight: '24px', margin: 0, maxWidth: 646 }}>
