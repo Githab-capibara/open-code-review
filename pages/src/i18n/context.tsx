@@ -2,8 +2,9 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 import { Language, TranslationKeys } from './types';
 import { en } from './en';
 import { zh } from './zh';
+import { ja } from './ja';
 
-const translations: Record<Language, TranslationKeys> = { en, zh };
+const translations: Record<Language, TranslationKeys> = { en, zh, ja };
 
 interface LanguageContextValue {
   language: Language;
@@ -18,7 +19,7 @@ const STORAGE_KEY = 'ocr-lang';
 function getInitialLanguage(): Language {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === 'en' || stored === 'zh') return stored;
+    if (stored === 'en' || stored === 'zh' || stored === 'ja') return stored;
   } catch {}
   return 'en';
 }
