@@ -3,7 +3,7 @@ import { TranslationKeys } from './types';
 export const zh: TranslationKeys = {
   // Navbar
   'navbar.features': '核心特性',
-  'navbar.benchmark': '排行榜',
+  'navbar.benchmark': '基准测试',
   'navbar.quickstart': '快速开始',
   'navbar.docs': '文档',
   'navbar.blog': '博客',
@@ -96,7 +96,7 @@ export const zh: TranslationKeys = {
 
   // Footer
   'footer.brand': 'Open Code Review',
-  'footer.copyright': '© 版权所有 2026。保留所有权利。',
+  'footer.copyright': '© 2026 版权所有。保留所有权利。',
 
   // Docs Page
   'docs.toc': '目录',
@@ -134,7 +134,7 @@ export const zh: TranslationKeys = {
   'docs.configKeyToken': 'API 密钥',
   'docs.configKeyModel': '模型名称',
   'docs.configKeyAnthropic': '使用 Anthropic SDK',
-  'docs.configKeyExtraBody': '供应商特定的请求体字段 (JSON)',
+  'docs.configKeyExtraBody': '提供商特定的请求体字段 (JSON)',
   'docs.configKeyLanguage': '输出语言',
   'docs.configKeyTelemetry': '遥测',
   'docs.configVerify': '验证配置',
