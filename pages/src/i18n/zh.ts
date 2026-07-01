@@ -10,7 +10,7 @@ export const zh: TranslationKeys = {
   'navbar.getStarted': '开始使用',
 
   // Hero
-  'hero.title': 'AI 代码审查\n经百万真实任务验证',
+  'hero.title': 'AI 代码审查\n百万真实任务验证',
   'hero.description': 'Open Code Review 将阿里巴巴经过实战检验的代码审查 Agent 引入您的工作流程。连接任意 LLM，数据完全私有，获得开发者真正采纳的审查意见。',
   'hero.quickStart': '快速开始',
   'hero.learnMore': '了解更多',
