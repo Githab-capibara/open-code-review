@@ -13,6 +13,8 @@ import (
 	"github.com/open-code-review/open-code-review/internal/mcp"
 	"github.com/open-code-review/open-code-review/internal/telemetry"
 	"github.com/open-code-review/open-code-review/internal/tool"
+
+	"go.opentelemetry.io/otel/codes"
 )
 
 func runReview(args []string) error {
@@ -104,11 +106,23 @@ func runReview(args []string) error {
 
 	ctx, span := telemetry.StartSpan(context.Background(), "review.run")
 	defer span.End()
+	telemetry.SetAttr(span, "review.repo", cc.RepoDir)
+	telemetry.SetAttr(span, "review.from", opts.from)
+	telemetry.SetAttr(span, "review.to", opts.to)
+	telemetry.SetAttr(span, "review.model", rt.Model)
+	var traceID string
+	if telemetry.IsEnabled() {
+		traceID = telemetry.TraceIDFromContext(ctx)
+		if opts.outputFormat != "json" {
+			fmt.Fprintf(os.Stderr, "[ocr] TraceID: %s\n", traceID)
+		}
+	}
 	startTime := time.Now()
 
 	comments, err := ag.Run(ctx)
 	if err != nil {
-		telemetry.SetAttr(span, "error", err.Error())
+		span.SetStatus(codes.Error, err.Error())
+		span.RecordError(err)
 		return fmt.Errorf("review failed: %w", err)
 	}
 

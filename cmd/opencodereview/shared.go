@@ -276,8 +276,10 @@ func emitRunResult(
 		telemetry.RecordCommentsGenerated(ctx, int64(len(comments)))
 	}
 
+	traceID := telemetry.TraceIDFromContext(ctx)
+
 	if outputFormat == "json" && len(comments) == 0 && ag.FilesReviewed() == 0 {
-		return outputJSONNoFiles()
+		return outputJSONNoFiles(traceID)
 	}
 
 	// Agent-text audiences need stdout back before PrintTraceSummary so the
@@ -296,7 +298,7 @@ func emitRunResult(
 		return outputJSONWithWarnings(comments, ag.Warnings(), ag.FilesReviewed(),
 			ag.TotalInputTokens(), ag.TotalOutputTokens(), ag.TotalTokensUsed(),
 			ag.TotalCacheReadTokens(), ag.TotalCacheWriteTokens(), duration,
-			ag.ProjectSummary(), ag.ToolCalls())
+			ag.ProjectSummary(), ag.ToolCalls(), traceID)
 	}
 	outputTextWithWarnings(comments, ag.Warnings())
 	if summary := ag.ProjectSummary(); summary != "" {

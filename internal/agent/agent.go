@@ -22,6 +22,8 @@ import (
 	"github.com/open-code-review/open-code-review/internal/stdout"
 	"github.com/open-code-review/open-code-review/internal/telemetry"
 	"github.com/open-code-review/open-code-review/internal/tool"
+
+	"go.opentelemetry.io/otel/codes"
 )
 
 // AgentWarning is re-exported from llmloop for backwards compatibility with
@@ -487,7 +489,17 @@ func (a *Agent) executeSubtask(ctx context.Context, d model.Diff) error {
 		return nil
 	}
 
-	err := a.runner.RunPerFile(ctx, messages, newPath)
+	err := func() error {
+		ctx, mainSpan := telemetry.StartSpan(ctx, "main.loop")
+		defer mainSpan.End()
+		telemetry.SetAttr(mainSpan, "file.path", newPath)
+		if err := a.runner.RunPerFile(ctx, messages, newPath); err != nil {
+			mainSpan.SetStatus(codes.Error, err.Error())
+			mainSpan.RecordError(err)
+			return err
+		}
+		return nil
+	}()
 	if err == nil {
 		// REVIEW_FILTER_TASK runs after the main loop and decides which of the
 		// just-collected comments to drop. It needs to see comments produced by
@@ -503,6 +515,10 @@ func (a *Agent) executeSubtask(ctx context.Context, d model.Diff) error {
 // executeReviewFilter runs the REVIEW_FILTER_TASK to remove comments that are
 // provably incorrect based solely on the diff. Errors are logged and silently ignored.
 func (a *Agent) executeReviewFilter(ctx context.Context, d model.Diff, newPath string) {
+	ctx, span := telemetry.StartSpan(ctx, "review_filter.execute")
+	defer span.End()
+	telemetry.SetAttr(span, "file.path", newPath)
+
 	ft := a.args.Template.ReviewFilterTask
 	if ft == nil || len(ft.Messages) == 0 {
 		return
@@ -512,6 +528,7 @@ func (a *Agent) executeReviewFilter(ctx context.Context, d model.Diff, newPath s
 	if len(comments) == 0 {
 		return
 	}
+	telemetry.SetAttr(span, "comments.before", len(comments))
 
 	commentsJSON := buildFilterCommentsJSON(comments)
 
@@ -534,20 +551,33 @@ func (a *Agent) executeReviewFilter(ctx context.Context, d model.Diff, newPath s
 	rec := fs.AppendTaskRecord(session.ReviewFilterTask, messages)
 	startTime := time.Now()
 
+	_, llmSpan := telemetry.StartLLMSpan(ctx, a.args.Model)
 	resp, err := a.args.LLMClient.CompletionsWithCtx(ctx, llm.ChatRequest{
 		Model:     a.args.Model,
 		Messages:  messages,
 		MaxTokens: a.args.Template.MaxTokens,
 	})
+	duration := time.Since(startTime)
 	if err != nil {
-		rec.SetError(err, time.Since(startTime))
+		telemetry.RecordLLMResult(llmSpan, duration, 0, err)
+		llmSpan.End()
+		rec.SetError(err, duration)
 		fmt.Fprintf(stdout.Writer(), "[ocr] Review filter failed for %s: %v\n", newPath, err)
+		span.SetStatus(codes.Error, err.Error())
+		span.RecordError(err)
 		return
 	}
-	rec.SetResponse(resp, time.Since(startTime))
+	var totalTokens int64
+	if resp.Usage != nil {
+		totalTokens = resp.Usage.TotalTokens
+	}
+	telemetry.RecordLLMResult(llmSpan, duration, totalTokens, nil)
+	llmSpan.End()
+	rec.SetResponse(resp, duration)
 	a.runner.RecordUsage(resp.Usage)
 
 	indices := parseFilterResponse(resp.Content(), len(comments))
+	telemetry.SetAttr(span, "comments.filtered", len(indices))
 	if len(indices) == 0 {
 		return
 	}
@@ -722,6 +752,10 @@ func (a *Agent) extFromPath(path string) string {
 // executePlanPhase runs the plan task for a single file, sending template messages
 // with resolved placeholders and collecting the LLM response as plan guidance.
 func (a *Agent) executePlanPhase(ctx context.Context, newPath, rawDiff, changeFiles, rule string) (string, error) {
+	ctx, span := telemetry.StartSpan(ctx, "plan.execute")
+	defer span.End()
+	telemetry.SetAttr(span, "file.path", newPath)
+
 	pt := a.args.Template.PlanTask
 	messages := make([]llm.Message, 0, len(pt.Messages))
 	for _, m := range pt.Messages {
@@ -740,16 +774,28 @@ func (a *Agent) executePlanPhase(ctx context.Context, newPath, rawDiff, changeFi
 	rec := fs.AppendTaskRecord(session.PlanTask, messages)
 	startTime := time.Now()
 
+	_, llmSpan := telemetry.StartLLMSpan(ctx, a.args.Model)
 	resp, err := a.args.LLMClient.CompletionsWithCtx(ctx, llm.ChatRequest{
 		Model:     a.args.Model,
 		Messages:  messages,
 		MaxTokens: a.args.Template.MaxTokens,
 	})
+	duration := time.Since(startTime)
 	if err != nil {
-		rec.SetError(err, time.Since(startTime))
+		telemetry.RecordLLMResult(llmSpan, duration, 0, err)
+		llmSpan.End()
+		rec.SetError(err, duration)
+		span.SetStatus(codes.Error, err.Error())
+		span.RecordError(err)
 		return "", fmt.Errorf("plan request: %w", err)
 	}
-	rec.SetResponse(resp, time.Since(startTime))
+	var totalTokens int64
+	if resp.Usage != nil {
+		totalTokens = resp.Usage.TotalTokens
+	}
+	telemetry.RecordLLMResult(llmSpan, duration, totalTokens, nil)
+	llmSpan.End()
+	rec.SetResponse(resp, duration)
 	a.runner.RecordUsage(resp.Usage)
 	fmt.Fprintf(stdout.Writer(), "[ocr] Plan completed for %s\n", newPath)
 	return resp.Content(), nil
