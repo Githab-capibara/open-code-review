@@ -36,6 +36,23 @@ func TestParseReviewFlagsModelOverride(t *testing.T) {
 	}
 }
 
+func TestParseReviewFlagsResume(t *testing.T) {
+	opts, err := parseReviewFlags([]string{"--from", "main", "--to", "feature", "--resume", "session-123"})
+	if err != nil {
+		t.Fatalf("parseReviewFlags: %v", err)
+	}
+	if opts.resume != "session-123" {
+		t.Errorf("resume = %q, want session-123", opts.resume)
+	}
+}
+
+func TestParseReviewFlags_PreviewWithResume(t *testing.T) {
+	_, err := parseReviewFlags([]string{"--commit", "abc123", "--preview", "--resume", "session-123"})
+	if err == nil {
+		t.Fatal("expected error for --preview with --resume")
+	}
+}
+
 func TestParseReviewFlags_InvalidAudience(t *testing.T) {
 	_, err := parseReviewFlags([]string{"--audience", "robot"})
 	if err == nil {

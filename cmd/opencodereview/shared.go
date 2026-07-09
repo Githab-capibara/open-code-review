@@ -251,6 +251,14 @@ type ResultProvider interface {
 	// that skipped / failed the summary phase.
 	ProjectSummary() string
 	ToolCalls() map[string]int64
+	// SessionID returns the persisted session identifier so callers can show it
+	// in JSON output or failure diagnostics. Returns "" when no session was
+	// created.
+	SessionID() string
+}
+
+type resumeInfoProvider interface {
+	ResumeInfo() *agent.ResumeInfo
 }
 
 // emitRunResult is the post-LLM-run finalization shared by `ocr review` and
@@ -295,10 +303,14 @@ func emitRunResult(
 	}
 
 	if outputFormat == "json" {
+		var resumeInfo *agent.ResumeInfo
+		if p, ok := ag.(resumeInfoProvider); ok {
+			resumeInfo = p.ResumeInfo()
+		}
 		return outputJSONWithWarnings(comments, ag.Warnings(), ag.FilesReviewed(),
 			ag.TotalInputTokens(), ag.TotalOutputTokens(), ag.TotalTokensUsed(),
 			ag.TotalCacheReadTokens(), ag.TotalCacheWriteTokens(), duration,
-			ag.ProjectSummary(), ag.ToolCalls(), traceID)
+			ag.ProjectSummary(), ag.ToolCalls(), traceID, resumeInfo, ag.SessionID())
 	}
 	outputTextWithWarnings(comments, ag.Warnings())
 	if summary := ag.ProjectSummary(); summary != "" {
