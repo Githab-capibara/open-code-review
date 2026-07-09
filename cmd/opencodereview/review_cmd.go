@@ -11,6 +11,7 @@ import (
 
 	"github.com/open-code-review/open-code-review/internal/agent"
 	"github.com/open-code-review/open-code-review/internal/mcp"
+	"github.com/open-code-review/open-code-review/internal/session"
 	"github.com/open-code-review/open-code-review/internal/telemetry"
 	"github.com/open-code-review/open-code-review/internal/tool"
 
@@ -61,6 +62,11 @@ func runReview(args []string) error {
 		return runPreview(cc, opts)
 	}
 
+	resumeState, err := loadReviewResumeState(cc.RepoDir, opts)
+	if err != nil {
+		return err
+	}
+
 	rt, err := loadLLMRuntime(cc.Template, opts.toolConfigPath, opts.model)
 	if err != nil {
 		return err
@@ -94,6 +100,7 @@ func runReview(args []string) error {
 		From:                  opts.from,
 		To:                    opts.to,
 		Commit:                opts.commit,
+		ReviewMode:            reviewModeFromOptions(opts),
 		Template:              *cc.Template,
 		SystemRule:            cc.Resolver,
 		FileFilter:            cc.FileFilter,
@@ -108,6 +115,7 @@ func runReview(args []string) error {
 		Model:                 rt.Model,
 		Background:            opts.background,
 		GitRunner:             cc.GitRunner,
+		Resume:                resumeState,
 	})
 
 	// Silence progress output during execution; restored before the trace
@@ -134,10 +142,49 @@ func runReview(args []string) error {
 	if err != nil {
 		span.SetStatus(codes.Error, err.Error())
 		span.RecordError(err)
+		if id := ag.SessionID(); id != "" {
+			fmt.Fprintf(os.Stderr, "[ocr] Session: %s (retry with: --resume %s)\n", id, id)
+		}
 		return fmt.Errorf("review failed: %w", err)
 	}
 
 	return emitRunResult(ctx, ag, comments, startTime, opts.outputFormat, opts.audience, q)
+}
+
+func loadReviewResumeState(repoDir string, opts reviewOptions) (*session.ResumeState, error) {
+	if opts.resume == "" {
+		return nil, nil
+	}
+	current := session.SessionOptions{
+		ReviewMode: reviewModeFromOptions(opts),
+		DiffFrom:   opts.from,
+		DiffTo:     opts.to,
+		DiffCommit: opts.commit,
+	}
+	if current.ReviewMode == session.ReviewModeWorkspace {
+		return nil, fmt.Errorf("resume requires --from/--to or --commit; workspace resume is not supported")
+	}
+	state, err := session.LoadResumeState(repoDir, opts.resume)
+	if err != nil {
+		return nil, fmt.Errorf("load resume session: %w (run 'ocr session list' to see available sessions)", err)
+	}
+	if err := state.ValidateOptions(current); err != nil {
+		return nil, fmt.Errorf("%w (run 'ocr session list' to see available sessions)", err)
+	}
+	if state.CompletedCount() == 0 {
+		return nil, fmt.Errorf("resume session %q has no completed review items (run 'ocr session list' to see available sessions)", opts.resume)
+	}
+	return state, nil
+}
+
+func reviewModeFromOptions(opts reviewOptions) string {
+	if opts.commit != "" {
+		return session.ReviewModeCommit
+	}
+	if opts.from != "" && opts.to != "" {
+		return session.ReviewModeRange
+	}
+	return session.ReviewModeWorkspace
 }
 
 // resolveRepoDir resolves the repo dir for `ocr rules check`. It delegates to
