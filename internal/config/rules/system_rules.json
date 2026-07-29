@@ -25,6 +25,7 @@
     "**/*.po": "po.md",
     "**/*.pot": "pot.md",
     "**/*.{graphql,gql}": "graphql.md",
+    "**/*.prisma": "prisma.md",
     "**/*.jl": "julia.md",
     "**/*.{tf,hcl,tfvars}": "terraform.md",
     "**/*.bicep": "bicep.md"

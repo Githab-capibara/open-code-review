@@ -824,6 +824,30 @@ func TestResolveDetail_SystemPatternMatch(t *testing.T) {
 	}
 }
 
+func TestResolveDetail_SystemPrismaPatternMatch(t *testing.T) {
+	t.Setenv("HOME", t.TempDir())
+	resolver, _, err := NewResolver(t.TempDir(), "")
+	if err != nil {
+		t.Fatalf("NewResolver: %v", err)
+	}
+	dr := resolver.(DetailResolver)
+
+	for _, path := range []string{"schema.prisma", "prisma/schema.prisma", "PRISMA/SCHEMA.PRISMA"} {
+		t.Run(path, func(t *testing.T) {
+			detail := dr.ResolveDetail(path)
+			if detail.Source != "system" {
+				t.Errorf("expected source 'system', got %q", detail.Source)
+			}
+			if detail.Pattern != "**/*.prisma" {
+				t.Errorf("expected pattern '**/*.prisma', got %q", detail.Pattern)
+			}
+			if !strings.Contains(detail.Rule, "Prisma Schema Review Principles") {
+				t.Errorf("expected Prisma rule, got %q", truncate(detail.Rule, 80))
+			}
+		})
+	}
+}
+
 func TestResolveDetail_SystemGoPatternMatch(t *testing.T) {
 	t.Setenv("HOME", t.TempDir())
 	resolver, _, err := NewResolver(t.TempDir(), "")
@@ -842,7 +866,10 @@ func TestResolveDetail_SystemGoPatternMatch(t *testing.T) {
 				t.Errorf("expected pattern '**/*.go', got %q", detail.Pattern)
 			}
 			for _, required := range []string{
-				"Go Review Principles", "Go 1.23+", "defer` inside a loop", "crypto/rand",
+				"Go Review Principles",
+				"Go 1.23+",
+				"defer` inside a loop",
+				"crypto/rand",
 			} {
 				if !strings.Contains(detail.Rule, required) {
 					t.Errorf("expected Go rule to contain %q", required)
