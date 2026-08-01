@@ -20,6 +20,16 @@ func parseReviewFlags(args []string) (reviewOptions, error) {
 	return opts, err
 }
 
+// runReview provides test compatibility for the pre-cobra runReview(args)
+// entry point: parse flags, then execute the review.
+func runReview(args []string) error {
+	opts, err := parseReviewFlags(args)
+	if err != nil {
+		return err
+	}
+	return executeReview(opts)
+}
+
 // parseScanFlags provides test compatibility: parses args through a fresh
 // cobra command instance and returns the resulting scanOptions.
 func parseScanFlags(args []string) (scanOptions, error) {

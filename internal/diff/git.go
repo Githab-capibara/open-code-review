@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -86,6 +87,64 @@ func NewWorkspaceProvider(repoDir string, runner *gitcmd.Runner) *Provider {
 		repoDir: repoDir,
 		mode:    ModeWorkspace,
 		runner:  runner,
+	}
+}
+
+// InputResolution carries this run's frozen, immutable commit endpoints, per the
+// run-manifest input-mode matrix. An empty field means "not applicable or not
+// resolvable" — a root commit and a merge commit have no single comparison base,
+// an unborn workspace has no HEAD, and a workspace has no immutable head — and a
+// caller must never treat an empty value as a real endpoint or fabricate one.
+// ExactRange is populated only when both a unique base and a head resolve.
+type InputResolution struct {
+	ResolvedBase string
+	ResolvedHead string
+	ExactRange   string
+}
+
+// ResolveInput freezes this run's commit endpoints by asking git, following the
+// input-mode matrix:
+//
+//   - range:     base = merge-base(from,to); head = the commit `to` resolves to;
+//     exact_range = base..head only when both resolve.
+//   - commit:    head = the commit resolved from `commit`; base is the first
+//     parent used by the diff, and exact_range = first-parent..head. A root
+//     commit has no base or exact range.
+//   - workspace: base = current HEAD when the repository has one (empty on an
+//     unborn repository); head and range stay empty (a workspace has no immutable
+//     head).
+//
+// Commit mode follows the same first-parent comparison used by GetDiff. Root
+// commits have no parent, so only their resolved head is available.
+//
+// It runs read-only git queries and never returns an error: an unresolvable
+// endpoint is reported as an empty field, never a fabricated SHA.
+func (p *Provider) ResolveInput(ctx context.Context) InputResolution {
+	switch p.mode {
+	case ModeRange:
+		base := p.MergeBase(ctx)
+		head := p.resolveCommit(ctx, p.to)
+		r := InputResolution{ResolvedBase: base, ResolvedHead: head}
+		if base != "" && head != "" {
+			r.ExactRange = base + ".." + head
+		}
+		return r
+	case ModeCommit:
+		head := p.resolveCommit(ctx, p.commit)
+		r := InputResolution{ResolvedHead: head}
+		if parents := p.commitParents(ctx, p.commit); len(parents) > 0 && head != "" {
+			// GetDiff renders merge commits against their first parent, so the
+			// manifest must record that same concrete comparison base.
+			r.ResolvedBase = parents[0]
+			r.ExactRange = parents[0] + ".." + head
+		}
+		return r
+	case ModeWorkspace:
+		// base = current HEAD if the repository has one; an unborn repository has
+		// no HEAD, so this stays empty rather than fabricating a base.
+		return InputResolution{ResolvedBase: p.resolveCommit(ctx, "HEAD")}
+	default:
+		return InputResolution{}
 	}
 }
 
@@ -316,6 +375,158 @@ func (p *Provider) computeMergeBase(ctx context.Context, from, to string) string
 		return ""
 	}
 	return strings.TrimSpace(out)
+}
+
+// RemoteIdentity returns a stable, credential-free identity string for the
+// repository's "origin" remote, suitable for hashing into the run manifest's
+// repository.identity_sha256. It reads the configured origin URL and canonicalizes
+// it — dropping any embedded userinfo, query and fragment (so credentials never
+// leak), lowercasing the host while keeping any port, and trimming a trailing
+// ".git"/"/" — so the same repository yields the same identity regardless of how
+// it was cloned. It returns "" when there is no origin remote, or when origin is
+// a local-filesystem remote (the caller then omits repository identity).
+func (p *Provider) RemoteIdentity(ctx context.Context) string {
+	out, err := p.runGit(ctx, "remote", "get-url", "origin")
+	if err != nil {
+		return ""
+	}
+	return canonicalRemote(firstLine(out))
+}
+
+// canonicalRemote reduces a git remote URL to a stable, credential-free identity
+// string for hashing into repository.identity_sha256, so the same repository
+// yields the same identity regardless of transport or embedded credentials.
+//
+// Network remotes canonicalize to "host[:port]/path": the host is lowercased and
+// any port is KEPT (two remotes differing only in port are distinct endpoints),
+// while the path preserves case and loses a trailing ".git"/"/".
+//
+// Local remotes (file://, absolute/relative filesystem paths, Windows drive
+// paths, UNC shares) have no stable network identity and no credentials to
+// strip; they canonicalize to "" so the caller omits repository identity, the
+// same behavior as a missing origin.
+//
+// An empty or unrecognizable input yields "".
+func canonicalRemote(raw string) string {
+	s := strings.TrimSpace(raw)
+	if s == "" {
+		return ""
+	}
+	// Drop query (?…) and fragment (#…): never part of repository identity.
+	if i := strings.IndexAny(s, "?#"); i >= 0 {
+		s = s[:i]
+	}
+	// Local remotes carry no stable network identity (see doc comment). Detect
+	// them before the scp split so a Windows "C:\…" path is not mistaken for a
+	// "host:path" with host "c".
+	if isLocalRemote(s) {
+		return ""
+	}
+	// scheme://[user[:pass]@]host[:port]/path. url.Host is "host[:port]" and
+	// never includes userinfo, so credentials drop out and the port is kept.
+	if strings.Contains(s, "://") {
+		if u, err := url.Parse(s); err == nil && u.Scheme != "" && u.Host != "" {
+			return joinHostPath(strings.ToLower(u.Host), u.Path)
+		}
+		return ""
+	}
+	// scp-like: [user@]host:path. The userinfo "@" lives in the host segment,
+	// which ends at the FIRST ":"; split there first so any "@" inside the path
+	// is preserved rather than truncated as if it were userinfo.
+	colon := strings.IndexByte(s, ':')
+	if colon < 0 {
+		return ""
+	}
+	hostSeg, path := s[:colon], s[colon+1:]
+	if at := strings.LastIndexByte(hostSeg, '@'); at >= 0 {
+		hostSeg = hostSeg[at+1:]
+	}
+	host := strings.ToLower(hostSeg)
+	if host == "" {
+		return ""
+	}
+	return joinHostPath(host, path)
+}
+
+// joinHostPath assembles the canonical "host[/path]" form, trimming a leading
+// "/" and a trailing ".git"/"/" from the path while preserving its case.
+func joinHostPath(host, path string) string {
+	path = strings.TrimPrefix(path, "/")
+	path = strings.TrimSuffix(path, "/")
+	path = strings.TrimSuffix(path, ".git")
+	path = strings.TrimSuffix(path, "/")
+	if path == "" {
+		return host
+	}
+	return host + "/" + path
+}
+
+// isLocalRemote reports whether a remote URL points at the local filesystem
+// rather than a network host: a file:// URL, a POSIX absolute/relative/home
+// path, a Windows drive path (X:\ or X:/), or a UNC share (\\server\share).
+func isLocalRemote(s string) bool {
+	switch {
+	case strings.HasPrefix(s, "file://"):
+		return true
+	case strings.HasPrefix(s, "/"), strings.HasPrefix(s, "~"):
+		return true
+	case strings.HasPrefix(s, "./"), strings.HasPrefix(s, "../"), s == ".", s == "..":
+		return true
+	case strings.HasPrefix(s, `\\`): // UNC \\server\share
+		return true
+	}
+	// Windows drive path: X:\ or X:/. Require a separator after the colon so a
+	// single-letter scp host ("c:path") is not misread — real hosts have a dot.
+	if len(s) >= 3 && isASCIILetter(s[0]) && s[1] == ':' && (s[2] == '\\' || s[2] == '/') {
+		return true
+	}
+	return false
+}
+
+func isASCIILetter(b byte) bool {
+	return (b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z')
+}
+
+// resolveCommit returns the immutable commit SHA a ref points at, or "" when the
+// ref does not resolve to a commit (e.g. an unborn HEAD, or a bad ref). The
+// ^{commit} peel collapses a tag or tree ref to its commit; --verify --quiet
+// makes an unresolvable ref exit non-zero silently rather than printing an error.
+func (p *Provider) resolveCommit(ctx context.Context, ref string) string {
+	out, err := p.runGit(ctx, "rev-parse", "--verify", "--quiet", "--end-of-options", ref+"^{commit}")
+	if err != nil {
+		return ""
+	}
+	return firstLine(out)
+}
+
+// commitParents returns the parent commit SHAs of ref: zero for a root commit,
+// one for an ordinary commit, and 2+ for a merge. It uses `rev-list --parents -n
+// 1`, whose single line is "<commit> <parent1> <parent2>…" — the leading commit
+// token is dropped, the rest are the parents. `rev-list` (unlike `rev-parse`)
+// does not echo --end-of-options, so the marker stays safe against a ref that
+// looks like an option. An error yields nil so the caller treats it as "no
+// unique base".
+func (p *Provider) commitParents(ctx context.Context, ref string) []string {
+	out, err := p.runGit(ctx, "rev-list", "--parents", "-n", "1", "--end-of-options", ref)
+	if err != nil {
+		return nil
+	}
+	fields := strings.Fields(firstLine(out))
+	if len(fields) <= 1 {
+		return nil // root commit (only the commit itself, no parents) or empty
+	}
+	return fields[1:]
+}
+
+// firstLine returns the first non-empty trimmed line of git output, so a stray
+// trailing newline or an unexpected second line never pollutes a resolved SHA.
+func firstLine(out string) string {
+	for _, line := range strings.Split(out, "\n") {
+		if s := strings.TrimSpace(line); s != "" {
+			return s
+		}
+	}
+	return ""
 }
 
 func (p *Provider) workspaceTrackedDiff(ctx context.Context) (string, error) {

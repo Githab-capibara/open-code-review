@@ -1,10 +1,48 @@
 package viewer
 
 import (
+	"encoding/json"
+	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/alibaba/open-code-review/internal/session"
 )
+
+type dataErrorReader struct {
+	data []byte
+	err  error
+}
+
+func (r *dataErrorReader) Read(p []byte) (int, error) {
+	if len(r.data) == 0 {
+		return 0, r.err
+	}
+	n := copy(p, r.data)
+	r.data = r.data[n:]
+	if len(r.data) == 0 {
+		return n, r.err
+	}
+	return n, nil
+}
+
+func TestReadJSONLLinesDiscardsPartialDataOnNonEOFError(t *testing.T) {
+	errRead := errors.New("read failed")
+	r := &dataErrorReader{data: []byte("complete\npartial"), err: errRead}
+	var visited []string
+
+	err := readJSONLLines(r, func(line []byte) {
+		visited = append(visited, string(line))
+	})
+	if !errors.Is(err, errRead) {
+		t.Fatalf("readJSONLLines error = %v, want %v", err, errRead)
+	}
+	if len(visited) != 1 || visited[0] != "complete\n" {
+		t.Fatalf("visited records = %q, want only the complete line", visited)
+	}
+}
 
 func TestSessionsRoot(t *testing.T) {
 	root, err := SessionsRoot()
@@ -224,6 +262,93 @@ func TestLoadSession_MissingFile(t *testing.T) {
 	_, err := LoadSession(root, "repo", "nonexistent")
 	if err == nil {
 		t.Error("expected error for missing session file")
+	}
+}
+
+func TestLoadSessionReadsV1Manifest(t *testing.T) {
+	root := t.TempDir()
+	repoDir := filepath.Join(root, "repo")
+	if err := os.MkdirAll(repoDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	writeJSONL(t, filepath.Join(repoDir, "manifest.jsonl"),
+		`{"type":"session_start","timestamp":"2025-01-01T00:00:00Z","cwd":"/x","model":"m"}`,
+		`{"type":"session_end","duration_seconds":1,"run_manifest":{"schema_version":"ocr.run-manifest/v1","run_id":"run-1","operation":"review","terminal_state":"complete","repository":{},"input":{"mode":"workspace"},"execution":{},"coverage":{"selected":[{"item_id":"a","path":"a.go"},{"item_id":"b","path":"b.go"}],"completed":[{"item_id":"a","path":"a.go"}],"reused":[{"item_id":"b","path":"b.go"}],"failed":[],"waived":[]},"elapsed_ms":1000}}`)
+
+	vs, err := LoadSession(root, "repo", "manifest")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if vs.Summary.RunManifest == nil || vs.Summary.TerminalState != "complete" || vs.Summary.FileCount != 2 {
+		t.Fatalf("summary = %+v", vs.Summary)
+	}
+	if vs.Summary.CompletedCount != 1 || vs.Summary.ReusedCount != 1 || vs.Summary.FailedCount != 0 || vs.Summary.WaivedCount != 0 {
+		t.Fatalf("coverage counts = %+v", vs.Summary)
+	}
+}
+
+func TestViewerReadsSessionEndLargerThanScannerLimit(t *testing.T) {
+	root := t.TempDir()
+	repoDir := filepath.Join(root, "repo")
+	if err := os.MkdirAll(repoDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	const itemCount = 35000
+	items := make([]session.CoverageItem, 0, itemCount)
+	for i := range itemCount {
+		id := fmt.Sprintf("%064x", i)
+		items = append(items, session.CoverageItem{
+			ItemID:      id,
+			Path:        fmt.Sprintf("pkg/file-%05d.go", i),
+			Fingerprint: id,
+		})
+	}
+	manifest := session.RunManifest{
+		SchemaVersion: session.ManifestSchemaVersion,
+		RunID:         "large",
+		Operation:     session.OperationReview,
+		TerminalState: session.StateComplete,
+		Input:         session.ManifestInput{Mode: session.InputModeWorkspace},
+		Coverage: session.Coverage{
+			Selected:  items,
+			Completed: items,
+			Reused:    []session.CoverageItem{},
+			Failed:    []session.CoverageItem{},
+			Waived:    []session.CoverageItem{},
+		},
+		ElapsedMS: 1000,
+	}
+	sessionEndData, err := json.Marshal(map[string]any{
+		"type":             "session_end",
+		"duration_seconds": 1,
+		"run_manifest":     manifest,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(sessionEndData) <= 10*1024*1024 {
+		t.Fatalf("session_end size = %d, want more than former 10 MiB limit", len(sessionEndData))
+	}
+	path := filepath.Join(repoDir, "large.jsonl")
+	writeJSONL(t, path,
+		`{"type":"session_start","timestamp":"2025-01-01T00:00:00Z","cwd":"/x","model":"m"}`,
+		string(sessionEndData),
+	)
+
+	summary, err := peekSession(path)
+	if err != nil {
+		t.Fatalf("peek large session: %v", err)
+	}
+	if summary.RunManifest == nil || summary.TerminalState != "complete" || summary.FileCount != itemCount {
+		t.Fatalf("peek summary = %+v", summary)
+	}
+
+	vs, err := LoadSession(root, "repo", "large")
+	if err != nil {
+		t.Fatalf("load large session: %v", err)
+	}
+	if vs.Summary.RunManifest == nil || vs.Summary.TerminalState != "complete" || vs.Summary.FileCount != itemCount {
+		t.Fatalf("loaded summary = %+v", vs.Summary)
 	}
 }
 
