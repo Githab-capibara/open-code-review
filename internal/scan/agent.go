@@ -3,6 +3,7 @@ package scan
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"sync"
@@ -154,13 +155,19 @@ func toLoopTemplate(s template.ScanTemplate) template.Template {
 // Session returns the session history associated with this Agent.
 func (a *Agent) Session() *session.SessionHistory { return a.session }
 
-// SessionID returns the current scan's session id, or "" when no session has been created.
+// SessionID returns the current scan's persisted session ID. It returns an empty
+// string when no session file exists.
 func (a *Agent) SessionID() string {
-	if a == nil || a.session == nil {
+	if a == nil || a.session == nil || !a.session.HasPersistence() {
 		return ""
 	}
 	return a.session.SessionID
 }
+
+// RunManifest returns nil because scan is intentionally outside the v1 run
+// manifest scope. It exists so review and scan can share the output pipeline
+// without synthesizing a manifest for scan.
+func (a *Agent) RunManifest() *session.RunManifest { return nil }
 
 // FilesReviewed returns the number of items included in this scan.
 func (a *Agent) FilesReviewed() int64 { return int64(len(a.items)) }
@@ -235,7 +242,12 @@ func (a *Agent) Run(ctx context.Context) ([]model.LlmComment, error) {
 	if reviewable == 0 {
 		fmt.Fprintln(stdout.Writer(), "[ocr] No reviewable files. Skipping scan.")
 		telemetry.Event(ctx, "scan.no.files")
-		a.session.Finalize()
+		// A clean skip still has to reach disk: if session_end never persisted,
+		// the skip cannot be claimed. Scan has no manifest builder, but the
+		// session_end delivery contract still applies.
+		if ferr := a.session.Finalize(); ferr != nil {
+			return []model.LlmComment{}, fmt.Errorf("finalize session: %w", ferr)
+		}
 		return []model.LlmComment{}, nil
 	}
 
@@ -266,7 +278,17 @@ func (a *Agent) Run(ctx context.Context) ([]model.LlmComment, error) {
 	// Project-level summary runs after all batches; never blocks return.
 	a.maybeRunProjectSummary(ctx, comments)
 
-	a.session.Finalize()
+	// A persistence failure is a delivery error in its own right: when the scan
+	// also failed, both facts are reported (errors.Join) rather than letting the
+	// dispatch error hide the fact that session_end never reached disk.
+	if ferr := a.session.Finalize(); ferr != nil {
+		finalizeErr := fmt.Errorf("finalize session: %w", ferr)
+		if err != nil {
+			err = errors.Join(err, finalizeErr)
+		} else {
+			err = finalizeErr
+		}
+	}
 	return comments, err
 }
 
@@ -572,7 +594,7 @@ func (a *Agent) executeSubtask(ctx context.Context, it model.ScanItem) error {
 		return nil
 	}
 
-	completed, err := a.runner.RunPerFile(ctx, messages, it.Path)
+	completed, _, err := a.runner.RunPerFile(ctx, messages, it.Path)
 	if err != nil {
 		return err
 	}

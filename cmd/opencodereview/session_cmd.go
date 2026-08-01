@@ -162,8 +162,13 @@ func printSessionDetail(w io.Writer, s *session.Summary, items []session.ItemDet
 		fmt.Fprintf(w, "  Duration:  %s\n", s.Duration.Round(time.Second))
 	}
 	fmt.Fprintf(w, "  Status:    %s\n", describeStatus(*s))
-	fmt.Fprintf(w, "  Files:     %d completed, %d reused, %d failed\n",
-		s.CompletedFiles, s.ReusedFiles, s.FailedFiles)
+	if s.RunManifest != nil {
+		fmt.Fprintf(w, "  Coverage:  %d selected = %d completed + %d reused + %d failed + %d waived\n",
+			s.SelectedFiles, s.CompletedFiles, s.ReusedFiles, s.FailedFiles, s.WaivedFiles)
+	} else {
+		fmt.Fprintf(w, "  Files:     %d completed, %d reused, %d failed (legacy checkpoints)\n",
+			s.CompletedFiles, s.ReusedFiles, s.FailedFiles)
+	}
 	fmt.Fprintf(w, "  Comments:  %d\n", s.TotalComments)
 	if s.LLMFailures > 0 {
 		fmt.Fprintf(w, "  LLM err:   %d\n", s.LLMFailures)
@@ -211,6 +216,22 @@ func describeRange(s session.Summary) string {
 }
 
 func describeFiles(s session.Summary) string {
+	if s.RunManifest != nil {
+		parts := []string{fmt.Sprintf("%d", s.SelectedFiles)}
+		if s.ReusedFiles > 0 {
+			parts = append(parts, fmt.Sprintf("reused %d", s.ReusedFiles))
+		}
+		if s.FailedFiles > 0 {
+			parts = append(parts, fmt.Sprintf("failed %d", s.FailedFiles))
+		}
+		if s.WaivedFiles > 0 {
+			parts = append(parts, fmt.Sprintf("waived %d", s.WaivedFiles))
+		}
+		if len(parts) == 1 {
+			return parts[0]
+		}
+		return parts[0] + " (" + strings.Join(parts[1:], ", ") + ")"
+	}
 	total := s.CompletedFiles + s.ReusedFiles
 	if s.ReusedFiles > 0 {
 		return fmt.Sprintf("%d (reused %d)", total, s.ReusedFiles)
@@ -222,10 +243,18 @@ func describeStatus(s session.Summary) string {
 	if s.Aborted {
 		return "aborted"
 	}
-	if s.FailedFiles > 0 {
-		return fmt.Sprintf("completed (%d fail)", s.FailedFiles)
+	if s.RunManifest != nil {
+		switch s.RunManifest.TerminalState {
+		case session.StateComplete, session.StatePartial, session.StateFailed, session.StateSkipped:
+			return string(s.RunManifest.TerminalState)
+		default:
+			return "unknown"
+		}
 	}
-	return "completed"
+	if s.FailedFiles > 0 {
+		return fmt.Sprintf("legacy (%d fail)", s.FailedFiles)
+	}
+	return "legacy"
 }
 
 func describeStart(s session.Summary) string {

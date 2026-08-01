@@ -42,7 +42,7 @@ func addConcurrencyFlags(cmd *cobra.Command, concurrency, timeout, maxTools, max
 	cmd.Flags().IntVar(timeout, "timeout", 10, "concurrent task timeout in minutes")
 	cmd.Flags().IntVar(maxTools, "max-tools", 0, "max tool call rounds per file (0 = template default; min 10)")
 	cmd.Flags().IntVar(maxGitProcs, "max-git-procs", 16, "max concurrent git subprocesses")
-	cmd.Flags().IntVar(maxTokensBudget, "max-tokens-budget", 0, "cap total token usage; dispatch stops once exceeded (0 = unlimited)")
+	cmd.Flags().IntVar(maxTokensBudget, "max-tokens-budget", 0, "cap total token usage (input+output) for this review; dispatch stops once exceeded and skipped files are reported as failed(budget). Partial results are published and review exits 0; it exits non-zero only if every selected item failed (0 = unlimited)")
 }
 
 func addModelFlag(cmd *cobra.Command, target *string) {
