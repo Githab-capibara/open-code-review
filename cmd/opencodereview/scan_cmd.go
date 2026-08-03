@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/alibaba/open-code-review/internal/config/template"
+	"github.com/alibaba/open-code-review/internal/llm"
 	"github.com/alibaba/open-code-review/internal/llmloop"
 	"github.com/alibaba/open-code-review/internal/scan"
 	"github.com/alibaba/open-code-review/internal/session"
@@ -37,6 +38,7 @@ type scanOptions struct {
 	noSummary       bool
 	batch           string
 	maxTokensBudget int
+	provider        string
 	model           string
 	resume          string
 }
@@ -57,6 +59,9 @@ var scanCmd = &cobra.Command{
 
   # Scan multiple files
   ocr scan --path internal/agent/agent.go,internal/diff/scan.go
+
+  # Select a configured provider and model for this run only
+  ocr scan --provider openai --model gpt-5.4 --format json
 
   # Exclude generated files / fixtures
   ocr scan --exclude '**/generated/*,**/testdata/*'
@@ -138,9 +143,16 @@ func executeScan(opts scanOptions) error {
 		return err
 	}
 
-	rt, err := loadLLMRuntime(cc.Template, opts.toolConfigPath, opts.model)
+	rt, err := loadLLMRuntime(cc.Template, opts.toolConfigPath, llm.ResolveOptions{
+		Provider: opts.provider,
+		Model:    opts.model,
+	})
 	if err != nil {
 		return err
+	}
+	llmIdentity := &jsonLLMIdentity{
+		Provider: rt.Provider,
+		Model:    rt.Model,
 	}
 	// Apply language to the scan template too (loadLLMRuntime only mutates
 	// the diff-review template it was handed).
@@ -209,7 +221,7 @@ func executeScan(opts scanOptions) error {
 		return fmt.Errorf("scan failed: %w", err)
 	}
 
-	return emitRunResult(ctx, ag, comments, startTime, opts.outputFormat, opts.audience, q)
+	return emitRunResult(ctx, ag, comments, startTime, opts.outputFormat, opts.audience, q, llmIdentity)
 }
 
 func loadScanResumeState(repoDir string, opts scanOptions, scanPaths []string) (*session.ResumeState, error) {
