@@ -65,6 +65,10 @@ import ruReviewRules from './ru/review-rules.md';
 import ruArchitecture from './ru/architecture.md';
 import ruTools from './ru/tools.md';
 import ruMcp from './ru/mcp.md';
+import ruAgentSkill from './ru/integrations/agent-skill.md';
+import ruClaudeCode from './ru/integrations/claude-code.md';
+import ruCicd from './ru/integrations/ci.md';
+import ruDelegate from './ru/integrations/delegate.md';
 
 export type DocSlug =
   | 'quickstart'
@@ -152,6 +156,10 @@ const ruDocs: LocalizedDocs = {
   'architecture': ruArchitecture,
   'tools': ruTools,
   'mcp': ruMcp,
+  'agent-skill': ruAgentSkill,
+  'claude-code': ruClaudeCode,
+  'cicd': ruCicd,
+  'delegate': ruDelegate,
 };
 
 const docsMap: Record<Language, LocalizedDocs> = {
