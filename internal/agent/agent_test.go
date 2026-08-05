@@ -151,52 +151,82 @@ func TestBuildFilterCommentsJSON(t *testing.T) {
 	}
 }
 
-func TestParseFilterResponse(t *testing.T) {
+func TestParseFilterToolCall(t *testing.T) {
+	makeResp := func(name, args string) *llm.ChatResponse {
+		content := ""
+		return &llm.ChatResponse{
+			Choices: []llm.Choice{{
+				Message: llm.ResponseMessage{
+					Role:    "assistant",
+					Content: &content,
+					ToolCalls: []llm.ToolCall{{
+						ID:   "call_1",
+						Type: "function",
+						Function: llm.FunctionCall{
+							Name:      name,
+							Arguments: args,
+						},
+					}},
+				},
+			}},
+		}
+	}
+
 	tests := []struct {
 		name    string
-		raw     string
+		resp    *llm.ChatResponse
 		total   int
 		wantSet map[int]struct{}
 	}{
 		{
-			name:    "valid JSON array",
-			raw:     `["c-0","c-2","c-4"]`,
+			name:    "valid tool call",
+			resp:    makeResp("report_incorrect_comments", `{"comment_ids":["c-0","c-2","c-4"]}`),
 			total:   5,
 			wantSet: map[int]struct{}{0: {}, 2: {}, 4: {}},
 		},
 		{
-			name:    "markdown fenced JSON",
-			raw:     "```json\n[\"c-1\"]\n```",
-			total:   3,
-			wantSet: map[int]struct{}{1: {}},
-		},
-		{
 			name:    "out-of-range indices ignored",
-			raw:     `["c-0","c-10","c-99"]`,
+			resp:    makeResp("report_incorrect_comments", `{"comment_ids":["c-0","c-10","c-99"]}`),
 			total:   5,
 			wantSet: map[int]struct{}{0: {}},
 		},
 		{
 			name:    "negative index ignored",
-			raw:     `["c--1","c-0"]`,
+			resp:    makeResp("report_incorrect_comments", `{"comment_ids":["c--1","c-0"]}`),
 			total:   2,
 			wantSet: map[int]struct{}{0: {}},
 		},
 		{
 			name:    "invalid ID format ignored",
-			raw:     `["x-0","c-abc","c-1"]`,
+			resp:    makeResp("report_incorrect_comments", `{"comment_ids":["x-0","c-abc","c-1"]}`),
 			total:   3,
 			wantSet: map[int]struct{}{1: {}},
 		},
 		{
-			name:    "invalid JSON returns nil",
-			raw:     `not json`,
+			name: "no tool call returns nil",
+			resp: &llm.ChatResponse{
+				Choices: []llm.Choice{{
+					Message: llm.ResponseMessage{Role: "assistant"},
+				}},
+			},
+			total:   5,
+			wantSet: nil,
+		},
+		{
+			name:    "wrong tool name returns nil",
+			resp:    makeResp("other_tool", `{"comment_ids":["c-0"]}`),
+			total:   5,
+			wantSet: nil,
+		},
+		{
+			name:    "invalid arguments returns nil",
+			resp:    makeResp("report_incorrect_comments", `not json`),
 			total:   5,
 			wantSet: nil,
 		},
 		{
 			name:    "empty array",
-			raw:     `[]`,
+			resp:    makeResp("report_incorrect_comments", `{"comment_ids":[]}`),
 			total:   5,
 			wantSet: map[int]struct{}{},
 		},
@@ -204,7 +234,7 @@ func TestParseFilterResponse(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := parseFilterResponse(tt.raw, tt.total)
+			got := parseFilterToolCall(tt.resp, tt.total)
 			if tt.wantSet == nil {
 				if got != nil {
 					t.Errorf("expected nil, got %v", got)

@@ -1373,6 +1373,25 @@ func (a *Agent) executeReviewFilter(ctx context.Context, d model.Diff, newPath s
 		messages = append(messages, llm.NewTextMessage(m.Role, content))
 	}
 
+	filterTool := llm.ToolDef{
+		Type: "function",
+		Function: llm.FunctionDef{
+			Name:        "report_incorrect_comments",
+			Description: "Report the IDs of review comments that are provably incorrect based on the diff.",
+			Parameters: map[string]any{
+				"type": "object",
+				"properties": map[string]any{
+					"comment_ids": map[string]any{
+						"type":        "array",
+						"items":       map[string]any{"type": "string"},
+						"description": "Array of incorrect comment IDs (e.g. [\"c-0\", \"c-2\"]). Empty array if none are incorrect.",
+					},
+				},
+				"required": []any{"comment_ids"},
+			},
+		},
+	}
+
 	fs := a.session.GetOrCreateFileSession(newPath)
 	rec := fs.AppendTaskRecord(session.ReviewFilterTask, messages)
 	ctx = llm.ContextWithSessionKey(ctx,
@@ -1384,6 +1403,7 @@ func (a *Agent) executeReviewFilter(ctx context.Context, d model.Diff, newPath s
 	resp, err := a.args.LLMClient.CompletionsWithCtx(reqCtx, llm.ChatRequest{
 		Model:     a.args.Model,
 		Messages:  messages,
+		Tools:     []llm.ToolDef{filterTool},
 		MaxTokens: a.args.Template.CompletionTokenLimit(),
 	})
 	duration := time.Since(startTime)
@@ -1405,7 +1425,7 @@ func (a *Agent) executeReviewFilter(ctx context.Context, d model.Diff, newPath s
 	rec.SetResponse(resp, duration)
 	a.runner.RecordUsage(resp.Usage)
 
-	indices := parseFilterResponse(resp.Content(), len(comments))
+	indices := parseFilterToolCall(resp, len(comments))
 	telemetry.SetAttr(span, "comments.filtered", len(indices))
 	if len(indices) == 0 {
 		return
@@ -1434,21 +1454,37 @@ func buildFilterCommentsJSON(comments []model.LlmComment) string {
 	return string(data)
 }
 
-// parseFilterResponse extracts comment indices from the LLM filter response.
+// parseFilterToolCall extracts comment indices from the report_incorrect_comments tool call.
 // Returns a set of 0-based indices. Invalid IDs or out-of-range indices are ignored.
-func parseFilterResponse(raw string, total int) map[int]struct{} {
-	raw = llmloop.StripMarkdownFences(raw)
-	var ids []string
-	if err := json.Unmarshal([]byte(raw), &ids); err != nil {
-		preview := raw
-		if len(preview) > 200 {
-			preview = preview[:200] + "..."
-		}
-		fmt.Fprintf(stdout.Writer(), "[ocr] Review filter: failed to parse LLM response: %v, raw: %s\n", err, preview)
+func parseFilterToolCall(resp *llm.ChatResponse, total int) map[int]struct{} {
+	toolCalls := resp.ToolCalls()
+	if len(toolCalls) == 0 {
+		fmt.Fprintf(stdout.Writer(), "[ocr] Review filter: no tool call in response\n")
 		return nil
 	}
+
+	var tc llm.ToolCall
+	for _, c := range toolCalls {
+		if c.Function.Name == "report_incorrect_comments" {
+			tc = c
+			break
+		}
+	}
+	if tc.Function.Name == "" {
+		fmt.Fprintf(stdout.Writer(), "[ocr] Review filter: unexpected tool call %q\n", toolCalls[0].Function.Name)
+		return nil
+	}
+
+	var args struct {
+		CommentIDs []string `json:"comment_ids"`
+	}
+	if err := json.Unmarshal([]byte(tc.Function.Arguments), &args); err != nil {
+		fmt.Fprintf(stdout.Writer(), "[ocr] Review filter: failed to parse tool call arguments: %v\n", err)
+		return nil
+	}
+
 	indices := make(map[int]struct{})
-	for _, id := range ids {
+	for _, id := range args.CommentIDs {
 		var idx int
 		if _, err := fmt.Sscanf(id, "c-%d", &idx); err == nil && idx >= 0 && idx < total {
 			indices[idx] = struct{}{}
