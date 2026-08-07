@@ -40,6 +40,7 @@ type scanOptions struct {
 	noDedup         bool
 	noSummary       bool
 	batch           string
+	maxTokens       int
 	maxTokensBudget int
 	provider        string
 	model           string
@@ -153,6 +154,12 @@ func executeScan(opts scanOptions) error {
 	if err != nil {
 		return err
 	}
+	scanTpl.MaxCompletionTokens = scanTpl.MaxTokens
+	maxTokens, err := resolveMaxTokens(scanTpl.MaxTokens, rt.AppCfg, opts.maxTokens)
+	if err != nil {
+		return err
+	}
+	scanTpl.MaxTokens = maxTokens
 	llmIdentity := &jsonLLMIdentity{
 		Provider: rt.Provider,
 		Model:    rt.Model,
