@@ -481,10 +481,10 @@ func TestExecuteToolCall_ArgumentsEdgeCases(t *testing.T) {
 			wantContains: "'comments' array is required",
 		},
 		{
-			name:        "valid args keeps path override",
+			name:        "valid args uses per-item path",
 			toolName:    "code_comment",
-			arguments:   `{"path":"hallucinated.go","comments":[{"content":"issue","existing_code":"foo"}]}`,
-			wantComment: "file.go",
+			arguments:   `{"comments":[{"content":"issue","existing_code":"foo","path":"item.go"}]}`,
+			wantComment: "item.go",
 		},
 		{
 			name:         "empty string args",
@@ -551,7 +551,7 @@ func TestExecuteToolCall_ArgumentsEdgeCases(t *testing.T) {
 	}
 }
 
-func TestExecuteToolCall_CodeCommentOverridesHallucinatedPath(t *testing.T) {
+func TestExecuteToolCall_CodeCommentUsesPerItemPath(t *testing.T) {
 	collector := tool.NewCommentCollector()
 	reg := tool.NewRegistry()
 	reg.Register(&tool.CodeCommentProvider{Collector: collector})
@@ -563,11 +563,11 @@ func TestExecuteToolCall_CodeCommentOverridesHallucinatedPath(t *testing.T) {
 	})
 
 	args := map[string]any{
-		"path": "wrong.go",
 		"comments": []any{
 			map[string]any{
 				"content":       "issue",
 				"existing_code": "foo",
+				"path":          "item-level.go",
 			},
 		},
 	}
@@ -576,7 +576,7 @@ func TestExecuteToolCall_CodeCommentOverridesHallucinatedPath(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cp := r.executeToolCall(context.Background(), "correct.go", llm.ToolCall{
+	cp := r.executeToolCall(context.Background(), "group-key", llm.ToolCall{
 		Function: llm.FunctionCall{
 			Name:      "code_comment",
 			Arguments: string(argsJSON),
@@ -590,7 +590,7 @@ func TestExecuteToolCall_CodeCommentOverridesHallucinatedPath(t *testing.T) {
 	if len(comments) != 1 {
 		t.Fatalf("expected 1 comment, got %d", len(comments))
 	}
-	if comments[0].Path != "correct.go" {
-		t.Errorf("path override: got %q, want %q", comments[0].Path, "correct.go")
+	if comments[0].Path != "item-level.go" {
+		t.Errorf("comment path: got %q, want %q", comments[0].Path, "item-level.go")
 	}
 }

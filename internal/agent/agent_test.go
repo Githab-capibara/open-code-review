@@ -59,11 +59,11 @@ func agentTaskDoneResponse() *llm.ChatResponse {
 func codeCommentResponse(path string) *llm.ChatResponse {
 	content := ""
 	args := map[string]any{
-		"path": path,
 		"comments": []any{
 			map[string]any{
 				"content":       "potential null pointer",
 				"existing_code": "foo := bar.Baz()",
+				"path":          path,
 			},
 		},
 	}
@@ -703,7 +703,7 @@ func TestDispatchSubtasks_WithFakeLLM(t *testing.T) {
 			MaxToolRequestTimes: 10,
 			MainTask: template.LlmConversation{
 				Messages: []template.ChatMessage{
-					{Role: "user", Content: "Review {{diff}} for {{current_file_path}}"},
+					{Role: "user", Content: "Review {{diffs}}"},
 				},
 			},
 		},
@@ -757,7 +757,7 @@ func TestDispatchSubtasks_TokenThresholdSkipIsNotReusableCheckpoint(t *testing.T
 			MaxToolRequestTimes: 5,
 			MainTask: template.LlmConversation{
 				Messages: []template.ChatMessage{
-					{Role: "user", Content: strings.Repeat("context ", 200) + "{{diff}}"},
+					{Role: "user", Content: strings.Repeat("context ", 200) + "{{diffs}}"},
 				},
 			},
 		},
@@ -827,7 +827,7 @@ func TestDispatchSubtasks_MainTaskWithoutTaskDoneIsNotReusableCheckpoint(t *test
 			MaxTokens:           100000,
 			MaxToolRequestTimes: 1,
 			MainTask: template.LlmConversation{
-				Messages: []template.ChatMessage{{Role: "user", Content: "Review {{diff}}"}},
+				Messages: []template.ChatMessage{{Role: "user", Content: "Review {{diffs}}"}},
 			},
 		},
 	})
@@ -891,7 +891,7 @@ func TestDispatchSubtasks_IncompleteMainTaskMarksPartialFailure(t *testing.T) {
 			MaxTokens:           100000,
 			MaxToolRequestTimes: 1,
 			MainTask: template.LlmConversation{
-				Messages: []template.ChatMessage{{Role: "user", Content: "Review {{diff}}"}},
+				Messages: []template.ChatMessage{{Role: "user", Content: "Review {{diffs}}"}},
 			},
 		},
 	})
@@ -921,7 +921,7 @@ func TestDispatchSubtasks_AllDeleted(t *testing.T) {
 			MaxToolRequestTimes: 5,
 			MainTask: template.LlmConversation{
 				Messages: []template.ChatMessage{
-					{Role: "user", Content: "Review {{diff}}"},
+					{Role: "user", Content: "Review {{diffs}}"},
 				},
 			},
 		},
@@ -957,7 +957,7 @@ func TestAgent_TokenAccumulation(t *testing.T) {
 			MaxToolRequestTimes: 10,
 			MainTask: template.LlmConversation{
 				Messages: []template.ChatMessage{
-					{Role: "user", Content: "Review {{diff}}"},
+					{Role: "user", Content: "Review {{diffs}}"},
 				},
 			},
 		},

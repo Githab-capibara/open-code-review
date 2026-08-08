@@ -235,7 +235,7 @@ func TestExecuteReviewFilter_NoFilterTask(t *testing.T) {
 		},
 	})
 
-	a.executeReviewFilter(context.Background(), model.Diff{NewPath: "a.go"}, "a.go")
+	a.executeGroupReviewFilter(context.Background(), FileGroup{Label: "a.go", Diffs: []model.Diff{{NewPath: "a.go"}}})
 	if client.calls != 0 {
 		t.Errorf("no LLM calls expected when ReviewFilterTask is nil, got %d", client.calls)
 	}
@@ -259,7 +259,7 @@ func TestExecuteReviewFilter_NoComments(t *testing.T) {
 		},
 	})
 
-	a.executeReviewFilter(context.Background(), model.Diff{NewPath: "a.go", Diff: "+x"}, "a.go")
+	a.executeGroupReviewFilter(context.Background(), FileGroup{Label: "a.go", Diffs: []model.Diff{{NewPath: "a.go", Diff: "+x"}}})
 	if client.calls != 0 {
 		t.Errorf("no LLM calls expected when no comments exist, got %d", client.calls)
 	}
@@ -299,7 +299,7 @@ func TestExecuteReviewFilter_RemovesComments(t *testing.T) {
 		},
 	})
 
-	a.executeReviewFilter(context.Background(), model.Diff{NewPath: "a.go", Diff: "+code"}, "a.go")
+	a.executeGroupReviewFilter(context.Background(), FileGroup{Label: "a.go", Diffs: []model.Diff{{NewPath: "a.go", Diff: "+code"}}})
 
 	comments := collector.CommentsForPath("a.go")
 	if len(comments) != 2 {
@@ -338,7 +338,7 @@ func TestExecuteReviewFilter_LLMError(t *testing.T) {
 		},
 	})
 
-	a.executeReviewFilter(context.Background(), model.Diff{NewPath: "a.go", Diff: "+x"}, "a.go")
+	a.executeGroupReviewFilter(context.Background(), FileGroup{Label: "a.go", Diffs: []model.Diff{{NewPath: "a.go", Diff: "+x"}}})
 
 	comments := collector.CommentsForPath("a.go")
 	if len(comments) != 1 {
@@ -433,7 +433,7 @@ func TestExecuteSubtask_EmptyMainTask(t *testing.T) {
 	})
 	a.currentDate = "2025-06-26 10:00"
 
-	completed, stop, err := a.executeSubtask(context.Background(), model.Diff{NewPath: "a.go", Diff: "+x", Insertions: 1})
+	completed, stop, err := a.executeGroupSubtask(context.Background(), FileGroup{Label: "a.go", Diffs: []model.Diff{{NewPath: "a.go", Diff: "+x", Insertions: 1}}})
 	if err == nil {
 		t.Fatal("expected error for empty main_task messages")
 	}
@@ -461,7 +461,7 @@ func TestExecuteSubtask_TokenThresholdExceeded(t *testing.T) {
 			MaxToolRequestTimes: 5,
 			MainTask: template.LlmConversation{
 				Messages: []template.ChatMessage{
-					{Role: "user", Content: "Review: {{diff}}"},
+					{Role: "user", Content: "Review: {{diffs}}"},
 				},
 			},
 		},
@@ -469,7 +469,7 @@ func TestExecuteSubtask_TokenThresholdExceeded(t *testing.T) {
 	a.currentDate = "2025-06-26 10:00"
 	a.diffs = []model.Diff{{NewPath: "a.go", Diff: strings.Repeat("code ", 200), Insertions: 100}}
 
-	completed, stop, err := a.executeSubtask(context.Background(), a.diffs[0])
+	completed, stop, err := a.executeGroupSubtask(context.Background(), FileGroup{Label: a.diffs[0].NewPath, Diffs: []model.Diff{a.diffs[0]}})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -537,12 +537,12 @@ func TestExecuteSubtask_WithPlanPhase(t *testing.T) {
 			PlanModeLineThreshold: 0,
 			PlanTask: &template.LlmConversation{
 				Messages: []template.ChatMessage{
-					{Role: "user", Content: "Plan for {{current_file_path}}: {{diff}}"},
+					{Role: "user", Content: "Plan for: {{diffs}}"},
 				},
 			},
 			MainTask: template.LlmConversation{
 				Messages: []template.ChatMessage{
-					{Role: "user", Content: "Review {{current_file_path}} with plan {{plan_guidance}}: {{diff}}"},
+					{Role: "user", Content: "Review with plan {{plan_guidance}}: {{diffs}}"},
 				},
 			},
 		},
@@ -553,9 +553,9 @@ func TestExecuteSubtask_WithPlanPhase(t *testing.T) {
 	a.currentDate = "2025-06-26 10:00"
 	a.diffs = []model.Diff{{NewPath: "main.go", OldPath: "main.go", Diff: "+new code", Insertions: 5}}
 
-	completed, stop, err := a.executeSubtask(context.Background(), a.diffs[0])
+	completed, stop, err := a.executeGroupSubtask(context.Background(), FileGroup{Label: a.diffs[0].NewPath, Diffs: []model.Diff{a.diffs[0]}})
 	if err != nil {
-		t.Fatalf("executeSubtask: %v", err)
+		t.Fatalf("executeGroupSubtask: %v", err)
 	}
 	if !completed {
 		t.Fatal("expected completed review")
@@ -576,14 +576,14 @@ func TestExecuteSubtask_ContextCancelled(t *testing.T) {
 		Template: template.Template{
 			MaxTokens:           10000,
 			MaxToolRequestTimes: 5,
-			MainTask:            template.LlmConversation{Messages: []template.ChatMessage{{Role: "user", Content: "{{diff}}"}}},
+			MainTask:            template.LlmConversation{Messages: []template.ChatMessage{{Role: "user", Content: "{{diffs}}"}}},
 		},
 	})
 
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 
-	completed, stop, err := a.executeSubtask(ctx, model.Diff{NewPath: "a.go", Diff: "+x", Insertions: 1})
+	completed, stop, err := a.executeGroupSubtask(ctx, FileGroup{Label: "a.go", Diffs: []model.Diff{{NewPath: "a.go", Diff: "+x", Insertions: 1}}})
 	if err == nil {
 		t.Fatal("expected error for cancelled context")
 	}
@@ -625,7 +625,7 @@ func TestExecuteReviewFilter_WithTimeout(t *testing.T) {
 		},
 	})
 
-	a.executeReviewFilter(context.Background(), model.Diff{NewPath: "a.go", Diff: "+x"}, "a.go")
+	a.executeGroupReviewFilter(context.Background(), FileGroup{Label: "a.go", Diffs: []model.Diff{{NewPath: "a.go", Diff: "+x"}}})
 
 	comments := collector.CommentsForPath("a.go")
 	if len(comments) != 1 {
@@ -644,7 +644,7 @@ func TestDispatchSubtasks_AllFilteredBySize(t *testing.T) {
 		Template: template.Template{
 			MaxTokens:           10,
 			MaxToolRequestTimes: 5,
-			MainTask:            template.LlmConversation{Messages: []template.ChatMessage{{Role: "user", Content: "{{diff}}"}}},
+			MainTask:            template.LlmConversation{Messages: []template.ChatMessage{{Role: "user", Content: "{{diffs}}"}}},
 		},
 	})
 	a.diffs = []model.Diff{
