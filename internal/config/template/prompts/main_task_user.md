@@ -1,4 +1,4 @@
-Other files changed in this update (not in this review group):
+// The following is the list of other files changed in this update.
 <other_changed_files>
 {{change_files}}
 </other_changed_files>
@@ -16,8 +16,8 @@ Current time in the real world: {{current_system_date_time}}
 ### Review Checklist
 {{system_rule}}
 
-### Review Plan
+### Review Plan (Optional)
 {{plan_guidance}}
 
-Now please review the code changes in <review_files> above.
+Now please review the code changes in <review_files>
 </user_task>
