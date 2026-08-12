@@ -226,7 +226,7 @@ func executeReview(opts reviewOptions) error {
 	var traceID string
 	if telemetry.IsEnabled() {
 		traceID = telemetry.TraceIDFromContext(ctx)
-		if opts.outputFormat != "json" {
+		if !isMachineReadable(opts.outputFormat) {
 			fmt.Fprintf(os.Stderr, "[ocr] TraceID: %s\n", traceID)
 		}
 	}
