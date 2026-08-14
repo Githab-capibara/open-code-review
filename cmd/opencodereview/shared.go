@@ -405,7 +405,7 @@ func emitRunResult(
 	if !machineReadable {
 		telemetry.PrintTraceSummary(ag.FilesReviewed(), int64(len(comments)),
 			ag.TotalInputTokens(), ag.TotalOutputTokens(), ag.TotalTokensUsed(),
-			ag.TotalCacheReadTokens(), ag.TotalCacheWriteTokens(), duration)
+			ag.TotalCacheReadTokens(), ag.TotalCacheWriteTokens(), duration, ag.SessionID())
 	}
 
 	if outputFormat == "json" {
