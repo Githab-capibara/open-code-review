@@ -22,6 +22,9 @@ export const zh: TranslationKeys = {
   'hero.copyFailed': '复制失败',
   'hero.installNpm': 'npm',
   'hero.installBrew': 'Homebrew',
+  'hero.installMacPorts': 'MacPorts',
+  'hero.installMore': '更多',
+  'hero.allInstallOptions': '全部安装方式',
 
   // Error boundary
   'error.pageLoadFailed': '页面加载失败。',
