@@ -69,7 +69,8 @@ func FormatDuration(dur time.Duration) string {
 }
 
 // PrintTraceSummary prints a one-line summary of the review to stdout.
-func PrintTraceSummary(filesReviewed, commentsGenerated int64, inputTokens, outputTokens, totalTokens int64, cacheReadTokens, cacheWriteTokens int64, duration time.Duration) {
+// If sessionID is non-empty, an "[ocr] Session: <id>" line follows the summary.
+func PrintTraceSummary(filesReviewed, commentsGenerated int64, inputTokens, outputTokens, totalTokens int64, cacheReadTokens, cacheWriteTokens int64, duration time.Duration, sessionID string) {
 	elapsed := duration.Round(time.Second).String()
 	if inputTokens > 0 || outputTokens > 0 {
 		base := fmt.Sprintf("[ocr] Summary: %d file(s) reviewed, %d comment(s), ~%d token(s) used (input: ~%d, output: ~%d)",
@@ -81,6 +82,9 @@ func PrintTraceSummary(filesReviewed, commentsGenerated int64, inputTokens, outp
 	} else {
 		fmt.Fprintf(stdout.Writer(), "[ocr] Summary: %d file(s) reviewed, %d comment(s), ~%d token(s) used, %s elapsed\n",
 			filesReviewed, commentsGenerated, totalTokens, elapsed)
+	}
+	if sessionID != "" {
+		fmt.Fprintf(stdout.Writer(), "[ocr] Session: %s\n", sessionID)
 	}
 }
 
