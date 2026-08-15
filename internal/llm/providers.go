@@ -331,6 +331,18 @@ var registry = []Provider{
 		},
 	},
 	{
+		Name:        "xai",
+		DisplayName: "xAI Grok API",
+		Protocol:    ProtocolOpenAIChatCompletions,
+		BaseURL:     "https://api.x.ai/v1",
+		EnvVar:      "XAI_API_KEY",
+		Models: []string{
+			"grok-4.6",
+			"grok-4.5",
+			"grok-4.3",
+		},
+	},
+	{
 		Name:        "litellm",
 		DisplayName: "LiteLLM AI Gateway",
 		Protocol:    ProtocolOpenAIChatCompletions,
