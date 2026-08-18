@@ -65,6 +65,8 @@ func TestIsAllowedExt(t *testing.T) {
 		{".NIMS", true},
 		{".nimble", true},
 		{".NIMBLE", true},
+		{".ipynb", true},
+		{".IPYNB", true},
 		{".elm", true},
 		{".ELM", true},
 		{".properties", true},
@@ -249,6 +251,12 @@ func TestIsExcludedPath(t *testing.T) {
 		{"testdata nested", "pkg/a/b/testdata/golden.txt", true},
 		{"fixtures dir", "test/fixtures/sample.json", true},
 		{"fixtures nested", "spec/fixtures/users.yml", true},
+
+		// Jupyter autosave checkpoints (duplicate copies of the real notebook)
+		{"ipynb checkpoint at root", ".ipynb_checkpoints/analysis-checkpoint.ipynb", true},
+		{"ipynb checkpoint nested", "notebooks/eda/.ipynb_checkpoints/eda-checkpoint.ipynb", true},
+		{"ipynb outside checkpoints", "notebooks/eda/eda.ipynb", false},
+		{"ipynb checkpoints without dot", "notebooks/ipynb_checkpoints/eda.ipynb", false},
 
 		// Generated code
 		{"generated go", "api/types.generated.go", true},

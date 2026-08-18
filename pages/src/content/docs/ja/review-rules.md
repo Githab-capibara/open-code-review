@@ -130,7 +130,7 @@ OCR は [`bmatcuk/doublestar/v4`](https://pkg.go.dev/github.com/bmatcuk/doublest
 | `**/*.R` | `r.md` |
 | `**/*.{cpp,cc,hpp}` | `cpp.md` |
 | `**/*.c` | `c.md` |
-| `**/*.py` | `python.md`: Python ソースコード。 |
+| `**/*.{py,ipynb}` | `python.md`: Python ソースコード。 |
 | `**/*.{php,phtml}` | `php.md`: PHP ソースと PHP テンプレート。 |
 | `**/*.proto` | `protobuf.md`: Protocol Buffers のワイヤ互換性。 |
 | `**/*.po` | `po.md`: gettext 翻訳ソースカタログ。 |

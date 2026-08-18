@@ -26,6 +26,7 @@
   "**/*.snap",
   "**/testdata/**",
   "**/fixtures/**",
+  "**/.ipynb_checkpoints/**",
   "**/*.generated.*",
   "**/*.gen.go",
   "**/*.pb.go",
