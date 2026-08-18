@@ -125,6 +125,8 @@ func TestResolve_DefaultRules(t *testing.T) {
 		{"lib/config.libsonnet", "Late Binding"},
 		{"environments/prod/main.jsonnet", "Late Binding"},
 		{"jsonnet/kube-prometheus/components/grafana.libsonnet", "Late Binding"},
+		{"src/foo.R", "R Code Review Principles"},
+		{"analysis/plots.r", "R Code Review Principles"},
 		{"src/main.zig", "Illegal Behavior"},
 		{"build.zig", "Illegal Behavior"},
 	}
