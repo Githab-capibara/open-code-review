@@ -168,7 +168,7 @@ matching order:
 | `**/*.R` | `r.md` |
 | `**/*.{cpp,cc,hpp}` | `cpp.md` |
 | `**/*.c` | `c.md` |
-| `**/*.py` | `python.md` — Python source. |
+| `**/*.{py,ipynb}` | `python.md` — Python source. |
 | `**/*.{php,phtml}` | `php.md` — PHP source and PHP templates. |
 | `**/*.proto` | `protobuf.md` — Protocol Buffers wire compatibility. |
 | `**/*.po` | `po.md` — gettext translation source catalogs. |
