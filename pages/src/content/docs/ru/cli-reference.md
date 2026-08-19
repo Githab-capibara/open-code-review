@@ -46,6 +46,24 @@ Use "ocr session -h" for more information about session inspection.
 GitHub: https://github.com/alibaba/open-code-review
 ```
 
+## Глобальные флаги
+
+Доступны в любой команде и принимаются как до, так и после подкоманды
+(`ocr --color=never review` и `ocr review --color=never` равнозначны).
+
+| Флаг | По умолчанию | Назначение |
+|---|---|---|
+| `--color <auto\|always\|never>` | `auto` | Когда выводить ANSI-цвет. `auto` раскрашивает вывод только если stdout — терминал, поэтому при пайпе или перенаправлении получается обычный текст. `always` сохраняет цвет и через пайп (удобно для `\| less -R`). |
+
+Если stdout не является терминалом, текстовый вывод всегда обычный, поэтому его
+можно безопасно передавать по пайпу:
+
+```bash
+ocr review --commit HEAD | gh issue comment 123 --body-file -
+```
+
+`TERM=dumb` также отключает цвет.
+
 ## Краткий обзор команд
 
 | Команда | Псевдоним | Назначение |
