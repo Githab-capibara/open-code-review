@@ -46,6 +46,24 @@ Use "ocr session -h" for more information about session inspection.
 GitHub: https://github.com/alibaba/open-code-review
 ```
 
+## Global flags
+
+Available on every command, and accepted either before or after the subcommand
+(`ocr --color=never review` and `ocr review --color=never` are equivalent).
+
+| Flag | Default | What it does |
+|---|---|---|
+| `--color <auto\|always\|never>` | `auto` | When to emit ANSI color. `auto` colorizes only when stdout is a terminal, so piping or redirecting yields plain text. `always` keeps color through a pipe (useful for `\| less -R`). |
+
+Text output is plain whenever stdout is not a terminal, so it can be piped
+safely:
+
+```bash
+ocr review --commit HEAD | gh issue comment 123 --body-file -
+```
+
+`TERM=dumb` also disables color.
+
 ## Command summary
 
 | Command | Alias | What it does |

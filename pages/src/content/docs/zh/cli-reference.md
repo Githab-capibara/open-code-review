@@ -45,6 +45,23 @@ Use "ocr session -h" for more information about session inspection.
 GitHub: https://github.com/alibaba/open-code-review
 ```
 
+## 全局参数
+
+所有命令均可使用，且放在子命令前后皆可
+（`ocr --color=never review` 与 `ocr review --color=never` 等价）。
+
+| 参数 | 默认值 | 说明 |
+|---|---|---|
+| `--color <auto\|always\|never>` | `auto` | 何时输出 ANSI 颜色。`auto` 仅在 stdout 是终端时着色，因此管道或重定向得到的是纯文本。`always` 会在管道中保留颜色（便于配合 `\| less -R`）。 |
+
+当 stdout 不是终端时，文本输出始终为纯文本，因此可以安全地通过管道传递：
+
+```bash
+ocr review --commit HEAD | gh issue comment 123 --body-file -
+```
+
+`TERM=dumb` 同样会关闭颜色。
+
 ## 命令总览
 
 | 命令 | 别名 | 作用 |
