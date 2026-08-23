@@ -40,28 +40,10 @@ Each ADR follows this structure:
 
 ## Consequences
 
-### Easier
-
-- Future maintainers can quickly understand architectural decisions
-- AI agents can reason about design choices when making changes
-- Reduces need for oral history or tribal knowledge transfer
-
-### Harder
-
-- Requires discipline to write ADRs for significant decisions
-- Initial time investment for each ADR
-- Must keep index table synchronized
-
-### Given up
-
-- Informal documentation in code comments for architectural decisions
-- Relying on git history for architecture rationale
-
-### Migration
-
-- This ADR establishes the pattern
-- No existing code changes required
-- Future decisions will follow this pattern
+- **Easier:** Future maintainers can quickly understand architectural decisions. AI agents can reason about design choices when making changes. Reduces need for oral history or tribal knowledge transfer.
+- **Harder:** Requires discipline to write ADRs for significant decisions. Initial time investment for each ADR. Must keep index table synchronized.
+- **Given up:** Informal documentation in code comments for architectural decisions. Relying on git history for architecture rationale.
+- **Migration:** This ADR establishes the pattern. No existing code changes required. Future decisions will follow this pattern.
 
 ## Alternatives considered
 
