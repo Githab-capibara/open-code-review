@@ -58,9 +58,9 @@ Contributors are anyone who participates in the project, including by:
 
 Contributors are expected to follow:
 
-- [CODE_OF_CONDUCT.md](../../CODE_OF_CONDUCT.md)
-- [CONTRIBUTING.md](../../CONTRIBUTING.md)
-- [SECURITY.md](../../SECURITY.md) for vulnerability reporting
+- [Code of Conduct](02-code-of-conduct.md)
+- [Contributing Guide](../development/02-contributing.md)
+- [Security Policy](../security/01-security-policy.md) for vulnerability reporting
 
 ### Maintainers
 
@@ -93,7 +93,7 @@ is [@lizhengfeng101](https://github.com/lizhengfeng101).
 ### Day-to-Day Changes
 
 Most changes are made through the normal pull request workflow described in
-[CONTRIBUTING.md](../../CONTRIBUTING.md):
+[Contributing Guide](../development/02-contributing.md):
 
 1. discuss the change in an issue when appropriate
 2. submit a pull request
@@ -160,7 +160,7 @@ The project's public collaboration channels are:
 - pull requests for concrete code and documentation review
 
 Security issues should follow the private reporting guidance in
-[SECURITY.md](../../SECURITY.md).
+[Security Policy](../security/01-security-policy.md).
 
 ## Continuity
 

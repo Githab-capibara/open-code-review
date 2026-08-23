@@ -3,7 +3,7 @@
 - **Status:** Accepted
 - **Date:** 2026-08-21
 - **Deciders:** @lizhengfeng101
-- **Related:** [AGENTS.md](governance/01-agents.md), [Contributing Guide](02-contributing.md)
+- **Related:** [Agents Guidelines](../governance/01-agents.md), [Contributing Guide](02-contributing.md)
 
 ## Context
 
@@ -16,12 +16,12 @@ The `CLAUDE.md` file delegates to `AGENTS.md` for comprehensive project guidelin
 ### CLAUDE.md Content
 
 ```markdown
-See [AGENTS.md](./AGENTS.md) for all project guidelines.
+See [Agents Guidelines](../governance/01-agents.md) for all project guidelines.
 ```
 
-### AGENTS.md Coverage
+### Agents Guidelines Coverage
 
-The `AGENTS.md` file covers:
+The [Agents Guidelines](../governance/01-agents.md) file covers:
 
 - Project overview and module path
 - Git commit notes (review before commit, English messages, LF line endings)

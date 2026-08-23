@@ -1,1 +1,1 @@
-See [AGENTS.md](../../AGENTS.md) for all project guidelines.
+See [Agents Guidelines](../governance/01-agents.md) for all project guidelines.
