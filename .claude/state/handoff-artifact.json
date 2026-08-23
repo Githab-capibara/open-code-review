@@ -1,0 +1,136 @@
+{
+  "version": "2.0.0",
+  "legacy_version": "1.0.0",
+  "artifactType": "structured-handoff",
+  "timestamp": "2026-08-21T08:30:28Z",
+  "sessionId": "",
+  "previous_state": {
+    "summary": "Before compaction: 20 recent edit(s)",
+    "plan_counts": {
+      "total": 0,
+      "wip": 0,
+      "blocked": 0,
+      "recent_edits": 20
+    }
+  },
+  "next_action": {
+    "summary": "Re-read Plans.md and determine the next task",
+    "source": "fallback",
+    "priority": "normal"
+  },
+  "open_risks": [
+    {
+      "severity": "medium",
+      "kind": "verification",
+      "summary": "20 recent edit(s) should be re-validated after resume",
+      "detail": ".claude/sessions/.last_inbox_check, .claude/sessions/leases/014597a62d4e4c1030aaf5c89b0caa253703890516bba3fbb10496c326b0f5dc.lock, .claude/sessions/leases/08a44d34f6e147fd3af46d94284873959dad53699213f71e888d40cd0933d9aa.lock, .claude/sessions/leases/095469a8097fd8eee3317297e987ca0f9850ebe28ebc547a894ed8a9d23f0680.lock, .claude/sessions/leases/0b5ca119d2be595aa307d34512d9679e49186307ef94201e4b3dfa079aa89938.lock"
+    }
+  ],
+  "failed_checks": null,
+  "decision_log": [
+    {
+      "timestamp": "2026-08-21T08:30:28Z",
+      "actor": "pre-compact-save",
+      "decision": "canonical_handoff_artifact_written",
+      "rationale": "Persist a stable JSON artifact in .claude/state for long-running session handoff."
+    },
+    {
+      "timestamp": "2026-08-21T08:30:28Z",
+      "actor": "pre-compact-save",
+      "decision": "legacy_snapshot_mirrored",
+      "rationale": "Keep precompact-snapshot.json for backward compatibility with older hooks."
+    }
+  ],
+  "context_reset": {
+    "policy": {
+      "mode": "auto",
+      "dryRun": false,
+      "thresholds": {
+        "wipTasks": 4,
+        "blockedTasks": 1,
+        "recentEdits": 8,
+        "failedChecks": 1,
+        "sessionAgeMinutes": 120
+      }
+    },
+    "recommended": true,
+    "summary": "Context reset recommended (auto): 20 recent edit count exceed threshold 8",
+    "reasons": [
+      "20 recent edit count exceed threshold 8"
+    ],
+    "candidates": [
+      {
+        "key": "wip_tasks",
+        "label": "WIP task count",
+        "actual": 0,
+        "threshold": 4,
+        "triggered": false
+      },
+      {
+        "key": "blocked_tasks",
+        "label": "blocked task count",
+        "actual": 0,
+        "threshold": 1,
+        "triggered": false
+      },
+      {
+        "key": "recent_edits",
+        "label": "recent edit count",
+        "actual": 20,
+        "threshold": 8,
+        "triggered": true
+      },
+      {
+        "key": "failed_checks",
+        "label": "failed check count",
+        "actual": 0,
+        "threshold": 1,
+        "triggered": false
+      },
+      {
+        "key": "session_age_minutes",
+        "label": "session age (minutes)",
+        "actual": 0,
+        "threshold": 120,
+        "triggered": false
+      }
+    ],
+    "counters": {
+      "wipTasks": 0,
+      "blockedTasks": 0,
+      "recentEdits": 20,
+      "failedChecks": 0,
+      "sessionAgeMinutes": null
+    }
+  },
+  "continuity": {
+    "plugin_first_workflow": true,
+    "resume_aware_effort_continuity": true,
+    "effort_hint": "medium",
+    "summary": "plugin-first workflow: enabled; resume-aware effort continuity: medium"
+  },
+  "planItems": null,
+  "wipTasks": null,
+  "recentEdits": [
+    ".claude/sessions/.last_inbox_check",
+    ".claude/sessions/leases/014597a62d4e4c1030aaf5c89b0caa253703890516bba3fbb10496c326b0f5dc.lock",
+    ".claude/sessions/leases/08a44d34f6e147fd3af46d94284873959dad53699213f71e888d40cd0933d9aa.lock",
+    ".claude/sessions/leases/095469a8097fd8eee3317297e987ca0f9850ebe28ebc547a894ed8a9d23f0680.lock",
+    ".claude/sessions/leases/0b5ca119d2be595aa307d34512d9679e49186307ef94201e4b3dfa079aa89938.lock",
+    ".claude/sessions/leases/0be561c78149c5db2460dcef30cd84f6bd9a7f54b452c9b85f27c310c197bfb5.lock",
+    ".claude/sessions/leases/191024701ca422ae4aba82f60da368419e1ee45e167b936825163d765326c314.lock",
+    ".claude/sessions/leases/247a0780103cc433a44b997b1881473d4b52c741281dcc17092ca10c6c535558.lock",
+    ".claude/sessions/leases/24cba20cf9055ead983713b47e18d4c562eda1579f1d70592d007916dbd78a8d.lock",
+    ".claude/sessions/leases/26bc974578ebf666e268340dd804847053bf4276032b7bb40b27c3ae23ba5c04.lock",
+    ".claude/sessions/leases/3daaac2bf5274f59459e19328e509133b48a8a9078e2a9a061bf9403d722668f.lock",
+    ".claude/sessions/leases/3f804782232662af061f6bbbf3d15f33abd249f2593e727ba93c5a288de93092.lock",
+    ".claude/sessions/leases/402df3bcefa44a9f9e2b52fe5f28ac421f7e06cbdc02ef22b5e2dac029da4d89.lock",
+    ".claude/sessions/leases/421035b0d220bec3e0e6d8eab05679a8d7633479a010be7712736372be43f253.lock",
+    ".claude/sessions/leases/426dac6f9da88e6bbcb64a3cba1b1fe127734351f209c7d6da25d223003ec06a.lock",
+    ".claude/sessions/leases/437aad2dca9d8f735ebd274282eaeece7dcfe32faa391648e807bc637358e2eb.lock",
+    ".claude/sessions/leases/4757c3c9866cda2a0da326ef95c2571ad9401c2f1f16237097ef22690f7bd01a.lock",
+    ".claude/sessions/leases/5767cabc35c1548f9cfc20256a0dbed5cff220c64bb4a5563ec342908587dd3d.lock",
+    ".claude/sessions/leases/5b5adb1e862720b1edde37c08e181a05315ded5c78f6805a5174be6da03b6262.lock",
+    ".claude/sessions/leases/5d2361897ddef37283536d75da976108c6cab015a9357fb99ae335d2ff2786d5.lock"
+  ]
+}

@@ -29,7 +29,7 @@
   <a href="#supported-agents"><img alt="Cursor" src="https://img.shields.io/badge/Cursor-supported-blueviolet.svg" /></a>
 </p>
 <p align="center">
-  English | <a href="README.zh-CN.md">简体中文</a> | <a href="README.ja-JP.md">日本語</a> | <a href="README.ko-KR.md">한국어</a> | <a href="README.ru-RU.md">Русский</a>
+  <a href="https://open-codereview.ai">Website</a> | <a href="https://discord.gg/">Discord</a> | <a href="/docs">Docs</a> | <a href="https://open-codereview.ai">Live App</a>
 </p>
 
 ---
@@ -190,6 +190,10 @@ This project exists thanks to all the people who contribute. See [CONTRIBUTING.m
 <a href="https://github.com/alibaba/open-code-review/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=alibaba/open-code-review" />
 </a>
+
+## Architecture
+
+![Architecture Overview](docs/architecture/01-overview.md)
 
 ## License
 
