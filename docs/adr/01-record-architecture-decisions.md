@@ -1,4 +1,4 @@
-# 01. Record Architecture Decisions
+# 01. Record architecture decisions
 
 - **Status:** Accepted
 - **Date:** 2026-08-21

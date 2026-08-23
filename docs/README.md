@@ -28,6 +28,7 @@ Welcome to the official documentation for OpenCodeReview.
 | [internal/](internal/) | Internal package docs |
 | [npm/](npm/) | NPM platform assets |
 | [pages/](pages/) | Website source |
+| [pipeline/](pipeline/) | Pipeline and workflow documentation |
 | [planning/](planning/) | Roadmap and planning |
 | [plugins/](plugins/) | Plugin system |
 | [scripts/](scripts/) | Build and maintenance scripts |
@@ -39,13 +40,15 @@ Welcome to the official documentation for OpenCodeReview.
 
 - [Engagement workflow deep dive](integration/01-delegate.md)
 - [Architecture overview](architecture/01-overview.md)
-- [Bug Bounty Guard docs](security/01-security-policy.md)
+- [Security policy](security/01-security-policy.md)
+- [Pipeline overview](pipeline/README.md)
 
 ## Governance
 
 - [Security Policy](security/01-security-policy.md)
 - [Contributing](development/02-contributing.md)
 - [Code of Conduct](governance/02-code-of-conduct.md)
+- [Governance](governance/03-governance.md)
 
 ## ADR Index
 
