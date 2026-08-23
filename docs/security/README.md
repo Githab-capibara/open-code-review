@@ -4,8 +4,8 @@ This directory contains security-related documentation for OpenCodeReview.
 
 ## Documents
 
-| File | Purpose |
-|------|---------|
+| Guide | Purpose |
+|-------|---------|
 | [01-security-policy.md](01-security-policy.md) | Security policy, vulnerability reporting, and best practices |
 | [02-assurance-case.md](02-assurance-case.md) | Security assurance case and threat model |
 

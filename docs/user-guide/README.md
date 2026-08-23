@@ -4,8 +4,8 @@ This directory contains user-facing documentation for OpenCodeReview, copied and
 
 ## Documents
 
-| File | Purpose |
-|------|---------|
+| Guide | Purpose |
+|-------|---------|
 | [01-quickstart.md](01-quickstart.md) | Get started in 5 minutes |
 | [02-installation.md](02-installation.md) | Install on every platform |
 | [03-configuration.md](03-configuration.md) | Configure LLM providers and settings |

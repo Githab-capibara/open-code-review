@@ -4,8 +4,8 @@ This directory contains planning documents for OpenCodeReview.
 
 ## Documents
 
-| File | Purpose |
-|------|---------|
+| Guide | Purpose |
+|-------|---------|
 | [01-roadmap.md](01-roadmap.md) | Project roadmap and planned features |
 
 ## Current State (Mid-2026)

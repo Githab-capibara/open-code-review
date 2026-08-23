@@ -4,8 +4,8 @@ This directory contains development-related documentation.
 
 ## Documents
 
-| File | Purpose |
-|------|---------|
+| Guide | Purpose |
+|-------|---------|
 | [01-claude.md](01-claude.md) | See Agents Guidelines |
 | [02-contributing.md](02-contributing.md) | Contribution workflow and coding guidelines |
 | [03-claude-code-environment.md](03-claude-code-environment.md) | Claude Code environment setup |

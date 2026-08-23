@@ -33,3 +33,4 @@ Design documents use this structure:
 
 | # | Title | Status | Feeds into |
 |---|---|---|---|
+| [01](01-design-overview.md) | Design overview | Accepted | docs/architecture/01-overview.md|

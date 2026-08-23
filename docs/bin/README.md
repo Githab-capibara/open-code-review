@@ -4,8 +4,9 @@ This directory contains executable entry points for the OpenCodeReview CLI.
 
 ## Contents
 
-| File | Purpose |
-|------|---------|
+| Guide | Purpose |
+|-------|---------|
+| [01-bin-overview.md](01-bin-overview.md) | Overview of binary entry points |
 | [ocr.js](../../bin/ocr.js) | Node.js entry point for the `ocr` command |
 
 ## ocr.js

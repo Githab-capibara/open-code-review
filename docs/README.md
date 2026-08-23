@@ -49,9 +49,3 @@ Welcome to the official documentation for OpenCodeReview.
 - [Contributing](development/02-contributing.md)
 - [Code of Conduct](governance/02-code-of-conduct.md)
 - [Governance](governance/03-governance.md)
-
-## ADR Index
-
-| # | Title | Status |
-|---|---|---|
-| [01](adr/01-record-architecture-decisions.md) | Record architecture decisions | Accepted |

@@ -4,11 +4,13 @@ This directory contains project governance documentation.
 
 ## Documents
 
-| File | Purpose |
-|------|---------|
+| Guide | Purpose |
+|-------|---------|
 | [01-agents.md](01-agents.md) | AGENTS.md guidance for AI coding assistants |
 | [02-code-of-conduct.md](02-code-of-conduct.md) | Community behavior guidelines |
 | [03-governance.md](03-governance.md) | Project governance and decision-making |
+| [04-pull-request-template.md](04-pull-request-template.md) | Pull request template and checklist |
+| [05-agent-working-principles.md](05-agent-working-principles.md) | Non-negotiable working principles for agents and contributors |
 
 ## Project Values
 

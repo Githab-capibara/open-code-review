@@ -1,16 +1,10 @@
-# Design Document Template
+# 01. Title in present-tense imperative
 
-## Purpose
-
-What this design document explores or proposes.
-
-## Status
-
-Research note | Proposed | Accepted | Deprecated
-
+- **Status:** Research note | Proposed | Accepted | Deprecated
 - **Date:** YYYY-MM-DD
 - **Deciders:** GitHub handles
 - **Researcher:** agent/person who wrote the doc
+- **Purpose:** What this design document explores or proposes
 - **Feeds into:** ADR or implementation this doc informs
 
 ## Context

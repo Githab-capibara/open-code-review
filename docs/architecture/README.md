@@ -4,8 +4,8 @@ This directory contains architecture and design documentation for OpenCodeReview
 
 ## Key Documents
 
-| File | Purpose |
-|------|---------|
+| Guide | Purpose |
+|-------|---------|
 | [01-overview.md](01-overview.md) | System architecture overview and design philosophy |
 
 ## Core Design Philosophy

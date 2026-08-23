@@ -4,8 +4,8 @@ This directory contains pipeline and workflow documentation for OpenCodeReview.
 
 ## Documents
 
-| File | Purpose |
-|------|---------|
+| Guide | Purpose |
+|-------|---------|
 | No documents yet | Add workflow docs here |
 
 ## Links
