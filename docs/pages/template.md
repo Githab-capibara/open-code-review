@@ -22,4 +22,4 @@ Main documentation content.
 ## Links
 
 - [Main Documentation](../README.md)
-- [Related Documents](./user-guide/README.md)
+- [Related Documents](../user-guide/README.md)
