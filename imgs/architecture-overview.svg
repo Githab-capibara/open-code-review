@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6470"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="420" fill="#ffffff"/>
+  <text x="480" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2933">OpenCodeReview — Architecture Overview</text>
+  <text x="480" y="58" text-anchor="middle" font-size="13" fill="#5b6470">Deterministic engineering &#215; agent hybrid</text>
+
+  <!-- Input -->
+  <rect x="24" y="150" width="130" height="90" rx="10" fill="#eef4ff" stroke="#3b6fd4" stroke-width="1.5"/>
+  <text x="89" y="188" text-anchor="middle" font-size="15" font-weight="700" fill="#274b8f">Git Diff</text>
+  <text x="89" y="208" text-anchor="middle" font-size="11" fill="#41609a">workspace / range</text>
+  <text x="89" y="224" text-anchor="middle" font-size="11" fill="#41609a">commit / scan</text>
+
+  <!-- Deterministic stage -->
+  <rect x="196" y="110" width="230" height="170" rx="12" fill="#f0faf4" stroke="#2e9e63" stroke-width="1.5"/>
+  <text x="311" y="138" text-anchor="middle" font-size="14" font-weight="700" fill="#20714a">Deterministic Core</text>
+  <rect x="212" y="152" width="198" height="30" rx="6" fill="#ffffff" stroke="#7fc7a0"/>
+  <text x="311" y="172" text-anchor="middle" font-size="12" fill="#2c6e4c">File selection &amp; filtering</text>
+  <rect x="212" y="190" width="198" height="30" rx="6" fill="#ffffff" stroke="#7fc7a0"/>
+  <text x="311" y="210" text-anchor="middle" font-size="12" fill="#2c6e4c">Smart file bundling</text>
+  <rect x="212" y="228" width="198" height="30" rx="6" fill="#ffffff" stroke="#7fc7a0"/>
+  <text x="311" y="248" text-anchor="middle" font-size="12" fill="#2c6e4c">Rule matching per language</text>
+
+  <!-- Agent stage -->
+  <rect x="468" y="110" width="230" height="170" rx="12" fill="#fff7ec" stroke="#d98a2b" stroke-width="1.5"/>
+  <text x="583" y="138" text-anchor="middle" font-size="14" font-weight="700" fill="#a05f14">Agent Loop</text>
+  <text x="583" y="160" text-anchor="middle" font-size="11" fill="#8a6330">scenario-tuned prompts &#183; budget &#183; retry</text>
+  <rect x="484" y="172" width="198" height="88" rx="6" fill="#ffffff" stroke="#ecc189"/>
+  <text x="583" y="194" text-anchor="middle" font-size="12" font-weight="600" fill="#8a5a17">LLM (multi-provider)</text>
+  <text x="583" y="214" text-anchor="middle" font-size="11" fill="#96703a">tools: file_read &#183; code_search</text>
+  <text x="583" y="230" text-anchor="middle" font-size="11" fill="#96703a">file_find &#183; code_comment</text>
+  <text x="583" y="248" text-anchor="middle" font-size="11" fill="#96703a">isolated context per bundle</text>
+
+  <!-- Accuracy stage -->
+  <rect x="740" y="110" width="196" height="170" rx="12" fill="#f6effd" stroke="#7d4bbd" stroke-width="1.5"/>
+  <text x="838" y="140" text-anchor="middle" font-size="14" font-weight="700" fill="#5b3591">Accuracy Pass</text>
+  <rect x="756" y="156" width="164" height="34" rx="6" fill="#ffffff" stroke="#b79ae0"/>
+  <text x="838" y="178" text-anchor="middle" font-size="12" fill="#5b3591">Comment positioning</text>
+  <rect x="756" y="200" width="164" height="34" rx="6" fill="#ffffff" stroke="#b79ae0"/>
+  <text x="838" y="222" text-anchor="middle" font-size="12" fill="#5b3591">Reflection re-check</text>
+
+  <!-- Outputs -->
+  <rect x="330" y="330" width="300" height="56" rx="10" fill="#fdf2f2" stroke="#c05252" stroke-width="1.5"/>
+  <text x="480" y="353" text-anchor="middle" font-size="14" font-weight="700" fill="#8f3030">Line-level review comments</text>
+  <text x="480" y="372" text-anchor="middle" font-size="11" fill="#a04a4a">stdout &#183; CI comments &#183; VSCode inline</text>
+
+  <!-- Arrows -->
+  <line x1="154" y1="195" x2="192" y2="195" stroke="#5b6470" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="426" y1="195" x2="464" y2="195" stroke="#5b6470" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="698" y1="195" x2="736" y2="195" stroke="#5b6470" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="838" y1="280" x2="838" y2="308" stroke="#5b6470" stroke-width="2"/>
+  <line x1="838" y1="308" x2="500" y2="308" stroke="#5b6470" stroke-width="2"/>
+  <line x1="460" y1="308" x2="480" y2="308" stroke="#5b6470" stroke-width="2"/>
+  <line x1="480" y1="308" x2="480" y2="326" stroke="#5b6470" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Session strip -->
+  <rect x="24" y="304" width="240" height="82" rx="10" fill="#f4f6f8" stroke="#98a2ad" stroke-width="1.2"/>
+  <text x="144" y="328" text-anchor="middle" font-size="12" font-weight="700" fill="#3f4954">Session persistence</text>
+  <text x="144" y="348" text-anchor="middle" font-size="11" fill="#5b6470">resume any interrupted run:</text>
+  <text x="144" y="364" text-anchor="middle" font-size="11" font-family="Consolas, monospace" fill="#3f4954">--resume &lt;session-id&gt;</text>
+  <line x1="264" y1="345" x2="326" y2="345" stroke="#98a2ad" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+  <text x="480" y="410" text-anchor="middle" font-size="11" fill="#8b95a1">docs/architecture/01-overview.md &#183; alibaba/open-code-review</text>
+</svg>

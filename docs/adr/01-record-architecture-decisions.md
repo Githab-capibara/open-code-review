@@ -11,32 +11,7 @@ As OpenCodeReview grows, we need to capture architectural decisions that shape t
 
 ## Decision
 
-We will adopt the Architecture Decision Record (ADR) pattern as described by Michael Nygard to document significant architectural decisions in the project.
-
-### ADR Format
-
-Each ADR follows this structure:
-
-1. **Title** — Short, imperative, present tense
-2. **Status** — `Proposed` / `Accepted` / `Deprecated` / `Superseded by ADR-NN`
-3. **Context** — Forces at play, what makes the decision non-obvious
-4. **Decision** — What we are doing (affirmative, present tense)
-5. **Consequences** — What becomes easier, harder, or given up
-6. **Alternatives considered** — Designs that lost, with one-sentence rationale
-
-### Storage Location
-
-- All ADRs live in `/docs/adr/`
-- Numbered sequentially: `01-...`, `02-...`
-- File names use kebab-case derived from title
-- Append-only — never edit an accepted ADR except to mark it superseded
-
-### ADR Lifecycle
-
-- Proposed ADRs can be opened by any contributor
-- Acceptance requires maintainer review (CODEOWNERS-gated)
-- To change a decision, write a new ADR that supersedes the old one
-- Maintain an index table in `/docs/adr/README.md`
+We adopt the Architecture Decision Record pattern as described by Michael Nygard to document significant architectural decisions in the project.
 
 ## Consequences
 

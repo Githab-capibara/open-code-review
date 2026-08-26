@@ -53,9 +53,9 @@ Use [`template.md`](template.md) as the starting point.
 - Append-only. To change a decision, write a new ADR that supersedes
   the old one; do not edit the old one except to flip its `Status` to
   `Superseded by ADR-NN`.
-- ADRs are CODEOWNERS-gated (`docs/adr/**` requires owner review).
-  Proposed ADRs may be opened by any contributor; only an owner-approved
-  PR can land them at `Status: Accepted`.
+- ADR changes require maintainer review (`docs/adr/**` is watched by the
+  core team). Proposed ADRs may be opened by any contributor; only a
+  maintainer-approved PR can land them at `Status: Accepted`.
 
 ## Index
 

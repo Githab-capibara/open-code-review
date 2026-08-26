@@ -29,7 +29,7 @@
   <a href="#supported-agents"><img alt="Cursor" src="https://img.shields.io/badge/Cursor-supported-blueviolet.svg" /></a>
 </p>
 <p align="center">
-  <a href="https://open-codereview.ai">Website</a> | <a href="https://discord.gg/">Discord</a> | <a href="/docs">Docs</a> | <a href="https://open-codereview.ai">Live App</a>
+  <a href="https://open-codereview.ai">Website</a> | <a href="https://discord.gg/opencode-review">Discord</a> | <a href="./docs/README.md">Docs</a> | <a href="https://open-codereview.ai">Live App</a>
 </p>
 
 ---
@@ -191,9 +191,23 @@ This project exists thanks to all the people who contribute. See [CONTRIBUTING.m
   <img src="https://contrib.rocks/image?repo=alibaba/open-code-review" />
 </a>
 
+## Benchmarks
+
+![Benchmark Donut Chart](imgs/benchmark-donut.svg)
+
+| Metric | OpenCodeReview | General-purpose Agent |
+|--------|----------------|-----------------------|
+| Precision | High | Lower |
+| F1 | High | Lower |
+| Tokens used | ~1/9 | Baseline |
+| Speed | Faster | Slower |
+
 ## Architecture
 
-![Architecture Overview](docs/architecture/01-overview.md)
+| Diagram | Purpose |
+|---------|---------|
+| [Architecture Overview SVG](imgs/architecture-overview.svg) | High-level system components |
+| [Architecture Detail SVG](docs/architecture/01-overview.md) | Design philosophy and components |
 
 ## License
 

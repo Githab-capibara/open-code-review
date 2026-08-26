@@ -2,6 +2,12 @@
 
 This directory contains CI/CD integration documentation.
 
+## Documents
+
+| Guide | Purpose |
+|-------|---------|
+| [01-ci-cd-overview.md](01-ci-cd-overview.md) | CI/CD integration overview and best practices |
+
 ## Supported Platforms
 
 | Platform | Documentation |

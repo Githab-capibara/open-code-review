@@ -4,20 +4,26 @@ This directory contains the source code for the OpenCodeReview website ([open-co
 
 ## Technology Stack
 
-- **Framework:** Astro / Vite (static site)
-- **Styling:** Tailwind CSS
+- **Framework:** React 18 SPA + react-router-dom
+- **Bundler:** webpack (dev server + production build)
+- **Markdown rendering:** marked, mermaid (diagrams), dompurify (sanitization)
+- **Visuals:** three.js scenes, custom icon set
 - **Language:** TypeScript
-- **Testing:** Vitest
+- **Testing:** Vitest; bundle budget enforced by size-limit (150 kB)
 
 ## Directory Structure
 
 ```
 pages/
 ├── src/
-│   ├── content/docs/    # Documentation markdown files
+│   ├── components/      # UI components (+ icons)
+│   ├── pages/           # Route pages
+│   ├── content/docs/    # Documentation markdown files per locale
+│   ├── content/blog/    # Blog posts per locale
 │   ├── i18n/            # UI translations
-│   ├── components/      # Reusable UI components
-│   └── layouts/         # Page layouts
+│   ├── hooks/           # React hooks
+│   ├── utils/           # Helpers
+│   └── styles/          # Global styles
 ├── public/              # Static assets
 └── README.md            # This file
 ```

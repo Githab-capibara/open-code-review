@@ -6,7 +6,7 @@ This directory contains pipeline and workflow documentation for OpenCodeReview.
 
 | Guide | Purpose |
 |-------|---------|
-| No documents yet | Add workflow docs here |
+| [01-pipeline-overview.md](01-pipeline-overview.md) | Review execution pipeline — from git diff to posted comments |
 
 ## Links
 
