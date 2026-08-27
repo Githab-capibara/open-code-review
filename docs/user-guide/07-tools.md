@@ -1,4 +1,6 @@
 
+# 07. Built-in Tools
+
 OCR ships with **six built-in tools** the LLM can call during a review.
 This page documents each tool's purpose, input schema, and example
 input/output. The full machine-readable definitions live in

@@ -1,4 +1,6 @@
 
+# 05. Review Rules
+
 Rules tell OCR **what to focus on** when reviewing each file. They live
 in JSON files at three layers, plus an embedded system default that ships
 with the binary.

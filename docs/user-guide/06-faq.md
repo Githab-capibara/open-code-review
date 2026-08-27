@@ -1,4 +1,6 @@
 
+# 06. FAQ
+
 Common errors, surprises, and "is this supposed to do that?" questions.
 If your problem isn't here, open a
 [GitHub issue](https://github.com/alibaba/open-code-review/issues) with

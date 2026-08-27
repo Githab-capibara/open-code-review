@@ -1,4 +1,6 @@
 
+# 03. Configuration
+
 The config file lives at `~/.opencodereview/config.json`. You have three ways
 to edit it:
 

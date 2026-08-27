@@ -1,4 +1,6 @@
 
+# 02. Installation
+
 There are six supported ways to install the `ocr` CLI.
 
 ## NPM (recommended)
