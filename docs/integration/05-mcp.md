@@ -1,4 +1,6 @@
 
+# 05. MCP Client
+
 OCR can act as a **Model Context Protocol (MCP) client**. You point it at
 one or more external MCP servers, and the tools those servers expose
 become available to the review agent — right alongside the

@@ -1,4 +1,4 @@
-# Suggest Diff Package
+# 18. Suggest Diff Package
 
 The `internal/suggestdiff` package computes a line-level diff between two code snippets so the agent can propose concrete replacements.
 

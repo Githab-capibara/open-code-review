@@ -1,4 +1,4 @@
-# Release Package
+# 15. Release Package
 
 The `internal/release` package holds release/version metadata and the consistency checks that keep the published release assets in sync with the build pipeline.
 

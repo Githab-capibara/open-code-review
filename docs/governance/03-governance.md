@@ -1,4 +1,4 @@
-# OpenCodeReview Governance
+# 03. Governance
 
 This document describes how OpenCodeReview is governed today and how technical
 decisions are made in the project.

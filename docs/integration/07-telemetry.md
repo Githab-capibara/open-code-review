@@ -1,4 +1,6 @@
 
+# 07. Telemetry
+
 OCR ships with first-class **OpenTelemetry** support. Every review run
 produces structured spans, metrics, and events. Wired up to a collector,
 the data is enough to answer "what did the agent spend time on?",

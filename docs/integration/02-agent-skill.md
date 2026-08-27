@@ -1,4 +1,6 @@
 
+# 02. Agent Skill
+
 Register OCR as a callable skill so an agent framework can invoke it
 with the right flags, prerequisite checks, and triage rubric — without
 you re-deriving any of that on the calling side.

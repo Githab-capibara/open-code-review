@@ -1,4 +1,4 @@
-# Scan Package
+# 16. Scan Package
 
 The `internal/scan` package implements full-file scan mode: instead of reviewing a git diff, it reviews entire files (or directories) for auditing unfamiliar codebases.
 

@@ -1,4 +1,4 @@
-# Model Package
+# 14. Model Package
 
 The `internal/model` package defines the core data types shared across OpenCodeReview: diffs, review comments, scan items, and preview entries.
 

@@ -1,4 +1,4 @@
-# Agent Guidelines for open-code-review
+# 01. Agent Guidelines for OpenCodeReview
 
 This file provides instructions for AI coding assistants working on this project.
 

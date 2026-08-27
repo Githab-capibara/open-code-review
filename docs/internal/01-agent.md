@@ -1,4 +1,4 @@
-# Agent Package
+# 01. Agent Package
 
 The `internal/agent` package implements the core review agent that orchestrates the code-review loop over a set of diffs.
 

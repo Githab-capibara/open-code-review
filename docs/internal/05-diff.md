@@ -1,4 +1,4 @@
-# Diff Package
+# 05. Diff Package
 
 The `internal/diff` package resolves what code to review: it turns CLI inputs (workspace, commit range, single commit) into a concrete set of file diffs and a resolved git remote.
 

@@ -1,4 +1,4 @@
-# Tool Package
+# 03. Tool Package
 
 The `internal/tool` package provides the agent's local tool providers, a registry to register/discover them, and a `FileReader` that backs file- and search-based tools.
 

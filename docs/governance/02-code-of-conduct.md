@@ -1,4 +1,4 @@
-# Code of Conduct
+# 02. Code of Conduct
 
 We are committed to a welcoming, safe, and respectful community.
 

@@ -1,4 +1,4 @@
-# Stdout Package
+# 17. Stdout Package
 
 The `internal/stdout` package provides a swappable, capturable stdout sink used to silence or redirect terminal output during tests and structured runs.
 

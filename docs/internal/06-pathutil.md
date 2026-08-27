@@ -1,4 +1,4 @@
-# Path Utility Package
+# 06. Path Utility Package
 
 The `internal/pathutil` package provides safe, repository-scoped path handling used across file-reading tools and session storage.
 

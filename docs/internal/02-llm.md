@@ -1,4 +1,4 @@
-# LLM Package
+# 02. LLM Package
 
 The `internal/llm` package provides LLM client interfaces supporting multiple protocols, endpoint resolution, token counting, retry reporting, and session-key expansion.
 

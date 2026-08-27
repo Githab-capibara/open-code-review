@@ -256,10 +256,6 @@ func (c *OpenAIResponsesClient) mapResponsesResponse(sdkResp *responses.Response
 	var toolCalls []ToolCall
 	var reasoningParts []string
 	for _, item := range sdkResp.Output {
-		// TODO(phase): ResponseOutputMessage.Phase (commentary/final_answer) is
-		// currently dropped. For gpt-5.3-codex+ models, preserve and resend
-		// Phase on assistant messages to avoid performance degradation. See
-		// DESIGN_STATE_CACHE_PHASE.md §3.
 		switch item.Type {
 		case "function_call":
 			fc := item.AsFunctionCall()

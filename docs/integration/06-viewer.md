@@ -1,4 +1,6 @@
 
+# 06. Session Viewer
+
 `ocr viewer` is a small embedded HTTP server that renders past review
 sessions in a browser-friendly UI. No external dependencies — sessions
 are read directly from the JSONL files OCR writes to disk during every

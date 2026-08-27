@@ -1,4 +1,6 @@
 
+# 01. Architecture Overview
+
 A walk-through of how `ocr review` actually works inside, from the moment
 you press Enter to the JSON that lands in your terminal. The goal is to
 give you enough mental model to debug behaviour, tune flags, and read
@@ -358,7 +360,7 @@ If you want to read along:
 | Tool registry & impls | `internal/tool/` |
 | LLM endpoint resolver | `internal/llm/resolver.go` |
 | Session JSONL writer | `internal/session/persist.go` |
-| Web viewer | `intern../integration/06-viewer.mdserver.go` |
+| Web viewer | `internal/server.go` |
 
 See [Contributing](../development/02-contributing.md) for build & test instructions.
 

@@ -13,8 +13,6 @@ export function buildReviewArgs(opts: CliRunOptions): string[] {
   }
   args.push('--format', 'json');
   // JSON 结果走 stdout，进度日志走 stderr，供扩展实时回显
-  // TODO: 待 CLI 发布支持 --progress-stderr 后再启用（当前已安装版本不识别该 flag）
-  // args.push('--progress-stderr');
   if (opts.customPrompt && opts.customPrompt.trim()) {
     args.push('--background', opts.customPrompt.trim());
   }

@@ -1,4 +1,4 @@
-# Viewer Package
+# 08. Viewer Package
 
 The `internal/viewer` package serves a local web UI for browsing and replaying review sessions (`ocr viewer`).
 

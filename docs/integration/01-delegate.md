@@ -1,4 +1,6 @@
 
+# 01. Delegation Mode
+
 OCR handles deterministic engineering (file selection, rule resolution)
 while the host agent performs the actual code review using its own LLM
 capabilities. No LLM endpoint is required on the OCR side.
@@ -40,7 +42,7 @@ needed — delegation mode never calls an LLM on the OCR side.
 ```bash
 mkdir -p .claude/commands
 curl -o .claude/commands/delegate-review.md \
-  https://raw.githubusercontent.com/alibaba/open-code-review/main/plugins/open-code-revi../integration/03-claude-code.mdcommands/delegate-review.md
+  https://raw.githubusercontent.com/alibaba/open-code-review/main/plugins/open-code-review/claude-code/commands/delegate-review.md
 ```
 
 ### Any agent — Skill

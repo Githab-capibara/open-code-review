@@ -1,4 +1,4 @@
-# Session Package
+# 07. Session Package
 
 The `internal/session` package provides a session-history mechanism for collecting conversation records, review items, and token usage, plus loading/listing past sessions for resume and the viewer.
 

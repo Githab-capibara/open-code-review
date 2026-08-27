@@ -1,4 +1,4 @@
-# Gitcmd Package
+# 12. Gitcmd Package
 
 The `internal/gitcmd` package runs git commands with bounded concurrency and a consistent error/streaming API.
 

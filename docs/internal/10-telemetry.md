@@ -1,4 +1,4 @@
-# Telemetry Package
+# 10. Telemetry Package
 
 The `internal/telemetry` package provides OpenTelemetry-based observability for the OpenCodeReview CLI: config resolution, event/span helpers, and human-readable trace summaries printed to the terminal.
 

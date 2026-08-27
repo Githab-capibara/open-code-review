@@ -1,4 +1,4 @@
-# Security Assurance Case
+# 02. Security Assurance Case
 
 This document provides a security assurance case for Open Code Review (OCR), justifying that security requirements are met through secure design principles and countermeasures against common implementation weaknesses.
 

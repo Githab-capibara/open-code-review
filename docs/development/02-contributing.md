@@ -1,4 +1,4 @@
-# Contributing to OpenCodeReview
+# 02. Contributing to OpenCodeReview
 
 Thank you for your interest in contributing to OpenCodeReview! Every contribution matters — whether it's fixing a typo, reporting a bug, or implementing a new feature.
 
