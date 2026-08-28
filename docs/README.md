@@ -35,6 +35,7 @@ Welcome to the official documentation for OpenCodeReview.
 | [security/](security/) | Security policies and assurance case |
 | [skills/](skills/) | Portable agent skills for Claude Code, Codex, Cursor, etc. |
 | [user-guide/](user-guide/) | User-facing documentation and CLI reference |
+| [rules/](rules/) | Per-language review-rule reference (mirrors internal/config/rules/rule_docs) |
 
 ## Key entry points
 
@@ -44,6 +45,7 @@ Welcome to the official documentation for OpenCodeReview.
 - → [Pipeline Overview](pipeline/01-pipeline-overview.md) — review execution from diff to comments
 - → [CLI Reference](user-guide/04-cli-reference.md) — complete command and flag reference
 - → [Agent Guidelines](governance/01-agents.md) — project-wide development rules
+- → [Language Rule Docs](rules/README.md) — per-language review rules and supported formats
 
 ## Governance
 

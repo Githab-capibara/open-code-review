@@ -1,77 +1,34 @@
 # Extensions
 
-This directory contains IDE extension documentation.
+This directory contains IDE extension documentation for OpenCodeReview.
 
-## Available Extensions
+## Documents
 
-| Extension | IDE | Description |
-|-----------|-----|-------------|
-| [VSCode Extension](../../extensions/vscode/) | Visual Studio Code | In-editor code review with GitHub integration |
+| Guide | Purpose |
+|-------|---------|
+| [01-extensions-overview.md](01-extensions-overview.md) | Overview of IDE extension strategy and architecture |
+| [02-vscode-extension.md](02-vscode-extension.md) | VS Code extension — features, installation, development, architecture |
 
-## VSCode Extension
+## Current Extensions
 
-### Features
+| Extension | IDE | Status |
+|-----------|-----|--------|
+| [VSCode Extension](../../extensions/vscode/) | Visual Studio Code | **Available** on Marketplace |
+| JetBrains plugin (planned) | IntelliJ IDEA, GoLand, PyCharm | **H2 2026** |
 
-- In-editor code review
-- GitHub Pull Request integration
-- Line-by-line review comments
-- Session history browsing
-- Multi-language support
+## VSCode Extension Quick Reference
 
-### Installation
+The VSCode extension integrates AI-powered code review directly into the editor:
 
-```bash
-# Install from VSCode Marketplace
-# Search for "OpenCodeReview" in Extensions
+- **Three review modes**: workspace changes, branch comparison (`--from` / `--to`), single commit (`--commit`)
+- **Streaming logs**: tail CLI output live; cancel anytime
+- **Two-way sync**: comment cards in sidebar stay in sync with CommentThreads in the editor
+- **Actions**: apply fixes, dismiss comments, flag as false-positive inline
+- **Configuration**: view/edit LLM provider config inside the extension (persists via `ocr config set`)
 
-# Or install from .vsix file
-code --install-extension opencodereview-x.y.z.vsix
-```
-
-### Usage
-
-1. Open a repository in VSCode
-2. Make changes and stage them
-3. Run "OpenCodeReview: Review Changes" command
-4. Review comments appear inline
-5. Apply fixes or dismiss comments
-
-### Configuration
-
-```json
-{
-  "opencodereview.ocrPath": "/path/to/ocr",
-  "opencodereview.autoReview": false,
-  "opencodereview.reviewOnSave": true
-}
-```
-
-## Development
-
-### Building the VSCode Extension
-
-```bash
-cd extensions/vscode
-npm install
-npm run compile
-npm run package
-```
-
-### Testing
-
-```bash
-npm test
-npm run integration-test
-```
-
-## Roadmap
-
-Planned extensions:
-
-- **JetBrains plugin** — IntelliJ IDEA, GoLand, PyCharm support (H2 2026)
-
-## Support
+## Links
 
 - [Extension Issues](https://github.com/alibaba/open-code-review/issues)
 - [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=open-code-review.opencodereview)
 - [Integration Documentation](../integration/README.md)
+- [Architecture Overview](../architecture/01-overview.md)
