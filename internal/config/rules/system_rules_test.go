@@ -95,6 +95,8 @@ func TestResolve_DefaultRules(t *testing.T) {
 		{"server/bootstrap.cjs", "TypeScript"},
 		{"app.kt", "Null Safety"},
 		{"src/main/handler.cpp", "Smart Pointer"},
+		{"src/main/handler.cxx", "Smart Pointer"},
+		{"include/handler.hxx", "Smart Pointer"},
 		{"driver.c", "malloc"},
 		{"pages/Index.ets", "State Decorator"},
 		{"components/Button.ets", "State Decorator"},
