@@ -1,3 +1,16 @@
+# 40-ts-js-tsx-jsx.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for TypeScript/JavaScript files.
+
+## Details
+
 #### Obvious Typos or Spelling Errors
 - Spelling errors in variable names, function names, component names, or Props property names
 - Strings in log or error messages containing spelling errors that affect readability
@@ -38,3 +51,8 @@
 - **Dangerous Methods**: Using document.write() is prohibited as it causes page reflow and security issues
 - **Sensitive Information**: Check whether API keys or sensitive data are exposed
 - **Prototype Chain Safety**: Modifying native object prototypes (e.g., Array.prototype, Object.prototype) is prohibited
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

@@ -1,3 +1,16 @@
+# 17-haskell.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Haskell Language files.
+
+## Details
+
 > Favor precision over recall: only raise an issue when you are confident it is a real defect, and stay silent when the surrounding context is unclear — a false alarm costs more reviewer trust than a missed minor issue. Treat security and correctness findings as blocking, and style or idiom suggestions as non-blocking. Confirm invariants and the strictness or totality guarantees of helpers defined elsewhere before reporting their call sites.
 
 #### Obvious Typos or Spelling Errors
@@ -59,3 +72,8 @@
 - Untrusted paths used without constraining traversal, symlink behavior, and the intended root directory
 - Secrets, tokens, private keys, credentials, or personally identifiable information written to logs, exceptions, source, or serialized diagnostics
 - Authentication, authorization, cryptographic, or random-token code that uses ad hoc algorithms, non-constant-time secret comparisons where relevant, or a non-cryptographic RNG
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

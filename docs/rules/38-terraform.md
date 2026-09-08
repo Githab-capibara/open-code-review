@@ -1,3 +1,16 @@
+# 38-terraform.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Terraform files.
+
+## Details
+
 > Favor precision over recall: only raise an issue when you are confident it is a real defect, and stay silent when the surrounding context is unclear — a false alarm costs more reviewer trust than a missed minor issue. Treat security and correctness findings as blocking, and style or idiom suggestions as non-blocking. Review only what is observable in the HCL under review; do not infer runtime provider behavior, cloud account configuration, or state stored outside this file.
 
 #### Obvious Typos or Spelling Errors
@@ -27,3 +40,8 @@
 - Duplicate resource/data-source labels within the same module (would fail `terraform validate`, if not already caught by other tooling)
 - Variables declared but never referenced anywhere in the diff's module, or referenced variables never declared in the diff's scope
 - Do not flag formatting/whitespace that `terraform fmt` would silently fix — focus on structural and semantic issues
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

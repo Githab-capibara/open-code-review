@@ -1,3 +1,16 @@
+# 16-graphql.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for GraphQL files.
+
+## Details
+
 > Favor precision over recall: only raise an issue when you are confident it is a real defect, and stay silent when the surrounding context is unclear — a false alarm costs more reviewer trust than a missed minor issue. Treat security and correctness findings as blocking, and style or idiom suggestions as non-blocking. Review only what is observable in the schema (SDL) or operation text under review; do not infer resolver behavior that lives in code outside this file.
 
 #### Obvious Typos or Spelling Errors
@@ -38,3 +51,8 @@
 - An explicit directive, configuration, or comment in the diff that enables introspection on an untrusted surface
 - Do not infer resolver-level N+1 cost, dataloader/batching usage, or runtime introspection state — those live in resolver code, not in schema or operation files
 - Do not report when a limit is enforced and clearly documented outside the schema
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

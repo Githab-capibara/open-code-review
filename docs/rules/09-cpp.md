@@ -1,3 +1,16 @@
+# 09-cpp.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for C++ Language files.
+
+## Details
+
 #### Obvious Typos or Spelling Errors
 - Spelling errors in variable names, constant names, or function names at their declaration sites; do not report spelling errors at call sites
 - Strings in log messages or exception messages containing spelling errors that affect readability
@@ -69,3 +82,8 @@ std::transform(vec.begin(), vec.end(), vec.begin(),
 - Pass parameters by const reference
 - Correct placement of const for pointers and references
 - Use const member variables judiciously
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

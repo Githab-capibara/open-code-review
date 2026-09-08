@@ -1,3 +1,16 @@
+# 02-astro.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Astro Framework files.
+
+## Details
+
 #### Obvious Typos or Spelling Errors
 - Spelling errors in component names, props, slots, or user-facing strings that affect readability
 
@@ -43,3 +56,8 @@
 
 #### Markup and Accessibility
 - Flag non-semantic or fragile interactive markup, including inaccessible islands before hydration, invalid conditional HTML, or mixed Astro/framework composition that breaks keyboard or focus behavior
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

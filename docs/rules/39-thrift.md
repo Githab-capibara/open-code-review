@@ -1,3 +1,16 @@
+# 39-thrift.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Thrift files.
+
+## Details
+
 > Favor precision over recall: only raise an issue when you are confident it is a real defect, and stay silent when the surrounding context is unclear — a false alarm costs more reviewer trust than a missed minor issue. Treat wire-compatibility breaks as blocking, and naming or layout preferences as non-blocking.
 
 #### Field IDs and Wire Compatibility
@@ -33,3 +46,8 @@
 - Secrets, tokens, or credentials embedded in constants, default values, or comments
 - `string` used to carry non-UTF-8 bytes where `binary` is meant, at a boundary that validates neither
 - Do not report when limits are enforced by transport or server configuration and that boundary is clearly documented
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

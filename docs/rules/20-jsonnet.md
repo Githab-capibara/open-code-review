@@ -1,3 +1,16 @@
+# 20-jsonnet.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Jsonnet files.
+
+## Details
+
 > Favor precision over recall: only raise an issue when you are confident it is a real defect, and stay silent when the surrounding context is unclear — a false alarm costs more reviewer trust than a missed minor issue. Review only what is observable in the Jsonnet under review; do not infer the contents of libraries imported from outside the diff, the values supplied for external variables or top-level arguments, or how the rendered output is consumed downstream. Do not flag formatting that `jsonnetfmt` would silently fix.
 
 #### Late Binding: self, $, and super
@@ -32,3 +45,8 @@
 - A manifested string interpolated into a CLI flag, a ConfigMap entry, or an annotation where indentation, a multi-document `---` separator, or a non-string scalar changes how the receiver parses it
 - `std.toString` or `std.manifestJson` used as the input to a hash, a checksum annotation, or an equality check, where field ordering or the representation of numbers is not guaranteed to be stable across evaluator versions
 - `assert` used to validate an input at a point that is never forced, so the check silently never runs
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

@@ -1,3 +1,16 @@
+# 31-prisma.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Prisma files.
+
+## Details
+
 #### Prisma Schema Review Principles
 > Favor precision over recall: report only defects likely real in the changed schema and its reachable application, migration, and datasource context. Treat data-loss, integrity, security, and compatibility findings as blocking; style-only suggestions are non-blocking. Do not duplicate errors that `prisma validate`, `prisma format`, migration tooling, or the database determine mechanically unless the diff reveals a concrete production consequence.
 
@@ -38,3 +51,8 @@ Before reporting a non-local claim, use `file_read` and `code_search` to inspect
 - Focus on correctness, integrity, migration safety, performance with demonstrated query evidence, security, and deployment compatibility.
 - Do not report formatting, model/field naming preferences, relation naming style, documentation requests, or speculative indexes as findings.
 - When the schema change is intentionally accompanied by a migration, generated-client update, or application code change, review the complete change set before reporting a compatibility issue.
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

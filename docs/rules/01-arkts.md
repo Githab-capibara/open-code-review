@@ -1,3 +1,16 @@
+# 01-arkts.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for ArkTS Code files.
+
+## Details
+
 #### Obvious Typos or Spelling Errors
 - Spelling errors in component names, variable names, or function names
 - Spelling errors in log or error messages that affect readability
@@ -53,3 +66,8 @@
 - User input must be validated (length, format, range); direct concatenation into SQL or command strings is prohibited
 - Sensitive information (keys, passwords, tokens) must not be logged or uploaded
 - Network requests must use HTTPS with certificate verification
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

@@ -1,3 +1,16 @@
+# 23-mapper-dao-xml.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Mapper/DAO XML files.
+
+## Details
+
 #### Obvious Spelling Error Detection
 - Spelling errors in SQL keywords
 - Spelling mismatches between mapper interface method names and XML `id` attributes
@@ -31,3 +44,8 @@
 - Exercise caution when context is unclear: when the full execution context of SQL cannot be determined, choose to ignore rather than report a false positive
 - Require sufficient evidence: only report issues when there is clear evidence of a problem
 - Prefer false negatives over false positives: maintain high-precision issue identification to avoid drowning real issues in excessive false reports
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

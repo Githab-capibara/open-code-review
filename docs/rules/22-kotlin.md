@@ -1,3 +1,16 @@
+# 22-kotlin.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Kotlin Language files.
+
+## Details
+
 ### 1. Null Safety
 - **Issue**: Nullable types not handled correctly, leading to potential `NullPointerException`.
 - **Key checks**:
@@ -132,3 +145,8 @@
 ### 9. Other Key Points
 - **Immutability**: Prefer `val` over `var`.
 - **String handling**: Use string templates (`"Value: $value"`) instead of concatenation.
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

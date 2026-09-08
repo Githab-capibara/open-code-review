@@ -1,3 +1,16 @@
+# 08-composer-json.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Composer JSON files.
+
+## Details
+
 #### Composer Manifest Review Principles
 > Focus on newly introduced correctness, reproducibility, security, and deployment defects. Inspect source usage, CI, containers, deployment configuration, and nearby workspace manifests before claiming a dependency or platform incompatibility. Do not turn preferences about exact pins versus compatible ranges into findings.
 
@@ -37,3 +50,8 @@
 - Incorrect `replace`, `provide`, or `conflict` declarations that can make Composer omit a required implementation or accept an incompatible package.
 - Changes to `type`, `bin`, installer paths, archive include/exclude rules, or framework `extra` metadata that break installation or packaging.
 - Published packages missing or invalid required metadata only when the repository is actually distributed as a package; do not apply publishing requirements to private applications.
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

@@ -1,3 +1,16 @@
+# 30-pot.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for POT Translation files.
+
+## Details
+
 > Favor precision over recall: only raise an issue when you are confident it is a real defect, and stay silent when the surrounding context is unclear — a false alarm costs more reviewer trust than a missed minor issue. Treat structural errors and placeholder mismatches as blocking, and style suggestions as non-blocking. In a template (.pot) file every `msgstr` is expected to be empty; do not report empty `msgstr` entries as missing translations.
 
 #### Header Integrity
@@ -27,3 +40,8 @@
 - Broken escape sequences (`\n`, `\t`, `\"`) that render literally or terminate the string early
 - Leading/trailing whitespace or trailing `\n` that differs between `msgid` and `msgid_plural` in a way that changes layout or concatenation
 - Encoding-corrupted characters (mojibake) in any string
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

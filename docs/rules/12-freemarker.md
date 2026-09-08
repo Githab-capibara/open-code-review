@@ -1,3 +1,16 @@
+# 12-freemarker.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for FreeMarker Template files.
+
+## Details
+
 #### Obvious Typos or Spelling Errors
 - Spelling errors in macro names, assigned variable names, or user-facing text at their declaration sites; do not report at reference sites
 - Typos in `<#assign>`/`<#macro>`/`<#function>` names that surface only at render time (`InvalidReferenceException` / macro not found), or that are silently masked by `!` defaults and `??` guards
@@ -34,3 +47,8 @@
 - Numbers, dates, times, and currency emitted with locale-default formatting where a fixed machine format is required (e.g. `?string`/`?c` for numbers in URLs, JSON, or IDs) — `?c` (computer format) prevents locale-dependent thousands separators corrupting non-display output
 - Hard-coded user-facing strings that should come from a localized message/resource bundle
 - Date/number output relying on an implicit locale/timezone without confirming the render environment sets them intentionally
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

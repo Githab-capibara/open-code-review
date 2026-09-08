@@ -1,3 +1,16 @@
+# 27-php.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for PHP Language files.
+
+## Details
+
 #### PHP Review Principles
 > Favor precision over recall: report only defects that are likely real in the changed code and its reachable context. Treat correctness and security findings as blocking; style-only suggestions are non-blocking. Account for the project's PHP version and framework conventions before reporting version- or lifecycle-dependent behavior.
 
@@ -60,3 +73,8 @@ Confirm attacker control and the output or execution context before reporting. F
 - Report performance issues only with evidence of meaningful data scale or a hot path: repeated queries, accidental full-result materialization, quadratic array operations, or expensive work repeated inside a loop.
 - Suggest tests only for concrete changed failure modes involving coercion, boundary values, errors, transactions, authorization, escaping, or framework configuration.
 - Do not make formatting, naming, import ordering, modern-syntax preferences, or advice already enforced by deterministic PHP tooling into blocking findings.
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

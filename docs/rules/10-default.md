@@ -1,3 +1,16 @@
+# 10-default.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Default files.
+
+## Details
+
 #### Correctness
 Is the logic correct? Are there missing boundary conditions?
 Are exceptions handled properly?
@@ -20,3 +33,8 @@ Does it follow the project’s existing code style and architecture patterns?
 #### Test Coverage
 Do critical logic paths have corresponding test cases?
 Do test cases cover boundary conditions?
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

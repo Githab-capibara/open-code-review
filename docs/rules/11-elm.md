@@ -1,3 +1,16 @@
+# 11-elm.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Elm Language files.
+
+## Details
+
 > Favor precision over recall: only raise an issue when you are confident it is a real defect, and stay silent when the surrounding context is unclear — a false alarm costs more reviewer trust than a missed minor issue. Treat security and correctness findings as blocking, and style or idiom suggestions as non-blocking. Review only what is observable in the code under review; do not infer behavior of ports, flags, or modules defined outside this file.
 
 #### Obvious Typos or Spelling Errors
@@ -43,3 +56,8 @@
 - Recursive `view` or `update` helpers that rebuild large `List`s or record structures on every call where a `Dict` or memoized value would avoid repeated work
 - Large `List.length`, `List.reverse`, or repeated `List.append` (`++`) usage in hot paths where the O(n) or O(n²) cost is avoidable with a different data structure or accumulator pattern
 - Untrusted input passed to `String.toInt`/`String.toFloat` without handling the `Maybe` result, or used to build a `Json.Decode` failure message shown verbatim to the user
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

@@ -1,3 +1,16 @@
+# 07-cargo-toml.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Cargo TOML files.
+
+## Details
+
 #### Cargo Manifest Hygiene
 - Avoid introducing wildcard dependency versions such as `*`; use an explicit compatible version requirement
 - Avoid unpinned `git` dependencies in production crates unless a `rev`, `tag`, or documented policy makes the source reproducible
@@ -17,3 +30,8 @@
 #### Release and Metadata
 - Published crates should include accurate `license` or `license-file`, `repository`, `description`, and relevant include/exclude settings
 - Avoid accidentally packaging generated artifacts, credentials, local paths, test fixtures with secrets, or large binary assets
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

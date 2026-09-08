@@ -1,3 +1,16 @@
+# 06-capnp.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Cap'n Proto files.
+
+## Details
+
 > Favor precision over recall: only raise an issue when you are confident it is a real defect, and stay silent when the surrounding context is unclear — a false alarm costs more reviewer trust than a missed minor issue. Treat wire-compatibility breaks as blocking, and naming or layout preferences as non-blocking.
 
 #### Ordinals and Wire Compatibility
@@ -34,3 +47,8 @@
 - Unbounded `List`, `Text`, or `Data` from untrusted input with no traversal limit or nesting limit set on the reader
 - Secrets, tokens, or credentials embedded in constants, defaults, or comments
 - Do not report when reader limits are set at the call site and that boundary is clearly documented
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

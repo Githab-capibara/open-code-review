@@ -1,3 +1,16 @@
+# 37-swift.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Swift Language files.
+
+## Details
+
 #### Swift Review Principles
 > Favor precision over recall: report only defects likely real in changed code and reachable execution paths. Prioritize crashes, data corruption, security issues, privacy issues, and concurrency bugs. Do not report style preferences.
 
@@ -103,3 +116,8 @@ Before reporting non-local behavior, use `file_read` and `code_search` to verify
 - Async tests leaving tasks running after completion.
 - Assertions that cannot fail for the regression they intend to detect.
 - Tests depending on uncontrolled environment state (network, time, locale, global persistence) where isolation is required.
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

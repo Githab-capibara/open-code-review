@@ -1,3 +1,16 @@
+# 25-nix.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Nix Language files.
+
+## Details
+
 > Favor precision over recall: report only Nix issues that are likely to break evaluation, reproducibility, build isolation, security, or deployment behavior. Do not report formatting that `nixfmt` or project style would handle, and do not require flakes when the repository intentionally uses channels or legacy Nix.
 
 #### Evaluation and Attribute Sets
@@ -30,3 +43,8 @@
 #### Review Scope
 - Focus on evaluation failures, non-reproducible sources, sandbox escapes, missing dependencies, module activation errors, and secret exposure.
 - Do not flag preference-only style choices, attr ordering, or idioms that are consistent with neighboring Nix files.
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

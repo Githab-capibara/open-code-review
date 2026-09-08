@@ -1,3 +1,16 @@
+# 36-rust.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Rust Language files.
+
+## Details
+
 #### Obvious Typos or Spelling Errors
 - Spelling errors in type names, function names, variable names, enum variants, trait names, or module names at their declaration sites; do not report spelling errors at call sites
 - Strings in log messages, panic messages, error messages, or public diagnostics containing spelling errors that affect readability
@@ -59,3 +72,8 @@ Only flag when the diff actually defines a `macro_rules!` or procedural macro; d
 - Do not log secrets, tokens, credentials, private keys, or personally identifiable information
 - Check integer conversions, byte slicing, and length arithmetic for overflow, truncation, and UTF-8 boundary errors
 - Cryptographic, random, authentication, and authorization code must use well-reviewed crates and explicit error handling; flag ad hoc implementations
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

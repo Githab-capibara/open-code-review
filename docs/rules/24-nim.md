@@ -1,3 +1,16 @@
+# 24-nim.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Nim Language files.
+
+## Details
+
 > Favor precision over recall: report only issues that are likely to cause incorrect behavior, memory unsafety, security vulnerabilities, or material performance problems. Do not report formatting handled by `nimpretty`, and account for the project's Nim version, memory-management mode, and compile-time defines before raising compatibility findings.
 
 #### Memory and Lifetime Safety
@@ -40,3 +53,8 @@
 - User-controlled data passed to `execShellCmd`, a shell invocation, SQL construction, path access, deserialization, or code evaluation without appropriate validation or parameterization
 - Secrets, credentials, tokens, or private data embedded in source, command arguments, logs, exceptions, or generated artifacts
 - Cryptographic keys or security tokens generated with non-cryptographic randomness or ad hoc cryptographic code
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

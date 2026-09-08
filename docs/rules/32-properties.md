@@ -1,3 +1,16 @@
+# 32-properties.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Properties File files.
+
+## Details
+
 #### Obvious Typos or Spelling Errors
 - Spelling errors in key names, especially the standard spelling of common configuration items
 
@@ -8,3 +21,8 @@
 
 #### Critical Security Issues
 - Sensitive information (passwords, API keys, database connection strings, etc.) stored in plaintext
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

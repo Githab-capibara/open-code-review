@@ -1,3 +1,16 @@
+# 33-protobuf.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Protobuf files.
+
+## Details
+
 > Favor precision over recall: only raise an issue when you are confident it is a real defect, and stay silent when the surrounding context is unclear — a false alarm costs more reviewer trust than a missed minor issue. Treat security and correctness findings as blocking, and style or idiom suggestions as non-blocking.
 
 #### Obvious Typos or Spelling Errors
@@ -37,3 +50,8 @@
 - Secrets, tokens, or credentials embedded in field defaults, examples, or comments
 - File paths, URLs, or SQL fragments carried as unconstrained strings without validation guidance at the service boundary
 - Do not report when limits are enforced outside the schema and that boundary is clearly documented
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

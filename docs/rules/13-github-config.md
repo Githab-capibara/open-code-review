@@ -1,3 +1,16 @@
+# 13-github-config.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for GitHub Config files.
+
+## Details
+
 #### Issue Template Validation
 - **Missing required fields**: Issue templates should have `name`, `description`, and `body` fields
 - **Invalid input types**: Verify `type` values in body inputs are valid (dropdown, input, textarea, checkboxes, markdown)
@@ -11,3 +24,8 @@
 #### General Structure
 - **YAML syntax correctness**: Indentation consistency, proper quoting of special characters, valid anchors/aliases usage
 - **Spelling errors in YAML keys**: Check for typos in configuration keys that would be silently ignored
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

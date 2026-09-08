@@ -1,3 +1,16 @@
+# 42-zig.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Zig Language files.
+
+## Details
+
 > Favor precision over recall: report only issues that are likely to cause incorrect behavior, memory unsafety, security vulnerabilities, or material performance problems. Do not report formatting handled by `zig fmt`, and account for the project's Zig version, build mode (`Debug`, `ReleaseSafe`, `ReleaseFast`, `ReleaseSmall`), and active `comptime` configuration before raising compatibility findings.
 
 #### Memory Safety and Illegal Behavior
@@ -33,3 +46,8 @@
 - `extern`/`export` declarations or `callconv` annotations with incompatible types, struct layout, nullability, or ownership relative to the C side
 - C strings or buffers consumed without validating length, null termination, encoding, and lifetime
 - User-controlled data passed to process spawning, path access, SQL construction, or deserialization without validation, and secrets embedded in source, logs, or error messages
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

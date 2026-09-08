@@ -1,3 +1,16 @@
+# 03-bicep.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Bicep Infrastructure Rules files.
+
+## Details
+
 > Favor precision over recall: only raise an issue when you are confident it is a real defect, and stay silent when the surrounding context is unclear — a false alarm costs more reviewer trust than a missed minor issue. Treat security and correctness findings as blocking, and style or idiom suggestions as non-blocking. Review only what is observable in the Bicep under review; do not infer Azure subscription/tenant configuration, deployed resource state, or policy assignments that live outside this file.
 
 #### Obvious Typos or Spelling Errors
@@ -26,3 +39,8 @@
 - Parameters declared but never referenced anywhere in the diff's scope, or referenced parameters/variables never declared in the diff's scope
 - Duplicate resource symbolic names within the same file (would fail compilation, if not already caught by other tooling)
 - Do not flag formatting/whitespace that the Bicep formatter would silently fix — focus on structural and semantic issues
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

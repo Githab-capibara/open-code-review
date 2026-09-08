@@ -1,3 +1,16 @@
+# 34-python.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Python Language files.
+
+## Details
+
 > Favor precision over recall: only raise an issue when you are confident it is a real defect, and stay silent when the surrounding context is unclear — a false alarm costs more reviewer trust than a missed minor issue. Treat security and correctness findings as blocking, and style or idiom suggestions as non-blocking.
 
 #### Obvious Typos or Spelling Errors
@@ -74,3 +87,8 @@ Validate the data source before flagging; confirm the input is actually attacker
 - Secrets, tokens, passwords, or PII written to logs or committed in source
 - Weak or misused cryptography (`hashlib.md5`/`sha1` for passwords, `random` for security tokens); use `secrets` and vetted libraries
 - Untrusted file paths joined without validation, allowing path traversal
+
+## References
+
+- [Rules Overview](../rules/README.md)
+

@@ -1,3 +1,16 @@
+# 18-java.md
+
+- **Status:** Active
+- **Date:** 2026-08-27
+- **Owner:** @alibaba-open-code-review
+- **Related:** [Rules Overview](../rules/README.md)
+
+## Overview
+
+This document contains review rules for Java Language files.
+
+## Details
+
 #### Obvious Typos or Spelling Errors
 - Spelling errors in variable names, method names, or class names at their declaration sites (confirm by searching for naming conventions of similar identifiers using `code_search`)
 - Strings in log messages or exception messages containing spelling errors that affect readability
@@ -39,3 +52,8 @@ Do not report in the following cases:
 - **Immutable objects**: References to final fields pointing to immutable objects
 - **Proper synchronization already in place**: Code already uses synchronized, Lock, atomic classes, or other correct synchronization mechanisms
 - **Components designed for single-threaded use**: Such as the building phase of a Builder pattern, temporary data transfer objects, etc.
+
+## References
+
+- [Rules Overview](../rules/README.md)
+
