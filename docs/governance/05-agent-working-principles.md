@@ -33,7 +33,7 @@ We will enforce the following principles for all agent and human contributors.
 - **Easier:** Consistent quality bar and documentation hygiene.
 - **Harder:** Requires discipline on every change.
 - **Given up:** Informal shortcuts and undocumented changes.
-- **Migration:** AGENTS.md moved from root to docs/governance.
+- **Migration:** AGENTS.md was moved from root to docs/governance/05-agent-working-principles.md and deleted from root.
 
 ## Alternatives considered
 

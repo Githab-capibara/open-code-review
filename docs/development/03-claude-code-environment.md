@@ -11,7 +11,7 @@ Developers using Claude Code as their AI coding assistant need project-specific 
 
 ## Decision
 
-The `CLAUDE.md` file delegates to `AGENTS.md` for comprehensive project guidelines. This keeps the Claude Code setup minimal while providing full documentation in a platform-agnostic location.
+The `CLAUDE.md` file delegates to the [Agents Guidelines](../governance/01-agents.md) in docs for comprehensive project guidelines. This keeps the Claude Code setup minimal while providing full documentation in a platform-agnostic location.
 
 ### CLAUDE.md Content
 
@@ -33,12 +33,12 @@ The [Agents Guidelines](../governance/01-agents.md) file covers:
 ## Consequences
 
 - **Easier:** Single source of truth for project guidelines
-- **Harder:** Claude Code users must read AGENTS.md (one extra click)
+- **Harder:** Claude Code users must read the Agents Guidelines (one extra click)
 - **Given up:** Claude-specific inline instructions
 - **Migration:** No migration needed
 
 ## Alternatives considered
 
-- **Duplicate content in CLAUDE.md:** Rejected because it would diverge from AGENTS.md
+- **Duplicate content in CLAUDE.md:** Rejected because it would diverge from the [Agents Guidelines](../governance/01-agents.md)
 - **Claude-specific instructions:** Rejected because project guidelines are platform-agnostic
 - **No CLAUDE.md:** Rejected because Claude Code users expect this file
