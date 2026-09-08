@@ -9,6 +9,9 @@ This directory contains development-related documentation.
 | [01-claude.md](01-claude.md) | See Agents Guidelines |
 | [02-contributing.md](02-contributing.md) | Contribution workflow and coding guidelines |
 | [03-claude-code-environment.md](03-claude-code-environment.md) | Claude Code environment setup |
+| [04-command-commit.md](04-command-commit.md) | Commit command documentation |
+| [05-command-open-code-review.md](05-command-open-code-review.md) | OCR review command documentation |
+| [06-command-tag.md](06-command-tag.md) | Git tag command documentation |
 
 ## Getting Started
 
