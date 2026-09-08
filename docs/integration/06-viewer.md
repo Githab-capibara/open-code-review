@@ -1,4 +1,3 @@
-
 # 06. Session Viewer
 
 `ocr viewer` is a small embedded HTTP server that renders past review

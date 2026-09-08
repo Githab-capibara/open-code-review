@@ -1,4 +1,3 @@
-
 # 07. Telemetry
 
 OCR ships with first-class **OpenTelemetry** support. Every review run

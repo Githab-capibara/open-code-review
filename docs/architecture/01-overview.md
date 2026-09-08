@@ -1,4 +1,3 @@
-
 # 01. Architecture Overview
 
 A walk-through of how `ocr review` actually works inside, from the moment

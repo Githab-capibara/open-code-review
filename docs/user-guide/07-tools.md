@@ -1,4 +1,3 @@
-
 # 07. Built-in Tools
 
 OCR ships with **six built-in tools** the LLM can call during a review.

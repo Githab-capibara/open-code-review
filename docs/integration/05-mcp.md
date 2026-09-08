@@ -1,4 +1,3 @@
-
 # 05. MCP Client
 
 OCR can act as a **Model Context Protocol (MCP) client**. You point it at

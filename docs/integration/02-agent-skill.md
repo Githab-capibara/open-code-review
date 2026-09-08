@@ -1,4 +1,3 @@
-
 # 02. Agent Skill
 
 Register OCR as a callable skill so an agent framework can invoke it

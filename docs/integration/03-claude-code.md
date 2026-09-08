@@ -1,4 +1,3 @@
-
 # 03. Claude Code Command
 
 Install the bundled command so OCR runs end-to-end inside

@@ -1,4 +1,3 @@
-
 # 05. Review Rules
 
 Rules tell OCR **what to focus on** when reviewing each file. They live

@@ -1,4 +1,3 @@
-
 # 01. Delegation Mode
 
 OCR handles deterministic engineering (file selection, rule resolution)

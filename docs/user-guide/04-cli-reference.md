@@ -1,4 +1,3 @@
-
 # 04. CLI Reference
 
 The complete reference for every `ocr` subcommand, flag, and exit

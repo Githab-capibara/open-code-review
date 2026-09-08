@@ -1,4 +1,3 @@
-
 # 01. Quick Start
 
 Get your first code review running in a few minutes.

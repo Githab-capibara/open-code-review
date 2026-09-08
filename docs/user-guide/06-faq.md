@@ -1,4 +1,3 @@
-
 # 06. FAQ
 
 Common errors, surprises, and "is this supposed to do that?" questions.
