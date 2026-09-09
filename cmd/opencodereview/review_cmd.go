@@ -116,9 +116,20 @@ func executeReviewContext(ctx context.Context, opts reviewOptions) (retErr error
 	if err != nil {
 		return err
 	}
-	defer func() {
+	closeOutPending := true
+	finishOutput := func() error {
+		if !closeOutPending {
+			return nil
+		}
+		closeOutPending = false
 		if cerr := closeOut(); cerr != nil {
-			retErr = errors.Join(retErr, fmt.Errorf("close output file: %w", cerr))
+			return fmt.Errorf("close output file: %w", cerr)
+		}
+		return nil
+	}
+	defer func() {
+		if cerr := finishOutput(); cerr != nil {
+			retErr = errors.Join(retErr, cerr)
 		}
 	}()
 
@@ -196,13 +207,7 @@ func executeReviewContext(ctx context.Context, opts reviewOptions) (retErr error
 	tools := buildToolRegistry(rt.Collector, fileReader)
 
 	mcpClients := initMCPClients(ctx, rt.AppCfg, tools, cc.RepoDir, Version)
-	defer func() {
-		closeCtx, cancel := context.WithTimeout(context.Background(), mcp.CloseAllTimeout)
-		defer cancel()
-		if err := mcp.CloseAll(closeCtx, mcpClients); err != nil {
-			fmt.Fprintf(os.Stderr, "[ocr] WARNING: %v\n", err)
-		}
-	}()
+	defer closeReviewMCPClients(mcpClients)
 
 	mcpToolDefs := mcp.CollectToolDefs(mcpClients, tools)
 	rt.PlanToolDefs = append(rt.PlanToolDefs, mcpToolDefs...)
@@ -292,6 +297,10 @@ func executeReviewContext(ctx context.Context, opts reviewOptions) (retErr error
 		emitErr = emitRunResult(runCtx, ag, comments, startTime, opts.outputFormat, opts.audience, q, llmIdentity, out, retryReport)
 		if emitErr != nil {
 			emitErr = fmt.Errorf("emit review result: %w", emitErr)
+		} else {
+			// Commit the report before potentially slow MCP shutdown. The deferred
+			// close remains a fallback for every earlier return and emit failure.
+			emitErr = finishOutput()
 		}
 	}
 	if resultErr != nil {
@@ -577,6 +586,16 @@ func initMCPClients(ctx context.Context, cfg *Config, tools *tool.Registry, repo
 		mcp.RegisterAll(tools, mc, serverCfg.Tools)
 	}
 	return clients
+}
+
+// closeReviewMCPClients is a variable so tests can observe the shutdown
+// boundary without starting an intentionally unresponsive subprocess.
+var closeReviewMCPClients = func(clients []*mcp.Client) {
+	closeCtx, cancel := context.WithTimeout(context.Background(), mcp.CloseAllTimeout)
+	defer cancel()
+	if err := mcp.CloseAll(closeCtx, clients); err != nil {
+		fmt.Fprintf(os.Stderr, "[ocr] WARNING: %v\n", err)
+	}
 }
 
 func buildToolRegistry(collector *tool.CommentCollector, fr *tool.FileReader) *tool.Registry {
