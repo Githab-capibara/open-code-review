@@ -6,7 +6,6 @@
 
 ## Purpose
 
-
 This file provides instructions for AI coding assistants working on this project.
 
 ## Project Overview
@@ -38,7 +37,6 @@ open-code-review (`ocr`) is an AI-powered code review CLI tool written in Go (mo
 
 - Run unit tests with `make test`, not `go test` directly.
 - `make test` sets `LC_ALL=C` to ensure git outputs English messages.
-- When writing or modifying code, add necessary unit tests to maintain coverage. The project enforces a 90% coverage threshold via `make coverage`.
 
 ## README
 

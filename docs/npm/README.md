@@ -2,6 +2,12 @@
 
 This directory contains platform-specific binary assets for the OpenCodeReview npm package.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-npm-overview.md) | NPM Package Overview | Active |
+
 ## Directory Structure
 
 ```
@@ -53,4 +59,10 @@ If automatic download fails:
 ## Links
 
 - [Installation Guide](../user-guide/02-installation.md)
-- [Supported Platforms](../user-guide/02-installation.md#supported-platforms)
+- [Supported Platforms](../user-guide/02-installation.md#github-release-binary)
+
+## File Index
+
+| File | Description |
+|------|-------------|
+| [01-npm-overview](01-npm-overview.md) | NPM package overview and platform assets |

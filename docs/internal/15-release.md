@@ -1,4 +1,9 @@
-# 15. Release Package
+# 15. Release
+
+`internal/release`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/release` package holds release/version metadata and the consistency checks that keep the published release assets in sync with the build pipeline.
 

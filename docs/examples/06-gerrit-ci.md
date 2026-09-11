@@ -1,8 +1,15 @@
-# OpenCodeReview - Gerrit CI Demo
+# 06. Gerrit CI
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 This demo shows how to integrate OpenCodeReview into a [Gerrit](https://www.gerritcodereview.com) code-review flow to automatically review changes and post the findings as inline comments on the patchset, plus a summary message.
 
-Like the GitHub Actions, GitLab CI, and GitFlic examples, the posting glue lives in the CI layer rather than in the `ocr` binary. Here it is a small, dependency-free Python script — [`post_review.py`](post_review.py) — that reads `ocr review --format json` and posts it as **one batched ReviewInput** to Gerrit's set-review endpoint, so a review lands atomically: inline comments grouped per file plus a summary message, in a single request.
+Like the GitHub Actions, GitLab CI, and GitFlic examples, the posting glue lives in the CI layer rather than in the `ocr` binary. Here it is a small, dependency-free Python script — [`post_review.py`](../../examples/gerrit_ci/post_review.py) — that reads `ocr review --format json` and posts it as **one batched ReviewInput** to Gerrit's set-review endpoint, so a review lands atomically: inline comments grouped per file plus a summary message, in a single request.
 
 ## How It Works
 
@@ -32,7 +39,7 @@ The bot only needs to read changes and comment on them. In the project's (or `Al
 
 ### 3. Configure the pipeline
 
-Copy `post_review.py` into your repository (or fetch it in the job) and wire it into your Jenkins job — see the [`Jenkinsfile`](Jenkinsfile) in this directory. Store `GERRIT_HTTP_USER` / `GERRIT_HTTP_PASSWORD` as Jenkins credentials, plus the LLM API token for the review step itself. `ocr` resolves `OCR_LLM_URL` / `OCR_LLM_TOKEN` / `OCR_LLM_MODEL` directly from the environment — no `ocr config set` needed, so the token is never written to disk on a shared agent.
+Copy `post_review.py` into your repository (or fetch it in the job) and wire it into your Jenkins job — see the [`Jenkinsfile`](../../examples/gerrit_ci/Jenkinsfile) in this directory. Store `GERRIT_HTTP_USER` / `GERRIT_HTTP_PASSWORD` as Jenkins credentials, plus the LLM API token for the review step itself. `ocr` resolves `OCR_LLM_URL` / `OCR_LLM_TOKEN` / `OCR_LLM_MODEL` directly from the environment — no `ocr config set` needed, so the token is never written to disk on a shared agent.
 
 ## Configuration Reference
 
@@ -55,7 +62,7 @@ Every value can be passed via flag or environment variable; **flags override the
 
 ### Jenkins (Gerrit Trigger)
 
-See the [`Jenkinsfile`](Jenkinsfile) in this directory. The Gerrit Trigger plugin injects `GERRIT_CHANGE_NUMBER`, `GERRIT_PATCHSET_REVISION`, and `GERRIT_CHANGE_URL` into the build environment, so the script needs no positional wiring:
+See the [`Jenkinsfile`](../../examples/gerrit_ci/Jenkinsfile) in this directory. The Gerrit Trigger plugin injects `GERRIT_CHANGE_NUMBER`, `GERRIT_PATCHSET_REVISION`, and `GERRIT_CHANGE_URL` into the build environment, so the script needs no positional wiring:
 
 ```bash
 ocr review --format json --audience agent | python3 post_review.py
@@ -107,7 +114,7 @@ python3 post_review.py /tmp/r.json --dry-run     # or: --input /tmp/r.json
 
 ## Tests
 
-`post_review.py` ships with [`post_review_test.py`](post_review_test.py) — standard-library `unittest`, no network or git required:
+`post_review.py` ships with [`post_review_test.py`](../../examples/gerrit_ci/post_review_test.py) — standard-library `unittest`, no network or git required:
 
 ```bash
 cd examples/gerrit_ci

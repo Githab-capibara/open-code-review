@@ -1,5 +1,12 @@
 # 06. FAQ
 
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## What you'll learn
+
+
 Common errors, surprises, and "is this supposed to do that?" questions.
 If your problem isn't here, open a
 [GitHub issue](https://github.com/alibaba/open-code-review/issues) with
@@ -137,7 +144,7 @@ fails to match `tsx`.
 
 ### A file shows zero comments — was it actually reviewed?
 
-Open the [Session Viewer](../integration/06-viewer.md) (`ocr viewer`), find the session,
+Open the [Session Viewer](../integration/05-viewer.md) (`ocr viewer`), find the session,
 and look at the file's `main_task` lane:
 
 - Tool calls present + ends in `task_done` → reviewed cleanly.
@@ -156,7 +163,7 @@ common causes:
   the sliding-window match.
 
 The comment is still real — it just wasn't placed automatically. Most
-agent integrations (the SKILL, the Claude Code plugin) read the
+agent integrations (the SKILL, the Codex plugin, the OpenCode plugin) read the
 `existing_code` field and locate the spot in the file themselves.
 
 ### Token threshold exceeded
@@ -273,7 +280,7 @@ instead. Watch `ocr.llm.tokens_used` (counter, labelled `model` +
 `status`), and `ocr.llm.request_duration_seconds` (histogram, labelled
 `model`). The console exporter prints these aggregates inline. For
 dashboards, switch to the OTLP exporter and ship to your metrics
-stack — see [Telemetry](../integration/07-telemetry.md).
+stack — see [Telemetry](../integration/06-telemetry.md).
 
 ### Why are my reviews so expensive?
 
@@ -310,7 +317,7 @@ If telemetry is enabled, the `content_logging` flag is plumbed through
 the config layer but currently gates **no** code path — prompt and
 response content is never exported to your collector regardless of the
 flag's value. Treat it as reserved. Leave it `false` in production. See
-[Telemetry](../integration/07-telemetry.md#content-logging) for details.
+[Telemetry](../integration/06-telemetry.md#content-logging) for details.
 
 ### Can I redact secrets before they're sent to the LLM?
 
@@ -360,5 +367,5 @@ and per-user rules.
 
 - [Configuration](../user-guide/03-configuration.md) — LLM endpoint resolution and config keys.
 - [Review Rules](../user-guide/05-review-rules.md) — the file filter and rule resolution chain.
-- [Session Viewer](../integration/06-viewer.md) — inspect past review sessions.
-- [Telemetry](../integration/07-telemetry.md) — token usage and LLM metrics.
+- [Session Viewer](../integration/05-viewer.md) — inspect past review sessions.
+- [Telemetry](../integration/06-telemetry.md) — token usage and LLM metrics.

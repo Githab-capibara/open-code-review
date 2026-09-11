@@ -2,17 +2,27 @@
 
 This directory contains documentation for third-party integrations, copied and adapted from the website source (`pages/src/content/docs/en/`).
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-delegate.md) | Delegate Mode | Accepted |
+| [02](02-agent-skill.md) | Agent Skill | Accepted |
+| [03](03-ci.md) | CI/CD Integration | Accepted |
+| [04](04-mcp.md) | MCP Server | Accepted |
+| [05](05-viewer.md) | Session Viewer | Accepted |
+| [06](06-telemetry.md) | Telemetry | Accepted |
+
 ## Available Integrations
 
 | File | Description |
 |------|-------------|
 | [01-delegate.md](01-delegate.md) | Delegation mode — let your AI coding agent run the review |
 | [02-agent-skill.md](02-agent-skill.md) | Portable agent skill for skill-compatible agents |
-| [03-claude-code.md](03-claude-code.md) | Claude Code plugin and slash-command integration |
-| [04-ci.md](04-ci.md) | CI/CD integration (GitHub Actions, GitLab CI, GitFlic, Gerrit, CodeUp, Bitbucket) |
-| [05-mcp.md](05-mcp.md) | Model Context Protocol (MCP) server |
-| [06-viewer.md](06-viewer.md) | Session viewer web interface |
-| [07-telemetry.md](07-telemetry.md) | OpenTelemetry integration for observability |
+| [03-ci.md](03-ci.md) | CI/CD integration (GitHub Actions, GitLab CI, GitFlic, Gerrit, CodeUp, Bitbucket) |
+| [04-mcp.md](04-mcp.md) | Model Context Protocol (MCP) server |
+| [05-viewer.md](05-viewer.md) | Session viewer web interface |
+| [06-telemetry.md](06-telemetry.md) | OpenTelemetry integration for observability |
 
 ## Integration Modes
 
@@ -39,15 +49,7 @@ Install the portable skill for skill-compatible agents:
 
 ## Quick Start
 
-### Claude Code
-
-```bash
-npm install -g @alibaba-group/open-code-review
-ocr config provider  # Configure your LLM
-ocr review           # Review your changes
-```
-
-### Cursor / Codex / Other Agents
+### Codex / OpenCode / Other Agents
 
 See [plugins documentation](../plugins/) for plugin installation, or [02-agent-skill.md](02-agent-skill.md) for the portable skill.
 
@@ -64,3 +66,9 @@ For integration issues:
 - [GitHub Issues](https://github.com/alibaba/open-code-review/issues)
 - [GitHub Discussions](https://github.com/alibaba/open-code-review/discussions)
 - [FAQ](../user-guide/06-faq.md)
+
+## Links
+
+- [Pipeline Documentation](../pipeline/README.md)
+- [Plugins](../plugins/README.md)
+- [Security Policy](../security/01-security-policy.md)

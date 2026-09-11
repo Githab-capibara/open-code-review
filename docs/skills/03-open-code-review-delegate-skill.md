@@ -17,8 +17,13 @@ metadata:
   homepage: https://github.com/alibaba/open-code-review
   version: "1.0.0"
 ---
+# 03. Open Code Review Delegate Skill
 
-# Open Code Review — Delegation Mode
+- **Status:** Published
+- **Platform:** Universal
+- **Date:** 2026-08-23
+- **Deciders:** @Githab-capibara
+
 
 A skill for performing AI code review where OCR provides deterministic engineering (file filtering, rule resolution) and the host agent performs the actual review using its own intelligence and tools.
 

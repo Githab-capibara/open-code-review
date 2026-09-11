@@ -26,15 +26,7 @@ which ocr || npm install -g @alibaba-group/open-code-review
 
 无需配置 LLM（`ocr config set …` 或环境变量）— 委托模式在 OCR 端不调用任何 LLM。
 
-## 安装 Skill / Command
-
-### Claude Code — Command
-
-```bash
-mkdir -p .claude/commands
-curl -o .claude/commands/delegate-review.md \
-  https://raw.githubusercontent.com/alibaba/open-code-review/main/plugins/open-code-review/claude-code/commands/delegate-review.md
-```
+## 安装 Skill
 
 ### 任意 Agent — Skill
 
@@ -42,11 +34,13 @@ curl -o .claude/commands/delegate-review.md \
 npx skills add alibaba/open-code-review --skill open-code-review-delegate
 ```
 
-或手动复制：
+或手动复制到 Agent 的 skills 目录：
 
 ```bash
-cp -R /path/to/open-code-review/skills/open-code-review-delegate ~/.claude/skills/
+cp -R /path/to/open-code-review/skills/open-code-review-delegate <skills-dir>/
 ```
+
+skills 目录的位置请参考 [Agent Skill](../agent-skill/#install)。
 
 ## 工作流程
 
@@ -140,10 +134,8 @@ cat <path>                     # 新的未跟踪文件
 | 模式 | 谁调用 LLM？ | 适用场景 |
 |------|-------------|----------|
 | [Agent Skill](../agent-skill/) | OCR | Agent 调用 `ocr review`，OCR 驱动完整审查 |
-| [Command（Claude Code）](../claude-code/) | OCR | Claude Code 中的斜杠命令，OCR 驱动审查 |
 | **委托模式** | 宿主 Agent | OCR 提供脚手架，Agent 驱动审查 |
 
 ## 另请参阅
 
 - [Agent Skill](../agent-skill/) — OCR 代表 Agent 驱动完整审查。
-- [Command（Claude Code）](../claude-code/) — 斜杠命令风格，含自动修复。

@@ -295,7 +295,6 @@ export const ko: TranslationKeys = {
   'docs.sidebar.telemetry': '텔레메트리',
   'docs.sidebar.integrations': '연동',
   'docs.sidebar.agentSkill': 'Agent Skill',
-  'docs.sidebar.claudeCode': 'Command (Claude Code)',
   'docs.sidebar.delegate': '위임 모드',
   'docs.sidebar.cicd': 'CI/CD',
   'docs.sidebar.contributing': '기여하기',

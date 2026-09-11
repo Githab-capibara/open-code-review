@@ -2,6 +2,12 @@
 
 This directory contains pipeline and workflow documentation for OpenCodeReview.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-pipeline-overview.md) | Pipeline Overview | Active |
+
 ## Documents
 
 | Guide | Purpose |

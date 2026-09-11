@@ -1,4 +1,11 @@
-# 06. Session Viewer
+# 05. Viewer
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 `ocr viewer` is a small embedded HTTP server that renders past review
 sessions in a browser-friendly UI. No external dependencies — sessions
@@ -159,7 +166,7 @@ either:
   in CI and run with a temporary `HOME` so the JSONL never persists.
 
 The OpenTelemetry exporter is a separate concern — see
-[Telemetry](../integration/07-telemetry.md) for how to keep prompt content out of
+[Telemetry](../integration/06-telemetry.md) for how to keep prompt content out of
 exported traces.
 
 ## When the viewer is not the right tool

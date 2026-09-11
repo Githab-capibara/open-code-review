@@ -1,4 +1,9 @@
-# 04. Config Package
+# 04. Config
+
+`internal/config`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/config` directory is **not a single package** — it is a collection of focused sub-packages, each loading one kind of configuration. Every sub-package is versioned under `internal/config/<name>`.
 

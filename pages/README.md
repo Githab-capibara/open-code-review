@@ -1,1 +1,1 @@
-../docs/pages/02-root-pages-readme.md
+../docs/pages/README.md

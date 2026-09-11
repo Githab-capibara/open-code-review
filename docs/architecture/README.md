@@ -2,6 +2,12 @@
 
 This directory contains architecture and design documentation for OpenCodeReview, copied and adapted from the website source (`pages/src/content/docs/en/`).
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-overview.md) | Overview | Accepted |
+
 ## Key Documents
 
 | Guide | Purpose |

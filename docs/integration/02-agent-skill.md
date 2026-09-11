@@ -1,5 +1,12 @@
 # 02. Agent Skill
 
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
+
 Register OCR as a callable skill so an agent framework can invoke it
 with the right flags, prerequisite checks, and triage rubric — without
 you re-deriving any of that on the calling side.
@@ -36,14 +43,14 @@ command to update the skill to the latest version.
 ### Option 2: Manual copy (system-wide)
 
 If you'd rather install the skill globally instead of per-project, copy
-the folder into your skills directory:
+the folder into your agent's skills directory:
 
 ```bash
-mkdir -p ~/.claude/skills
-cp -R /path/to/open-code-review/skills/open-code-review ~/.claude/skills/
+cp -R /path/to/open-code-review/skills/open-code-review <skills-dir>/
 ```
 
-This makes the skill available to every project on the machine.
+This makes the skill available to every project on the machine. Refer to
+your agent's documentation for the skills-directory location.
 
 ## What the skill does
 
@@ -109,5 +116,5 @@ prompt template.
 
 ## See Also
 
-- [Command（Claude Code Plugin）](../integration/03-claude-code.md) — the
-  slash-command flavor of the same skill.
+- [CI/CD Integration](../integration/03-ci.md) — run OCR reviews as a pipeline step.
+- [Telemetry](../integration/06-telemetry.md) — token usage and LLM metrics.

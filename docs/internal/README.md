@@ -2,6 +2,29 @@
 
 This directory contains documentation for OpenCodeReview's internal Go packages.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-agent.md) | Agent | Active |
+| [02](02-llm.md) | LLM | Active |
+| [03](03-tool.md) | Tool | Active |
+| [04](04-config.md) | Config | Active |
+| [05](05-diff.md) | Diff | Active |
+| [06](06-pathutil.md) | Pathutil | Active |
+| [07](07-session.md) | Session | Active |
+| [08](08-viewer.md) | Viewer | Active |
+| [09](09-mcp.md) | MCP | Active |
+| [10](10-telemetry.md) | Telemetry | Active |
+| [11](11-delegate.md) | Delegate | Active |
+| [12](12-gitcmd.md) | Gitcmd | Active |
+| [13](13-llmloop.md) | LLMLoop | Active |
+| [14](14-model.md) | Model | Active |
+| [15](15-release.md) | Release | Active |
+| [16](16-scan.md) | Scan | Active |
+| [17](17-stdout.md) | Stdout | Active |
+| [18](18-suggestdiff.md) | Suggestdiff | Active |
+
 ## Package Overview
 
 | Package | Purpose |
@@ -112,4 +135,4 @@ internal/
 
 - [Architecture Overview](../architecture/01-overview.md)
 - [ADR Index](../adr/README.md)
-- [Development Guide](../development/02-contributing.md)
+- [Development Guide](../development/01-contributing.md)

@@ -293,7 +293,6 @@ export const ru: TranslationKeys = {
   'docs.sidebar.telemetry': 'Телеметрия',
   'docs.sidebar.integrations': 'Интеграции',
   'docs.sidebar.agentSkill': 'Agent Skill',
-  'docs.sidebar.claudeCode': 'Command (Claude Code)',
   'docs.sidebar.delegate': 'Режим делегирования',
   'docs.sidebar.cicd': 'CI/CD',
   'docs.sidebar.contributing': 'Участие в разработке',

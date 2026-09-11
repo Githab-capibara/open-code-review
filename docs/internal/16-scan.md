@@ -1,4 +1,9 @@
-# 16. Scan Package
+# 16. Scan
+
+`internal/scan`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/scan` package implements full-file scan mode: instead of reviewing a git diff, it reviews entire files (or directories) for auditing unfamiliar codebases.
 

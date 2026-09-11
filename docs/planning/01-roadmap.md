@@ -1,5 +1,12 @@
 # 01. Roadmap
 
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
+
 This document describes the planned direction for OpenCodeReview over the
 next year. It is a living document and will be updated as priorities evolve.
 
@@ -13,8 +20,8 @@ OpenCodeReview currently provides:
 
 - A CLI tool (`ocr`) for AI-powered code review with deterministic
   engineering and agent hybrid architecture.
-- Integration with coding agents: Claude Code (plugin/skill), Codex
-  (plugin), and Cursor (plugin).
+- Integration with coding agents: Codex (plugin), OpenCode (plugin),
+  and QCA (plugin).
 - A VSCode extension for in-editor code review.
 - CI/CD integration (GitHub Actions, GitLab CI, etc.).
 - Multi-provider LLM support (OpenAI-compatible, Anthropic, Google Gemini,
@@ -35,12 +42,12 @@ OpenCodeReview currently provides:
 
 ### Delegate Mode
 
-- **Subscription-friendly review** — An opt-in mode where `ocr` no longer
+- **Status: Done** — An opt-in mode where `ocr` no longer
   depends on a separately-configured LLM endpoint. Instead of calling an
   LLM itself, `ocr` resolves the review scope, applies excludes, loads
   review rules, injects background context, and collects the diffs, then
   hands that off as a structured review task for the host coding agent
-  (e.g. Claude Code) to execute using its own agent loop and included
+  (e.g. Codex) to execute using its own agent loop and included
   subscription usage — removing the need for a standalone API key.
 
 ### Ultra Mode

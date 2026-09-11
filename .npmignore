@@ -8,7 +8,6 @@ go.mod
 go.sum
 scripts/hooks/
 scripts/publish/
-.claude/
 .git/
 .idea/
 .github/
@@ -16,4 +15,3 @@ scripts/publish/
 .ossutil_checkpoint/
 publish-strategy.md
 opencodereview
-CLAUDE.md

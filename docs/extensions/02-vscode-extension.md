@@ -1,4 +1,4 @@
-# 02. VS Code extension readme
+# 02. VS Code Extension Readme
 - **Status:** Accepted
 - **Date:** 2026-08-24
 ## Context
@@ -6,7 +6,7 @@ Moved documentation from `extensions/vscode/README.md` into docs.
 ## Decision
 Preserve original content for reference.
 <p align="center">
-  English | <a href="README.zh-CN.md">简体中文</a>
+  English (Chinese translation available at [README.zh-CN.md](../../extensions/vscode/README.zh-CN.md))
 </p>
 
 # Open Code Review (VS Code Extension)

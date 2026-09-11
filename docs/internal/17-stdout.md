@@ -1,4 +1,9 @@
-# 17. Stdout Package
+# 17. Stdout
+
+`internal/stdout`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/stdout` package provides a swappable, capturable stdout sink used to silence or redirect terminal output during tests and structured runs.
 

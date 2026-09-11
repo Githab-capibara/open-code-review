@@ -1,1 +1,1 @@
-../docs/examples/02-root-examples-readme.md
+../docs/examples/README.md

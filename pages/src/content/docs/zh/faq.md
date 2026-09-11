@@ -142,8 +142,8 @@ OCR 无法把评论锚定到 diff 中的精确行。两个常见原因：
   仍会如此。
 - diff 有异常格式（CRLF、tab/空格混用）破坏了滑动窗口匹配。
 
-评论仍是真实的——只是没被自动放置。多数 agent 集成（SKILL、Claude Code
-plugin）读 `existing_code` 字段并自行在文件中定位。
+评论仍是真实的——只是没被自动放置。多数 agent 集成（SKILL、Codex
+plugin、OpenCode plugin）读 `existing_code` 字段并自行在文件中定位。
 
 ### Token threshold exceeded
 

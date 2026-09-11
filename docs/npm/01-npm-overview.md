@@ -1,4 +1,4 @@
-# 01. Npm overview
+# 01. Npm Overview
 
 - **Status:** Accepted
 - **Date:** 2026-08-23

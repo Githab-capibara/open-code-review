@@ -152,7 +152,7 @@ OCR はコメントを diff 内の正確な行にアンカーできませんで�
   壊れた。
 
 コメント自体は本物です——ただ自動的に配置されなかっただけです。ほとんどのエージェント統合
-（SKILL、Claude Code plugin）は `existing_code` フィールドを読み、ファイル内で自ら位置を特定します。
+（SKILL、Codex plugin、OpenCode plugin）は `existing_code` フィールドを読み、ファイル内で自ら位置を特定します。
 
 ### Token threshold exceeded
 

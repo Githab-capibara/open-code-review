@@ -36,15 +36,7 @@ which ocr || npm install -g @alibaba-group/open-code-review
 Конфигурация LLM (`ocr config set …` или переменные окружения) не требуется:
 в режиме делегирования OCR никогда не вызывает LLM на своей стороне.
 
-## Установка навыка / команды
-
-### Claude Code — команда
-
-```bash
-mkdir -p .claude/commands
-curl -o .claude/commands/delegate-review.md \
-  https://raw.githubusercontent.com/alibaba/open-code-review/main/plugins/open-code-review/claude-code/commands/delegate-review.md
-```
+## Установка навыка
 
 ### Любой агент — навык
 
@@ -52,11 +44,13 @@ curl -o .claude/commands/delegate-review.md \
 npx skills add alibaba/open-code-review --skill open-code-review-delegate
 ```
 
-Или скопируйте манифест вручную:
+Или скопируйте манифест вручную в каталог навыков вашего агента:
 
 ```bash
-cp -R /path/to/open-code-review/skills/open-code-review-delegate ~/.claude/skills/
+cp -R /path/to/open-code-review/skills/open-code-review-delegate <skills-dir>/
 ```
+
+Расположение каталога навыков см. в [Agent Skill](../agent-skill/#install).
 
 ## Рабочий процесс
 
@@ -152,10 +146,8 @@ cat <path>                     # new untracked files
 | Режим | Кто вызывает LLM? | Сценарий использования |
 |------|-------------------|----------|
 | [Навык агента](../agent-skill/) | OCR | Агент вызывает `ocr review`; OCR управляет полным процессом ревью. |
-| [Команда (Claude Code)](../claude-code/) | OCR | Slash-команда в Claude Code; OCR управляет ревью. |
 | **Режим делегирования** | Основной агент | OCR предоставляет каркас; агент управляет ревью. |
 
 ## См. также
 
 - [Навык агента](../agent-skill/) — OCR выполняет полный процесс ревью от имени агента.
-- [Команда (Claude Code)](../claude-code/) — вариант slash-команды с автоматическим исправлением.

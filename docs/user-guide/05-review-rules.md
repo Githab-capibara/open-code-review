@@ -1,5 +1,12 @@
 # 05. Review Rules
 
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## What you'll learn
+
+
 Rules tell OCR **what to focus on** when reviewing each file. They live
 in JSON files at three layers, plus an embedded system default that ships
 with the binary.

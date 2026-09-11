@@ -295,7 +295,6 @@ export const ja: TranslationKeys = {
   'docs.sidebar.telemetry': 'テレメトリ',
   'docs.sidebar.integrations': '統合',
   'docs.sidebar.agentSkill': 'Agent Skill',
-  'docs.sidebar.claudeCode': 'Command（Claude Code）',
   'docs.sidebar.delegate': 'デリゲーションモード',
   'docs.sidebar.cicd': 'CI/CD',
   'docs.sidebar.contributing': 'コントリビュート',

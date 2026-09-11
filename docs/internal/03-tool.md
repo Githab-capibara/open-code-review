@@ -1,4 +1,9 @@
-# 03. Tool Package
+# 03. Tool
+
+`internal/tool`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/tool` package provides the agent's local tool providers, a registry to register/discover them, and a `FileReader` that backs file- and search-based tools.
 

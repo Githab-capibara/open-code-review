@@ -47,11 +47,11 @@ npx skills add alibaba/open-code-review --skill open-code-review
 проекта, скопируйте каталог в директорию навыков:
 
 ```bash
-mkdir -p ~/.claude/skills
-cp -R /path/to/open-code-review/skills/open-code-review ~/.claude/skills/
+cp -R /path/to/open-code-review/skills/open-code-review <skills-dir>/
 ```
 
 После этого навык будет доступен каждому проекту на компьютере.
+Расположение каталога навыков см. в документации вашего агента.
 
 ## Что делает навык {#what-the-skill-does}
 
@@ -116,4 +116,5 @@ SKILL.md: это обычный Markdown с frontmatter. Если фреймво
 
 ## См. также
 
-- [Команда (плагин Claude Code)](../claude-code/) — вариант того же навыка в виде slash-команды.
+- [Режим делегирования](../delegate/) — OCR выполняет выбор файлов и
+  разрешение правил, а основной агент проводит ревью.

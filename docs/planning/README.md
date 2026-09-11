@@ -2,6 +2,12 @@
 
 This directory contains planning documents for OpenCodeReview.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-roadmap.md) | Project Roadmap | Active |
+
 ## Documents
 
 | Guide | Purpose |
@@ -13,7 +19,7 @@ This directory contains planning documents for OpenCodeReview.
 OpenCodeReview currently provides:
 
 - CLI tool (`ocr`) for AI-powered code review
-- Integration with coding agents: Claude Code, Codex, Cursor
+- Integration with coding agents: Codex, OpenCode
 - VSCode extension for in-editor code review
 - CI/CD integration (GitHub Actions, GitLab CI, etc.)
 - Multi-provider LLM support (OpenAI, Anthropic, Google Gemini, Amazon Bedrock, Azure OpenAI)
@@ -48,4 +54,4 @@ Provide feedback via:
 ## Links
 
 - [Governance](../governance/03-governance.md)
-- [Contributing](../development/02-contributing.md)
+- [Contributing](../development/01-contributing.md)

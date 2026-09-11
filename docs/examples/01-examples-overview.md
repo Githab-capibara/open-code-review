@@ -1,9 +1,9 @@
-# 01. Examples overview
+# 01. Examples Overview
 
 - **Status:** Accepted
 - **Date:** 2026-08-23
 - **Deciders:** @Githab-capibara
-- **Related:** [examples/](../../examples/), [CI/CD guide](../ci-cd/README.md), [CI integration](../integration/04-ci.md)
+- **Related:** [examples/](../../examples/), [CI/CD guide](../ci-cd/README.md), [CI integration](../integration/03-ci.md)
 
 ## Context
 
@@ -34,7 +34,7 @@ Common conventions across all examples:
    other per platform API.
 
 Deeper setup steps live in each example's own `README.md`; the user-facing
-guide is [CI/CD integration](../integration/04-ci.md).
+guide is [CI/CD integration](../integration/03-ci.md).
 
 ## Consequences
 

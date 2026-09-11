@@ -3,7 +3,7 @@
 - **Status:** Example
 - **Platform:** GitHub Actions | GitLab CI | GitFlic | Gerrit | CodeUp | Bitbucket
 - **Date:** YYYY-MM-DD
-- **Related:** [Integration Guide](../integration/04-ci.md)
+- **Related:** [Integration Guide](../integration/03-ci.md)
 
 ## Purpose
 
@@ -42,5 +42,5 @@ Common issues and solutions.
 
 ## Links
 
-- [CI/CD Integration Guide](../integration/04-ci.md)
+- [CI/CD Integration Guide](../integration/03-ci.md)
 - [CLI Reference](../user-guide/04-cli-reference.md)

@@ -52,7 +52,7 @@ author: lizhengfeng101
 1. 基于 Go 语言从零重写的 CLI 工具。
 2. 一条配置自定义模型的命令，以及兼容 OpenAI、Anthropic 协议。
 2. 一组评审的命令和一个框架内核。
-3. 一个配套的 skill，可直接集成到 Claude Code。
+3. 一个配套的 skill，可供 AI 编码代理使用。
 4. 配套的 Github Action，便于用户直接集成到自己的 Github 仓库。
 5. 可观测能力，便于用户集成到自己公司内部的系统。
 
@@ -128,7 +128,7 @@ author: lizhengfeng101
 - `/read-issue`：快速理解 Issue，自动打标签
 - `/mk-issue`：基于问题背景创建结构化 Issue
 - `/mkpr`：基于当前改动内容自动创建 PR。
-- `/review`：Claude Code + gh cli 评审代码并自动修复
+- `/review`：AI 代理 + gh cli 评审代码并自动修复
 - `/open-code-review`：用 OCR 自身评审代码并自动修复
 - `/release-eval`：评估发版改动是否影响核心链路，决定要不要跑评测集（跑一次需要 8 个小时）
 - `/tag`：发布新版本
@@ -136,8 +136,8 @@ author: lizhengfeng101
 
 工作流的演进也有意思：
 
-- 前期：Claude Code 写代码 -> Skills 评审 -> CC 修复
-- 现在：Claude Code 写代码 -> OCR 作为 pre-commit-hook 自动评审 -> CC 自动修复 -> /mkpr 创建评审 -> Github Actions 触发再次评审以及一些围栏任务 -> CC 修复
+- 前期：AI 代理写代码 -> Skills 评审 -> 代理修复
+- 现在：AI 代理写代码 -> OCR 作为 pre-commit-hook 自动评审 -> 代理自动修复 -> /mkpr 创建评审 -> Github Actions 触发再次评审以及一些围栏任务 -> 代理修复
 
 稳定性靠什么保证？自动化代码评审 + 单元测试 + Lint + CI/CD 流水线 + E2E 评测集(200个PR)等。因为迭代快，所以更需要这些网兜着。
 

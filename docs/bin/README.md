@@ -2,6 +2,12 @@
 
 This directory contains executable entry points for the OpenCodeReview CLI.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-bin-overview.md) | Binary Overview | Active |
+
 ## Contents
 
 | Guide | Purpose |

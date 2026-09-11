@@ -160,7 +160,7 @@ common causes:
   the sliding-window match.
 
 The comment is still real — it just wasn't placed automatically. Most
-agent integrations (the SKILL, the Claude Code plugin) read the
+agent integrations (the SKILL, the Codex plugin, the OpenCode plugin) read the
 `existing_code` field and locate the spot in the file themselves.
 
 ### Token threshold exceeded

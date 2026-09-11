@@ -1,4 +1,9 @@
-# 12. Gitcmd Package
+# 12. Gitcmd
+
+`internal/gitcmd`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/gitcmd` package runs git commands with bounded concurrency and a consistent error/streaming API.
 

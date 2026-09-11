@@ -1,4 +1,4 @@
-# 01. Pipeline overview
+# 01. Pipeline Overview
 
 - **Status:** Accepted
 - **Date:** 2026-08-23

@@ -1,4 +1,4 @@
-# 01. Bin entry points
+# 01. Bin Overview
 
 - **Status:** Accepted
 - **Date:** 2026-08-23

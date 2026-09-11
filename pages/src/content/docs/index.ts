@@ -17,7 +17,6 @@ import enMcp from './en/mcp.md';
 import enViewer from './en/viewer.md';
 import enTelemetry from './en/telemetry.md';
 import enAgentSkill from './en/integrations/agent-skill.md';
-import enClaudeCode from './en/integrations/claude-code.md';
 import enCicd from './en/integrations/ci.md';
 import enDelegate from './en/integrations/delegate.md';
 import enContributing from './en/contributing.md';
@@ -35,7 +34,6 @@ import zhMcp from './zh/mcp.md';
 import zhViewer from './zh/viewer.md';
 import zhTelemetry from './zh/telemetry.md';
 import zhAgentSkill from './zh/integrations/agent-skill.md';
-import zhClaudeCode from './zh/integrations/claude-code.md';
 import zhCicd from './zh/integrations/ci.md';
 import zhDelegate from './zh/integrations/delegate.md';
 import zhContributing from './zh/contributing.md';
@@ -53,7 +51,6 @@ import jaMcp from './ja/mcp.md';
 import jaViewer from './ja/viewer.md';
 import jaTelemetry from './ja/telemetry.md';
 import jaAgentSkill from './ja/integrations/agent-skill.md';
-import jaClaudeCode from './ja/integrations/claude-code.md';
 import jaCicd from './ja/integrations/ci.md';
 import jaDelegate from './ja/integrations/delegate.md';
 import jaContributing from './ja/contributing.md';
@@ -71,7 +68,6 @@ import ruMcp from './ru/mcp.md';
 import ruViewer from './ru/viewer.md';
 import ruTelemetry from './ru/telemetry.md';
 import ruAgentSkill from './ru/integrations/agent-skill.md';
-import ruClaudeCode from './ru/integrations/claude-code.md';
 import ruCicd from './ru/integrations/ci.md';
 import ruDelegate from './ru/integrations/delegate.md';
 import ruContributing from './ru/contributing.md';
@@ -89,7 +85,6 @@ export type DocSlug =
   | 'viewer'
   | 'telemetry'
   | 'agent-skill'
-  | 'claude-code'
   | 'cicd'
   | 'delegate'
   | 'contributing'
@@ -109,7 +104,6 @@ const enDocs: Record<DocSlug, string> = {
   'viewer': enViewer,
   'telemetry': enTelemetry,
   'agent-skill': enAgentSkill,
-  'claude-code': enClaudeCode,
   'cicd': enCicd,
   'delegate': enDelegate,
   'contributing': enContributing,
@@ -128,7 +122,6 @@ const zhDocs: Record<DocSlug, string> = {
   'viewer': zhViewer,
   'telemetry': zhTelemetry,
   'agent-skill': zhAgentSkill,
-  'claude-code': zhClaudeCode,
   'cicd': zhCicd,
   'delegate': zhDelegate,
   'contributing': zhContributing,
@@ -147,7 +140,6 @@ const jaDocs: Record<DocSlug, string> = {
   'viewer': jaViewer,
   'telemetry': jaTelemetry,
   'agent-skill': jaAgentSkill,
-  'claude-code': jaClaudeCode,
   'cicd': jaCicd,
   'delegate': jaDelegate,
   'contributing': jaContributing,
@@ -166,7 +158,6 @@ const ruDocs: LocalizedDocs = {
   'viewer': ruViewer,
   'telemetry': ruTelemetry,
   'agent-skill': ruAgentSkill,
-  'claude-code': ruClaudeCode,
   'cicd': ruCicd,
   'delegate': ruDelegate,
   'contributing': ruContributing,

@@ -34,11 +34,10 @@ npx skills add alibaba/open-code-review --skill open-code-review
 プロジェクトごとではなくグローバルに skill をインストールしたい場合は、フォルダを skills ディレクトリにコピーします。
 
 ```bash
-mkdir -p ~/.claude/skills
-cp -R /path/to/open-code-review/skills/open-code-review ~/.claude/skills/
+cp -R /path/to/open-code-review/skills/open-code-review <skills-dir>/
 ```
 
-これにより、マシン上のすべてのプロジェクトで skill が利用可能になります。
+これにより、マシン上のすべてのプロジェクトで skill が利用可能になります。skills ディレクトリの場所は使用するエージェントのドキュメントを参照してください。
 
 ## skill が行うこと
 
@@ -81,4 +80,4 @@ SDK は SKILL.md prompt をロードし、agent が[skill が行うこと](#what
 
 ## 関連項目
 
-- [Command（Claude Code Plugin）](../claude-code/)——同じ skill の slash-command 版。
+- [デリゲーションモード](../delegate/) — OCR がファイル選択とルール解決を担当し、ホストエージェントがレビューを実行。

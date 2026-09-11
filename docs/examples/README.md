@@ -2,6 +2,18 @@
 
 This directory contains ready-to-use CI/CD pipeline examples for OpenCodeReview.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-examples-overview.md) | Examples Overview | Active |
+| [02](02-github-actions.md) | GitHub Actions | Active |
+| [03](03-gitlab-ci.md) | GitLab CI | Active |
+| [04](04-bitbucket-pipelines.md) | Bitbucket Pipelines | Active |
+| [05](05-codeup-ci.md) | CodeUp CI | Active |
+| [06](06-gerrit-ci.md) | Gerrit CI | Active |
+| [07](07-gitflic-ci.md) | GitFlic CI | Active |
+
 ## Available Examples
 
 | Example | Platform | Description |
@@ -59,5 +71,17 @@ code_review:
 
 ## Links
 
-- [CI/CD Integration Guide](../integration/04-ci.md)
+- [CI/CD Integration Guide](../integration/03-ci.md)
 - [CLI Reference](../user-guide/04-cli-reference.md)
+
+## File Index
+
+| File | Description |
+|------|-------------|
+| [01-examples-overview](01-examples-overview.md) | Examples directory overview |
+| [02-github-actions](02-github-actions.md) | GitHub Actions CI/CD example |
+| [03-gitlab-ci](03-gitlab-ci.md) | GitLab CI/CD example |
+| [04-bitbucket-pipelines](04-bitbucket-pipelines.md) | Bitbucket Pipelines example |
+| [05-codeup-ci](05-codeup-ci.md) | CodeUp (Aliyun) CI/CD example |
+| [06-gerrit-ci](06-gerrit-ci.md) | Gerrit CI/CD example |
+| [07-gitflic-ci](07-gitflic-ci.md) | GitFlic CI/CD example |

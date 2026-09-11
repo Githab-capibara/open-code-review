@@ -2,6 +2,13 @@
 
 This directory contains IDE extension documentation for OpenCodeReview.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-extensions-overview.md) | Extensions Overview | Active |
+| [02](02-vscode-extension.md) | VS Code Extension | Active |
+
 ## Documents
 
 | Guide | Purpose |

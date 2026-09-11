@@ -130,7 +130,7 @@ open-code-review/
 │   ├── tool/                  # ツールレジストリ + provider の実装
 │   └── viewer/                # 埋め込み HTTP UI
 ├── pages/                     # WebUI マーケティングページ（独立した React app）
-├── plugins/                   # Claude Code slash コマンド
+├── plugins/                   # Agent プラグイン（Codex、OpenCode、QCA）
 ├── extensions/                # エディタ拡張（VS Code）
 ├── examples/                  # CI レシピ（GitHub Actions、GitLab CI）
 ├── skills/                    # Agent SDK skill manifest

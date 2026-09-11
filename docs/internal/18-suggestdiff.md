@@ -1,4 +1,9 @@
-# 18. Suggest Diff Package
+# 18. Suggestdiff
+
+`internal/suggestdiff`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/suggestdiff` package computes a line-level diff between two code snippets so the agent can propose concrete replacements.
 

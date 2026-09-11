@@ -1,4 +1,11 @@
-# OpenCode integration
+# 03. OpenCode
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 This integration exposes OpenCodeReview as native tools and slash commands in
 [OpenCode](https://opencode.ai/).

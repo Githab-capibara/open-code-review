@@ -1,4 +1,11 @@
-# OpenCodeReview - Bitbucket Pipelines
+# 04. Bitbucket Pipelines
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 This example reviews Bitbucket Cloud pull requests with OpenCodeReview (OCR)
 and posts the findings back to the pull request.
@@ -25,7 +32,7 @@ PR created or updated → Bitbucket Pipeline → OCR reviews diff → PR comment
 
 ### 1. Copy the pipeline file
 
-Copy [`bitbucket-pipelines.yml`](bitbucket-pipelines.yml) to the root of the
+Copy [`bitbucket-pipelines.yml`](../../examples/bitbucket_pipelines/bitbucket-pipelines.yml) to the root of the
 repository you want OCR to review:
 
 ```bash

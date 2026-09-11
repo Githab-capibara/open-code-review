@@ -2,6 +2,13 @@
 
 This directory contains security-related documentation for OpenCodeReview.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-security-policy.md) | Security Policy | Active |
+| [02](02-assurance-case.md) | Assurance Case | Active |
+
 ## Documents
 
 | Guide | Purpose |
@@ -36,3 +43,9 @@ Include:
 - [Assurance Case](02-assurance-case.md)
 - [Code of Conduct](../governance/02-code-of-conduct.md)
 - [Governance Model](../governance/03-governance.md)
+
+## Links
+
+- [CI/CD Integration](../ci-cd/README.md)
+- [Pipeline Documentation](../pipeline/README.md)
+- [Security Issues](https://github.com/alibaba/open-code-review/security/advisories)

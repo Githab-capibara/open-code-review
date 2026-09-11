@@ -2,6 +2,16 @@
 
 This directory contains project governance documentation.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-agents.md) | Agents | Active |
+| [02](02-code-of-conduct.md) | Code of Conduct | Active |
+| [03](03-governance.md) | Governance | Active |
+| [04](04-agent-working-principles.md) | Agent Working Principles | Active |
+| [05](05-pull-request-guidelines.md) | Pull Request Guidelines | Active |
+
 ## Documents
 
 | Guide | Purpose |
@@ -9,8 +19,8 @@ This directory contains project governance documentation.
 | [01-agents.md](01-agents.md) | AI coding assistant guidelines for OpenCodeReview |
 | [02-code-of-conduct.md](02-code-of-conduct.md) | Community behavior guidelines |
 | [03-governance.md](03-governance.md) | Project governance and decision-making |
-| [04-pull-request-template.md](04-pull-request-template.md) | Pull request template and checklist |
-| [05-agent-working-principles.md](05-agent-working-principles.md) | Non-negotiable working principles for agents and contributors |
+| [04-agent-working-principles.md](04-agent-working-principles.md) | Non-negotiable working principles for agents and contributors |
+| [05-pull-request-guidelines.md](05-pull-request-guidelines.md) | Pull request template and checklist |
 
 ## Project Values
 
@@ -36,5 +46,5 @@ OpenCodeReview maintainers and contributors act consistently with these principl
 
 ## Links
 
-- [Contributing Guide](../development/02-contributing.md)
+- [Contributing Guide](../development/01-contributing.md)
 - [Security Policy](../security/01-security-policy.md)

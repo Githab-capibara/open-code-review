@@ -1,8 +1,15 @@
-# OpenCodeReview - GitFlic CI Demo
+# 07. GitFlic CI
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 This demo shows how to integrate OpenCodeReview into a [GitFlic](https://gitflic.ru) CI/CD pipeline to automatically review Merge Requests and post the findings as MR discussions — inline on the changed lines where possible.
 
-Like the GitHub Actions and GitLab CI examples, the posting glue lives in the CI layer rather than in the `ocr` binary. Here it is a small, dependency-free Python script — [`post_review.py`](post_review.py) — that reads `ocr review --format json` and posts to the GitFlic Discussions API. The only GitFlic-specific wrinkle it handles is the **old-side line**: GitFlic requires it even for a comment on the new side of the diff, and `ocr review` reports new-side positions only, so the script recomputes it from the same merge-base diff the review ran on.
+Like the GitHub Actions and GitLab CI examples, the posting glue lives in the CI layer rather than in the `ocr` binary. Here it is a small, dependency-free Python script — [`post_review.py`](../../examples/gitflic_ci/post_review.py) — that reads `ocr review --format json` and posts to the GitFlic Discussions API. The only GitFlic-specific wrinkle it handles is the **old-side line**: GitFlic requires it even for a comment on the new side of the diff, and `ocr review` reports new-side positions only, so the script recomputes it from the same merge-base diff the review ran on.
 
 ## How It Works
 
@@ -57,7 +64,7 @@ Create a token in **User Settings → Access Tokens** (or a dedicated service ac
 
 ## Tests
 
-`post_review.py` ships with [`post_review_test.py`](post_review_test.py) — standard-library `unittest`, no network or git required:
+`post_review.py` ships with [`post_review_test.py`](../../examples/gitflic_ci/post_review_test.py) — standard-library `unittest`, no network or git required:
 
 ```bash
 cd examples/gitflic_ci

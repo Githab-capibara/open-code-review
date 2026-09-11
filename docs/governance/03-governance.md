@@ -1,5 +1,12 @@
 # 03. Governance
 
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
+
 This document describes how OpenCodeReview is governed today and how technical
 decisions are made in the project.
 
@@ -59,7 +66,7 @@ Contributors are anyone who participates in the project, including by:
 Contributors are expected to follow:
 
 - [Code of Conduct](02-code-of-conduct.md)
-- [Contributing Guide](../development/02-contributing.md)
+- [Contributing Guide](../development/01-contributing.md)
 - [Security Policy](../security/01-security-policy.md) for vulnerability reporting
 
 ### Maintainers
@@ -93,7 +100,7 @@ is [@lizhengfeng101](https://github.com/lizhengfeng101).
 ### Day-to-Day Changes
 
 Most changes are made through the normal pull request workflow described in
-[Contributing Guide](../development/02-contributing.md):
+[Contributing Guide](../development/01-contributing.md):
 
 1. discuss the change in an issue when appropriate
 2. submit a pull request

@@ -1,4 +1,9 @@
-# 14. Model Package
+# 14. Model
+
+`internal/model`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/model` package defines the core data types shared across OpenCodeReview: diffs, review comments, scan items, and preview entries.
 

@@ -30,4 +30,4 @@ How to confirm the setup or change works (`make test`, `make check`, etc.).
 ## Related Documentation
 
 - [Development Overview](../development/README.md)
-- [Contributing](../development/02-contributing.md)
+- [Contributing](../development/01-contributing.md)

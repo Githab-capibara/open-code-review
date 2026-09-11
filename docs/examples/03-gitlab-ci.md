@@ -1,4 +1,11 @@
-# OpenCodeReview - GitLab CI Demo
+# 03. GitLab CI
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 This demo shows how to integrate OpenCodeReview into your GitLab CI/CD pipeline to automatically review Merge Requests and post review comments as inline discussions.
 

@@ -1,4 +1,9 @@
-# 13. LLM Loop Package
+# 13. Llmloop
+
+`internal/llmloop`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/llmloop` package is the engine that drives one review file through the LLM: it builds the message list, enforces the token budget, runs tool calls, and collects comments.
 

@@ -2,6 +2,18 @@
 
 This directory contains user-facing documentation for OpenCodeReview, copied and adapted from the website source (`pages/src/content/docs/en/`).
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-quickstart.md) | Quick Start | Active |
+| [02](02-installation.md) | Installation | Active |
+| [03](03-configuration.md) | Configuration | Active |
+| [04](04-cli-reference.md) | CLI Reference | Active |
+| [05](05-review-rules.md) | Review Rules | Active |
+| [06](06-faq.md) | FAQ | Active |
+| [07](07-tools.md) | Tools Reference | Active |
+
 ## Documents
 
 | Guide | Purpose |
@@ -58,6 +70,12 @@ ocr review
 ## Advanced Topics
 
 - [Review Rules Customization](05-review-rules.md)
-- [MCP Server](../integration/05-mcp.md)
+- [MCP Server](../integration/04-mcp.md)
 - [Delegate Mode](../integration/01-delegate.md)
-- [CI/CD Integration](../integration/04-ci.md)
+- [CI/CD Integration](../integration/03-ci.md)
+
+## Links
+
+- [Architecture Overview](../architecture/01-overview.md)
+- [ADR Index](../adr/README.md)
+- [Development Guide](../development/01-contributing.md)

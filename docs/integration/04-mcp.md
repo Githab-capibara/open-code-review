@@ -1,4 +1,11 @@
-# 05. MCP Client
+# 04. MCP
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 OCR can act as a **Model Context Protocol (MCP) client**. You point it at
 one or more external MCP servers, and the tools those servers expose

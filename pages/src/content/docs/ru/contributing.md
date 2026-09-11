@@ -136,7 +136,7 @@ open-code-review/
 │   ├── tool/                  # Tool registry + provider impls
 │   └── viewer/                # Embedded HTTP UI
 ├── pages/                     # WebUI marketing page (separate React app)
-├── plugins/                   # Claude Code slash command
+├── plugins/                   # Плагины агентов (Codex, OpenCode, QCA)
 ├── extensions/                # Editor extensions (VS Code)
 ├── examples/                  # CI recipes (GitHub Actions, GitLab CI)
 ├── skills/                    # Agent SDK skill manifest

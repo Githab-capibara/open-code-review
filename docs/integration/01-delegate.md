@@ -1,4 +1,11 @@
-# 01. Delegation Mode
+# 01. Delegate
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 OCR handles deterministic engineering (file selection, rule resolution)
 while the host agent performs the actual code review using its own LLM
@@ -34,15 +41,7 @@ which ocr || npm install -g @alibaba-group/open-code-review
 No LLM configuration (`ocr config set …` or environment variables) is
 needed — delegation mode never calls an LLM on the OCR side.
 
-## Install the skill / command
-
-### Claude Code — Command
-
-```bash
-mkdir -p .claude/commands
-curl -o .claude/commands/delegate-review.md \
-  https://raw.githubusercontent.com/alibaba/open-code-review/main/plugins/open-code-review/claude-code/commands/delegate-review.md
-```
+## Install the skill
 
 ### Any agent — Skill
 
@@ -50,11 +49,14 @@ curl -o .claude/commands/delegate-review.md \
 npx skills add alibaba/open-code-review --skill open-code-review-delegate
 ```
 
-Or copy the manifest manually:
+Or copy the manifest manually into your agent's skills directory:
 
 ```bash
-cp -R /path/to/open-code-review/skills/open-code-review-delegate ~/.claude/skills/
+cp -R /path/to/open-code-review/skills/open-code-review-delegate <skills-dir>/
 ```
+
+See [Installation](../integration/02-agent-skill.md#install) for the
+skills-directory location of common agents.
 
 ## Workflow
 
@@ -150,10 +152,9 @@ Classify each finding by severity:
 | Mode | Who calls the LLM? | Use case |
 |------|-------------------|----------|
 | [Agent Skill](../integration/02-agent-skill.md) | OCR | Agent invokes `ocr review`; OCR drives the full review |
-| [Command (Claude Code)](../integration/03-claude-code.md) | OCR | Slash command in Claude Code; OCR drives the review |
 | **Delegation Mode** | Host agent | OCR provides scaffolding; agent drives the review |
 
 ## See Also
 
 - [Agent Skill](../integration/02-agent-skill.md) — OCR drives the full review on behalf of the agent.
-- [Command (Claude Code)](../integration/03-claude-code.md) — slash-command flavor with auto-fix.
+- [CI/CD Integration](../integration/03-ci.md) — run OCR reviews as a pipeline step.

@@ -39,11 +39,10 @@ npx skills add alibaba/open-code-review --skill open-code-review
 若想全局安装 skill 而非按项目，把文件夹复制进你的 skills 目录：
 
 ```bash
-mkdir -p ~/.claude/skills
-cp -R /path/to/open-code-review/skills/open-code-review ~/.claude/skills/
+cp -R /path/to/open-code-review/skills/open-code-review <skills-dir>/
 ```
 
-这使 skill 在机器上每个项目可用。
+这使 skill 在机器上每个项目可用。skills 目录的位置请参考所用 Agent 的文档。
 
 ## skill 做什么
 
@@ -97,5 +96,4 @@ markdown。若你的框架期望不同 schema，markdown 正文仍可用作 prom
 
 ## 另见
 
-- [Command（Claude Code Plugin）](../claude-code/)——同一 skill 的
-  slash-command 版本。
+- [委托模式](../delegate/) — OCR 负责文件选择与规则解析，宿主 Agent 执行审查。

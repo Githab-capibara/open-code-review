@@ -4,6 +4,17 @@ This directory mirrors the per-language review-rule reference files shipped
 with OpenCodeReview (internal/config/rules/rule_docs/). Each file documents the
 supported language or configuration format and the review rules applied to it.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-arkts.md) | ArkTS Rules | Active |
+| [02](02-astro.md) | Astro Rules | Active |
+| [03](03-bicep.md) | Bicep Rules | Active |
+| [04](04-build-gradle.md) | Build Gradle Rules | Active |
+| [05](05-c.md) | C Rules | Active |
+| ... | *(and 37 more)* | Active |
+
 ## Documents
 
 | Guide | Purpose |
@@ -50,3 +61,9 @@ supported language or configuration format and the review rules applied to it.
 | [40-ts-js-tsx-jsx](40-ts-js-tsx-jsx.md) | ts js tsx jsx rule reference |
 | [41-yaml](41-yaml.md) | yaml rule reference |
 | [42-zig](42-zig.md) | zig rule reference |
+
+## Links
+
+- [Security Policy](../security/01-security-policy.md)
+- [Governance](../governance/03-governance.md)
+- [Internal Rules Config](../internal/04-config.md)

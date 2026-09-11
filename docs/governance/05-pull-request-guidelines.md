@@ -1,4 +1,11 @@
-# 04. Pull Request Template
+# 05. Pull Request Guidelines
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 <!-- What does this PR do? Why is this change needed? -->
 

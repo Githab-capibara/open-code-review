@@ -52,7 +52,7 @@ The very first version we shipped offered only a few things:
 1. A CLI tool rewritten from scratch in Go.
 2. A single command to configure a custom model, plus compatibility with the OpenAI and Anthropic protocols.
 2. A set of review commands and a framework core.
-3. A companion skill that integrates directly into Claude Code.
+3. A companion skill for AI coding agents.
 4. A companion GitHub Action so users could plug it straight into their own GitHub repos.
 5. Observability, so users could integrate it into their company's internal systems.
 
@@ -128,7 +128,7 @@ Concretely, we built a few core Skills:
 - `/read-issue`: quickly understand an Issue and auto-label it
 - `/mk-issue`: create a structured Issue from the problem context
 - `/mkpr`: automatically create a PR from the current changes.
-- `/review`: review code with Claude Code + gh cli and auto-fix
+- `/review`: review code with the AI agent + gh cli and auto-fix
 - `/open-code-review`: review code with OCR itself and auto-fix
 - `/release-eval`: assess whether a release's changes affect the core path, deciding whether to run the eval set (one run takes 8 hours)
 - `/tag`: publish a new release
@@ -136,8 +136,8 @@ Concretely, we built a few core Skills:
 
 The evolution of the workflow is interesting too:
 
-- Early: Claude Code writes code -> Skills review -> CC fixes
-- Now: Claude Code writes code -> OCR reviews automatically as a pre-commit hook -> CC auto-fixes -> /mkpr creates the review -> GitHub Actions triggers another review plus some guardrail tasks -> CC fixes
+- Early: the AI agent writes code -> Skills review -> agent fixes
+- Now: the AI agent writes code -> OCR reviews automatically as a pre-commit hook -> agent auto-fixes -> /mkpr creates the review -> GitHub Actions triggers another review plus some guardrail tasks -> agent fixes
 
 What guarantees stability? Automated code review + unit tests + Lint + CI/CD pipeline + an E2E eval set (200 PRs), and so on. Because we iterate fast, we need these nets underneath us all the more.
 

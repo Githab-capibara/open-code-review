@@ -1,4 +1,9 @@
-# 05. Diff Package
+# 05. Diff
+
+`internal/diff`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/diff` package resolves what code to review: it turns CLI inputs (workspace, commit range, single commit) into a concrete set of file diffs and a resolved git remote.
 

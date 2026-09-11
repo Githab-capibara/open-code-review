@@ -1,4 +1,11 @@
-# 07. Built-in Tools
+# 07. Tools
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## What you'll learn
+
 
 OCR ships with **six built-in tools** the LLM can call during a review.
 This page documents each tool's purpose, input schema, and example
@@ -384,5 +391,5 @@ always read at least 30 lines around the change."
 
 - [Architecture](../architecture/01-overview.md) — how the agent loop drives tools.
 - [Review Rules](../user-guide/05-review-rules.md) — what the LLM is told to focus on.
-- [Session Viewer](../integration/06-viewer.md) — see exactly which tools fired in past
+- [Session Viewer](../integration/05-viewer.md) — see exactly which tools fired in past
   reviews.

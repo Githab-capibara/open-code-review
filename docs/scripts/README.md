@@ -2,6 +2,12 @@
 
 This directory contains build, verification, and maintenance scripts for OpenCodeReview.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-scripts-overview.md) | Scripts Overview | Active |
+
 ## Scripts Overview
 
 | Script | Purpose | Language |
@@ -78,5 +84,5 @@ make license-check
 
 ## Links
 
-- [Contributing Guide](../development/02-contributing.md)
+- [Contributing Guide](../development/01-contributing.md)
 - [Scripts overview](01-scripts-overview.md)

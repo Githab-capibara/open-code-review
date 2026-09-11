@@ -18,8 +18,13 @@ metadata:
   homepage: https://github.com/alibaba/open-code-review
   version: "1.0.0"
 ---
+# 04. Open Code Review Skill
 
-# Open Code Review
+- **Status:** Published
+- **Platform:** Universal
+- **Date:** 2026-08-23
+- **Deciders:** @Githab-capibara
+
 
 This Codex plugin skill intentionally mirrors the canonical skill at
 `skills/open-code-review/SKILL.md`. Keep both files synchronized when updating

@@ -1,57 +1,62 @@
-# 01. Extensions overview
+# 01. Extensions Overview
 
-- **Status:** Accepted
-- **Date:** 2026-08-23
-- **Deciders:** @Githab-capibara
-- **Related:** [extensions/vscode/](../../extensions/vscode/), [Extensions README](README.md)
+**Status:** Active
+**Last Updated:** 2026-08-23
+**Maintainer:** @Githab-capibara
 
-## Context
+## Purpose
 
 Developers want review results without leaving the editor. The CLI covers
 terminal workflows; IDE integration brings inline comments, apply/discard
 actions, and configuration UI.
 
-## Decision
+## Compatibility
 
-Maintain IDE integrations under [`extensions/`](../../extensions/). Today
-that is one extension — the VSCode extension
-[`extensions/vscode/`](../../extensions/vscode/) (`open-code-review-vscode`,
-VSCode `^1.74.0`, TypeScript):
+- **VS Code:** `^1.74.0`, TypeScript, Preact WebView
+- **JetBrains:** Planned for H2 2026 (see [roadmap](../planning/01-roadmap.md))
+- **Localization:** English (`package.nls.json`) and Chinese (`package.nls.zh-cn.json`)
 
-**Architecture** (`src/extension/`):
+## Installation
 
-| Layer | Modules | Role |
-|-------|---------|------|
-| Entry | `extension.ts`, `commands.ts` | Activation and command registration |
-| Providers | `CommentProvider`, `SidebarProvider`, `ConfigPanelProvider` | Inline review comments, sidebar session browsing, settings panel |
-| Positioning | `commentAnchor.ts`, `lineOffset.ts` | Map OCR line-level comments to stable editor anchors despite edits |
-| Services | `CliService`, `GitService`, `ConfigService`, `ReviewSession` | Spawn the `ocr` CLI, read git state, manage config drafts, track session lifecycle |
-| Parsers | `cliParse.ts`, `configParse.ts`, `configDraft.ts`, `gitMap.ts`, `shellEnv.ts` | Typed parsing of CLI output, config JSON, git status, shell environment |
+1. Install VS Code `^1.74.0` or later
+2. Open Extensions view (`Ctrl+Shift+X`)
+3. Search for `open-code-review`
+4. Click Install
+
+Or install from the Marketplace directly:
+```bash
+# From VS Code CLI
+code --install-extension alibaba-group.open-code-review
+```
+
+## Features
+
+The VS Code extension (`open-code-review-vscode`) provides:
+
+- **Three review modes:** workspace changes, branch comparison (`--from` / `--to`), and a single commit (`--commit`)
+- **Inline gutter annotations:** apply / dismiss / flag-as-false-positive each comment
+- **Live sidebar logging:** real-time review progress streaming
+- **Two-way sync:** comments in the editor stay in sync with the sidebar session
 
 **Registered commands:** `ocr.review.start`, `ocr.review.cancel`,
 `ocr.config.open`, `ocr.comment.apply`, `ocr.comment.discard`,
 `ocr.comment.falsePositive`.
 
 **Testing:** Jest unit tests colocated under `__tests__/`; the VSCode API is
-mocked via `__mocks__/vscode.js`. Localization through `package.nls.json`
-(English) and `package.nls.zh-cn.json` (Chinese). CI builds and packages via
-the `vscode-ext.yml` workflow; the roadmap adds a JetBrains plugin in H2
-2026 ([roadmap](../planning/01-roadmap.md)).
+mocked via `__mocks__/vscode.js`. CI builds and packages via the
+`vscode-ext.yml` workflow.
 
-## Consequences
+## Configuration
 
-- **Easier:** review feedback appears as native editor comments with
-  one-keystroke apply/discard; no terminal context switching.
-- **Harder:** extension must parse CLI output formats — CLI changes can
-  break anchoring, covered by parser tests.
-- **Given up:** deep LSP-style language analysis — the extension delegates
-  all intelligence to the `ocr` process.
-- **Migration:** new IDE targets get a sibling directory under
-  `extensions/` plus an entry here.
+- `ocr.review.start` — start a review session
+- `ocr.review.cancel` — cancel an in-progress session
+- `ocr.config.open` — open the config panel
+- `ocr.comment.apply` — apply the suggested fix inline
+- `ocr.comment.discard` — dismiss a review comment
+- `ocr.comment.falsePositive` — mark a comment as false positive
 
-## Alternatives considered
+## Related Documentation
 
-- **Generic Language Server instead of an extension:** rejected because
-  review comments are transient annotations, not persistent diagnostics.
-- **Webview-only UI:** rejected for comments — inline gutter annotations are
-  the core UX requirement.
+- [VS Code Extension](02-vscode-extension.md)
+- [Extensions README](README.md)
+- [Plugins Overview](../plugins/README.md)

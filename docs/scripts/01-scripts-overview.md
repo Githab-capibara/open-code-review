@@ -1,4 +1,4 @@
-# 01. Scripts overview
+# 01. Scripts Overview
 
 - **Status:** Accepted
 - **Date:** 2026-08-23

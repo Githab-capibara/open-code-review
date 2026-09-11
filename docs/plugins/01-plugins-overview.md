@@ -1,4 +1,4 @@
-# 01. Plugins overview
+# 01. Plugins Overview
 
 - **Status:** Accepted
 - **Date:** 2026-08-23
@@ -19,9 +19,7 @@ subdirectory (or manifest) per host platform:
 
 | Platform | Location | Mechanism |
 |----------|----------|-----------|
-| Claude Code | [`claude-code/`](../../plugins/open-code-review/claude-code/) | `.claude-plugin/plugin.json` manifest + slash commands `review.md`, `delegate-review.md` |
 | Codex | [`.codex-plugin/plugin.json`](../../plugins/open-code-review/.codex-plugin/plugin.json), `CODEX.ko-KR.md` | Codex plugin manifest with callable review skills |
-| Cursor | [`.cursor-plugin/plugin.json`](../../plugins/open-code-review/.cursor-plugin/plugin.json) | Cursor plugin manifest with portable skills |
 | OpenCode | [`opencode/`](../../plugins/open-code-review/opencode/) | Native TypeScript plugin (`open-code-review.ts`) with its own `package.json`, vitest tests, and README |
 | QCA Forward | [`qca/`](../../plugins/open-code-review/qca/) | Host-model delegation: `system-prompt.md` plus ready-to-publish `template.example.json` |
 
@@ -35,7 +33,7 @@ repository root under [`skills/`](../../skills/) — see
 
 - **Easier:** users install a single plugin per platform; command names and
   behavior stay consistent across hosts.
-- **Harder:** five platform manifests must be kept in sync when review
+- **Harder:** three platform manifests must be kept in sync when review
   behavior changes.
 - **Given up:** a single universal plugin format — none of the hosts share
   one.

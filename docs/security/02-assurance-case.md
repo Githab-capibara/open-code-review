@@ -1,4 +1,11 @@
-# 02. Security Assurance Case
+# 02. Assurance Case
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 This document provides a security assurance case for Open Code Review (OCR), justifying that security requirements are met through secure design principles and countermeasures against common implementation weaknesses.
 

@@ -1,4 +1,9 @@
-# 08. Viewer Package
+# 08. Viewer
+
+`internal/viewer`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/viewer` package serves a local web UI for browsing and replaying review sessions (`ocr viewer`).
 

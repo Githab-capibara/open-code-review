@@ -26,15 +26,7 @@ which ocr || npm install -g @alibaba-group/open-code-review
 
 LLM 設定（`ocr config set …` や環境変数）は不要です — デリゲーションモードは OCR 側で LLM を呼び出しません。
 
-## Skill / Command のインストール
-
-### Claude Code — Command
-
-```bash
-mkdir -p .claude/commands
-curl -o .claude/commands/delegate-review.md \
-  https://raw.githubusercontent.com/alibaba/open-code-review/main/plugins/open-code-review/claude-code/commands/delegate-review.md
-```
+## Skill のインストール
 
 ### 任意のエージェント — Skill
 
@@ -42,11 +34,13 @@ curl -o .claude/commands/delegate-review.md \
 npx skills add alibaba/open-code-review --skill open-code-review-delegate
 ```
 
-または手動コピー：
+またはエージェントの skills ディレクトリに手動コピー：
 
 ```bash
-cp -R /path/to/open-code-review/skills/open-code-review-delegate ~/.claude/skills/
+cp -R /path/to/open-code-review/skills/open-code-review-delegate <skills-dir>/
 ```
+
+skills ディレクトリの場所は [Agent Skill](../agent-skill/#install) を参照してください。
 
 ## ワークフロー
 
@@ -140,10 +134,8 @@ cat <path>                     # 新規未追跡ファイル
 | モード | LLM を呼ぶのは？ | ユースケース |
 |--------|-----------------|-------------|
 | [Agent Skill](../agent-skill/) | OCR | Agent が `ocr review` を呼び出し、OCR が完全なレビューを駆動 |
-| [Command（Claude Code）](../claude-code/) | OCR | Claude Code のスラッシュコマンド、OCR がレビューを駆動 |
 | **デリゲーションモード** | ホストエージェント | OCR がスキャフォールディングを提供、Agent がレビューを駆動 |
 
 ## 関連項目
 
 - [Agent Skill](../agent-skill/) — OCR がエージェントに代わって完全なレビューを駆動。
-- [Command（Claude Code）](../claude-code/) — スラッシュコマンド形式、自動修正付き。

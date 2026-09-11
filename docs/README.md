@@ -22,9 +22,9 @@ Welcome to the official documentation for OpenCodeReview.
 | [design/](design/) | Design documents and research notes |
 | [development/](development/) | Development setup and contribution guidelines |
 | [examples/](examples/) | CI/CD pipeline examples for all supported platforms |
-| [extensions/](extensions/) | IDE extensions (VS Code, JetBrains) |
+| [extensions/](extensions/) | IDE extensions (VS Code) |
 | [governance/](governance/) | Project governance, policies, and code of conduct |
-| [integration/](integration/) | Third-party integrations (Claude Code, CI/CD, MCP, telemetry) |
+| [integration/](integration/) | Third-party integrations (delegation, CI/CD, MCP, telemetry) |
 | [internal/](internal/) | Internal Go package documentation |
 | [npm/](npm/) | NPM platform assets and publishing |
 | [pages/](pages/) | Website source code |
@@ -33,7 +33,7 @@ Welcome to the official documentation for OpenCodeReview.
 | [plugins/](plugins/) | Plugin system and agent plugin formats |
 | [scripts/](scripts/) | Build, verification, and maintenance scripts |
 | [security/](security/) | Security policies and assurance case |
-| [skills/](skills/) | Portable agent skills for Claude Code, Codex, Cursor, etc. |
+| [skills/](skills/) | Portable agent skills for Codex, OpenCode, etc. |
 | [user-guide/](user-guide/) | User-facing documentation and CLI reference |
 | [rules/](rules/) | Per-language review-rule reference (mirrors internal/config/rules/rule_docs) |
 
@@ -50,6 +50,6 @@ Welcome to the official documentation for OpenCodeReview.
 ## Governance
 
 - → [Security Policy](security/01-security-policy.md) — vulnerability disclosure and response timeline
-- → [Contributing](development/02-contributing.md) — build, test, and contribution guidelines
+- → [Contributing](development/01-contributing.md) — build, test, and contribution guidelines
 - → [Code of Conduct](governance/02-code-of-conduct.md) — community behavior expectations
 - → [Governance](governance/03-governance.md) — project structure and decision-making

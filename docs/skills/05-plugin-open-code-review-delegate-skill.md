@@ -17,8 +17,13 @@ metadata:
   homepage: https://github.com/alibaba/open-code-review
   version: "1.0.0"
 ---
+# 05. Open Code Review Delegate Skill
 
-# Open Code Review — Delegation Mode
+- **Status:** Published
+- **Platform:** Universal
+- **Date:** 2026-08-23
+- **Deciders:** @Githab-capibara
+
 
 This Codex plugin skill intentionally mirrors the canonical skill at
 `skills/open-code-review-delegate/SKILL.md`. Keep both files synchronized when

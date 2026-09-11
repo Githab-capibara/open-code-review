@@ -1,5 +1,12 @@
 # 03. Configuration
 
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## What you'll learn
+
+
 The config file lives at `~/.opencodereview/config.json`. You have three ways
 to edit it:
 

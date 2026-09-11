@@ -1,1 +1,1 @@
-../../docs/extensions/02-vscode-extension-readme.md
+../../docs/extensions/02-vscode-extension.md

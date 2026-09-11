@@ -2,6 +2,12 @@
 
 This directory contains the source code for the OpenCodeReview website ([open-codereview.ai](https://open-codereview.ai)).
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-pages-overview.md) | Website Source Overview | Active |
+
 ## Technology Stack
 
 - **Framework:** React 18 SPA + react-router-dom
@@ -61,3 +67,9 @@ Output is deployed to GitHub Pages.
 
 - [Website](https://open-codereview.ai)
 - [Documentation](../user-guide/README.md)
+
+## File Index
+
+| File | Description |
+|------|-------------|
+| [01-pages-overview](01-pages-overview.md) | Website source code overview |

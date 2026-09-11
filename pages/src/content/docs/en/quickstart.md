@@ -26,7 +26,7 @@ ocr version
 
 ## Step 2 — Configure an LLM
 
-> If you're using [Delegation Mode](../integrations/delegate/) (e.g. running inside Claude Code), the host agent supplies the model — skip to Step 4.
+> If you're using [Delegation Mode](../integrations/delegate/) (e.g. running inside Codex), the host agent supplies the model — skip to Step 4.
 
 ```bash
 ocr config provider
@@ -96,5 +96,5 @@ ocr review --format json --audience agent > review.json
 - [Configuration](../configuration/) — every env var, config key, and built-in provider.
 - [CLI Reference](../cli-reference/) — every sub-command, flag, and output mode.
 - [Review Rules](../review-rules/) — customize what gets reviewed.
-- [Integrations](../integrations/agent-skill/) — embed OCR in Claude Code, an Agent skill, or CI.
+- [Integrations](../integrations/agent-skill/) — embed OCR in Codex, an Agent skill, or CI.
 - [FAQ](../faq/) — known errors and remedies.

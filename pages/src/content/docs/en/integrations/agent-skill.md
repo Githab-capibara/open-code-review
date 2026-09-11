@@ -40,14 +40,14 @@ command to update the skill to the latest version.
 ### Option 2: Manual copy (system-wide)
 
 If you'd rather install the skill globally instead of per-project, copy
-the folder into your skills directory:
+the folder into your agent's skills directory:
 
 ```bash
-mkdir -p ~/.claude/skills
-cp -R /path/to/open-code-review/skills/open-code-review ~/.claude/skills/
+cp -R /path/to/open-code-review/skills/open-code-review <skills-dir>/
 ```
 
-This makes the skill available to every project on the machine.
+This makes the skill available to every project on the machine. Refer
+to your agent's documentation for the skills-directory location.
 
 ## What the skill does
 
@@ -113,5 +113,5 @@ prompt template.
 
 ## See Also
 
-- [Command（Claude Code Plugin）](../claude-code/) — the
-  slash-command flavor of the same skill.
+- [Delegation Mode](../delegate/) — OCR handles file selection and rule
+  resolution while the host agent performs the review.

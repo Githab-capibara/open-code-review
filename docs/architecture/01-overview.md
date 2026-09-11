@@ -1,4 +1,8 @@
-# 01. Architecture Overview
+# 01. Overview
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
 
 A walk-through of how `ocr review` actually works inside, from the moment
 you press Enter to the JSON that lands in your terminal. The goal is to
@@ -287,7 +291,7 @@ The template itself isn't a CLI override — to change prompts you edit
 [`task_template.json`](https://github.com/alibaba/open-code-review/blob/main/internal/config/template/task_template.json)
 and rebuild. The `--tools` flag is a *tool-registry* override (it
 swaps the JSON consumed by `internal/config/toolsconfig`), not a
-template override — see [Tools](../internal/03-tool.md#customizing-tools).
+template override — see [Tools](../internal/03-tool.md#registry).
 
 > **Placeholder syntax caveat.** All the placeholders above use
 > double-brace `{{…}}` syntax *except* `RE_LOCATION_TASK`, which
@@ -309,7 +313,7 @@ The repo path is **not** base64-encoded; `encodeRepoPath` (in
 Each line is one event: prompt sent, LLM response, tool call, tool
 result, comment emitted, etc. The Web UI (`ocr viewer`) reads these
 files directly — there's no database, just append-only logs. See
-[Session Viewer](../integration/06-viewer.md) for the UI tour and event schema.
+[Session Viewer](../integration/05-viewer.md) for the UI tour and event schema.
 
 ## Telemetry
 
@@ -321,7 +325,7 @@ short-lived `event.<name>` span at each decision point (`plan.skipped`,
 tool calls are recorded only as metrics — not as spans. Prompt and
 response content is **never** attached to telemetry; the
 `OCR_CONTENT_LOGGING` flag is plumbed but currently dead. See
-[Telemetry](../integration/07-telemetry.md) for the full schema.
+[Telemetry](../integration/06-telemetry.md) for the full schema.
 
 ## What's *not* automated
 
@@ -361,10 +365,10 @@ If you want to read along:
 | Session JSONL writer | `internal/session/persist.go` |
 | Web viewer | `internal/server.go` |
 
-See [Contributing](../development/02-contributing.md) for build & test instructions.
+See [Contributing](../development/01-contributing.md) for build & test instructions.
 
 ## See Also
 
 - [Tools](../internal/03-tool.md) — the six tools the agent loop calls.
 - [Review Rules](../user-guide/05-review-rules.md) — how per-file rule text is resolved.
-- [Session Viewer](../integration/06-viewer.md) — inspect the transcripts this pipeline writes.
+- [Session Viewer](../integration/05-viewer.md) — inspect the transcripts this pipeline writes.

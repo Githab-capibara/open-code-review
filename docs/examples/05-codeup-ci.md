@@ -1,4 +1,11 @@
-# CodeUp CI Integration
+# 05. CodeUp CI
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 Run `open-code-review` (`ocr`) automatically on every merge request in
 [Alibaba Cloud Yunxiao CodeUp](https://codeup.aliyun.com), posting results

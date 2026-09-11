@@ -1,4 +1,8 @@
-# 02. LLM Package
+# 02. LLM
+
+`internal/llm`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
 
 The `internal/llm` package provides LLM client interfaces supporting multiple protocols, endpoint resolution, token counting, retry reporting, and session-key expansion.
 

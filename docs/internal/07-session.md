@@ -1,4 +1,9 @@
-# 07. Session Package
+# 07. Session
+
+`internal/session`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/session` package provides a session-history mechanism for collecting conversation records, review items, and token usage, plus loading/listing past sessions for resume and the viewer.
 

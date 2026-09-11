@@ -1,4 +1,4 @@
-# 01. Skills overview
+# 01. Skills Overview
 
 - **Status:** Accepted
 - **Date:** 2026-08-23

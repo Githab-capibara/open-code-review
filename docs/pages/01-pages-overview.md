@@ -1,4 +1,4 @@
-# 01. Pages overview
+# 01. Pages Overview
 
 - **Status:** Accepted
 - **Date:** 2026-08-23

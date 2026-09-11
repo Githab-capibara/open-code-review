@@ -85,7 +85,6 @@ const sidebarTree: SidebarGroup[] = [
         labelKey: 'docs.sidebar.integrations',
         children: [
           { id: 'sb-agent-skill', labelKey: 'docs.sidebar.agentSkill', slug: 'agent-skill' },
-          { id: 'sb-claude-code', labelKey: 'docs.sidebar.claudeCode', slug: 'claude-code' },
           { id: 'sb-delegate', labelKey: 'docs.sidebar.delegate', slug: 'delegate' },
           { id: 'sb-cicd', labelKey: 'docs.sidebar.cicd', slug: 'cicd' },
         ],

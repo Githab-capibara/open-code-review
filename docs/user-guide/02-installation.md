@@ -1,5 +1,12 @@
 # 02. Installation
 
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## What you'll learn
+
+
 There are six supported ways to install the `ocr` CLI.
 
 ## NPM (recommended)
@@ -225,4 +232,4 @@ download via NPM). Removing the directory is a clean uninstall.
 
 - [QuickStart](../user-guide/01-quickstart.md) — configure an LLM and run your first review.
 - [Configuration](../user-guide/03-configuration.md) — every env var and config key OCR honors.
-- [Contributing](../development/02-contributing.md) — build from source, run tests, and hack on OCR.
+- [Contributing](../development/01-contributing.md) — build from source, run tests, and hack on OCR.

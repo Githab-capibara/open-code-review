@@ -1,12 +1,19 @@
 # 01. Quick Start
 
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## What you'll learn
+
+
 Get your first code review running in a few minutes.
 
 ## Prerequisites
 
 - **Git ≥ 2.41**
 - **Node.js ≥ 18**
-- **LLM API key** (not needed if using [Delegation Mode](../integration/01-delegate.md)
+- **LLM API key** (not needed if using [Delegation Mode](../integration/01-delegate.md).)
 
 ## Step 1 — Install the CLI
 
@@ -22,7 +29,7 @@ ocr version
 
 ## Step 2 — Configure an LLM
 
-> If you're using [Delegation Mode](../integration/01-delegate.md) (e.g. running inside Claude Code, the host agent supplies the model — skip to Step 4.
+> If you're using [Delegation Mode](../integration/01-delegate.md) (e.g. running inside Codex, the host agent supplies the model) — skip to Step 4.
 
 ```bash
 ocr config provider
@@ -92,5 +99,5 @@ ocr review --format json --audience agent > review.json
 - [Configuration](../user-guide/03-configuration.md) — every env var, config key, and built-in provider.
 - [CLI Reference](../user-guide/04-cli-reference.md) — every sub-command, flag, and output mode.
 - [Review Rules](../user-guide/05-review-rules.md) — customize what gets reviewed.
-- [Integrations](../integration/02-agent-skill.md) — embed OCR in Claude Code, an Agent skill, or CI.
+- [Integrations](../integration/02-agent-skill.md) — embed OCR in Codex, an Agent skill, or CI.
 - [FAQ](../user-guide/06-faq.md) — known errors and remedies.

@@ -29,6 +29,12 @@ Design documents use this structure:
 - Can be superseded by ADRs when decisions are finalized
 - Keep drafts as status "Research note" until ready for review
 
+## Links
+
+- [Architecture Decisions](../adr/README.md)
+- [Architecture Overview](../architecture/01-overview.md)
+- [Internal Packages](../internal/README.md)
+
 ## Index
 
 | # | Title | Status | Feeds into |

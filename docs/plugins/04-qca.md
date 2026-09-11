@@ -1,4 +1,11 @@
-# QCA Forward integration
+# 04. QCA
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 This integration runs Open Code Review in delegation mode inside a QCA
 Forward session. OCR performs deterministic file selection and rule
@@ -7,11 +14,11 @@ key is required.
 
 ## Assets
 
-- [`template.example.json`](template.example.json) is a Forward Template
+- [`template.example.json`](../../plugins/open-code-review/qca/template.example.json) is a Forward Template
   example. Replace the skill and environment placeholders before publishing.
-- [`system-prompt.md`](system-prompt.md) is the canonical system prompt for the
+- [`05-qca-system-prompt.md`](05-qca-system-prompt.md) is the canonical system prompt for the
   template.
-- [`../../../skills/open-code-review-delegate/SKILL.md`](../../../skills/open-code-review-delegate/SKILL.md)
+- [`05-plugin-open-code-review-delegate-skill.md`](../skills/05-plugin-open-code-review-delegate-skill.md)
   is the Skill package to publish and bind to the template.
 
 ## Runtime requirements

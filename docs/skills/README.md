@@ -2,9 +2,19 @@
 
 This directory contains documentation for OpenCodeReview's portable agent skills.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-skills-overview.md) | Skills Overview | Active |
+| [02](02-open-code-review-skill.md) | Core Review Skill | Active |
+| [03](03-open-code-review-delegate-skill.md) | Delegate Skill | Active |
+| [04](04-plugin-open-code-review-skill.md) | Plugin Skill | Active |
+| [05](05-plugin-open-code-review-delegate-skill.md) | Plugin Delegate Skill | Active |
+
 ## What are Agent Skills?
 
-Agent skills are portable, platform-agnostic instruction files that teach AI coding agents (Claude Code, Codex, Cursor, etc.) how to use OpenCodeReview for code review.
+Agent skills are portable, platform-agnostic instruction files that teach AI coding agents (Codex, OpenCode, etc.) how to use OpenCodeReview for code review.
 
 ## Available Skills
 
@@ -35,21 +45,16 @@ When to invoke this skill.
 
 ## Installation
 
-### Claude Code
+Skills are plain folders with a `SKILL.md` inside. Copy them into your
+agent's skills directory:
 
 ```bash
-# Skills are auto-discovered from .claude/skills/
+cp -R /path/to/open-code-review/skills/open-code-review <skills-dir>/
+npx skills add alibaba/open-code-review --skill open-code-review
 ```
 
-### Cursor
-
-```bash
-# Copy skills to Cursor skills directory
-```
-
-### Other Agents
-
-See [Integration Guide](../integration/02-agent-skill.md).
+See [Installation](../integration/02-agent-skill.md#install) for the
+skills-directory locations of common agents.
 
 ## Links
 

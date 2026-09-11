@@ -1,1 +1,1 @@
-../docs/governance/04-pull-request-template.md
+../docs/governance/05-pull-request-guidelines.md

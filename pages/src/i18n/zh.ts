@@ -295,7 +295,6 @@ export const zh: TranslationKeys = {
   'docs.sidebar.telemetry': '遥测',
   'docs.sidebar.integrations': '集成',
   'docs.sidebar.agentSkill': 'Agent Skill',
-  'docs.sidebar.claudeCode': 'Command（Claude Code）',
   'docs.sidebar.delegate': '委托模式',
   'docs.sidebar.cicd': 'CI/CD',
   'docs.sidebar.contributing': '贡献',

@@ -1,4 +1,9 @@
-# 10. Telemetry Package
+# 10. Telemetry
+
+`internal/telemetry`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/telemetry` package provides OpenTelemetry-based observability for the OpenCodeReview CLI: config resolution, event/span helpers, and human-readable trace summaries printed to the terminal.
 

@@ -1,4 +1,11 @@
-# 02. Contributing to OpenCodeReview
+# 01. Contributing
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 Thank you for your interest in contributing to OpenCodeReview! Every contribution matters — whether it's fixing a typo, reporting a bug, or implementing a new feature.
 
@@ -153,7 +160,7 @@ Documentation is a crucial part of OpenCodeReview. We welcome improvements to RE
 - Clarifying confusing explanations or adding missing context
 - Adding usage examples for commands or configuration options
 - Updating outdated content (e.g., after a feature change)
-- Translating or improving localized documentation (`README.zh-CN.md`, `README.ja-JP.md`, `README.ko-KR.md`, `README.ru-RU.md`, `../../CONTRIBUTING.zh-CN.md`, `../../CONTRIBUTING.ja-JP.md`, `../../CONTRIBUTING.ko-KR.md`, `../../CONTRIBUTING.ru-RU.md`)
+- Translating or improving localized documentation (`pages/src/content/docs/zh/`, `pages/src/content/docs/ja/`, `pages/src/content/docs/ru/`)
 
 ### Documentation Workflow
 
@@ -166,15 +173,10 @@ Documentation is a crucial part of OpenCodeReview. We welcome improvements to RE
 | File                    | Purpose                              |
 | ----------------------- | ------------------------------------ |
 | `README.md`             | Main project documentation (English) |
-| `README.zh-CN.md`       | Chinese translation                  |
-| `README.ja-JP.md`       | Japanese translation                 |
-| `README.ko-KR.md`       | Korean translation                   |
-| `README.ru-RU.md`       | Russian translation                  |
-| `../../CONTRIBUTING.md`       | Contribution guide (English)         |
-| `../../CONTRIBUTING.zh-CN.md` | Contribution guide (Chinese)         |
-| `../../CONTRIBUTING.ja-JP.md` | Contribution guide (Japanese)        |
-| `../../CONTRIBUTING.ko-KR.md` | Contribution guide (Korean)          |
-| `../../CONTRIBUTING.ru-RU.md` | Contribution guide (Russian)         |
+| `pages/src/content/docs/zh/` | Chinese documentation site source    |
+| `pages/src/content/docs/ja/` | Japanese documentation site source   |
+| `pages/src/content/docs/ru/` | Russian documentation site source    |
+| `docs/development/01-contributing.md` | Contribution guide (English) |
 
 ## Submitting Changes
 

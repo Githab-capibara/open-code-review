@@ -2,16 +2,17 @@
 
 This directory contains development-related documentation.
 
+## Index
+
+| # | Title | Status |
+|---|---|---|
+| [01](01-contributing.md) | Contributing | Active |
+
 ## Documents
 
 | Guide | Purpose |
 |-------|---------|
-| [01-claude.md](01-claude.md) | See Agents Guidelines |
-| [02-contributing.md](02-contributing.md) | Contribution workflow and coding guidelines |
-| [03-claude-code-environment.md](03-claude-code-environment.md) | Claude Code environment setup |
-| [04-command-commit.md](04-command-commit.md) | Commit command documentation |
-| [05-command-open-code-review.md](05-command-open-code-review.md) | OCR review command documentation |
-| [06-command-tag.md](06-command-tag.md) | Git tag command documentation |
+| [01-contributing.md](01-contributing.md) | Contribution workflow and coding guidelines |
 
 ## Getting Started
 
@@ -39,7 +40,7 @@ make test
 ## Development Workflow
 
 1. Create a branch for your change
-2. Make your changes following [coding guidelines](02-contributing.md)
+2. Make your changes following [coding guidelines](01-contributing.md)
 3. Run `make check` to format and validate
 4. Run `make test` to verify tests pass
 5. Commit with clear English commit messages

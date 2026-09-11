@@ -1,5 +1,12 @@
 # 02. Code of Conduct
 
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
+
 We are committed to a welcoming, safe, and respectful community.
 
 ## Expected Behavior

@@ -1,4 +1,9 @@
-# 11. Delegate Package
+# 11. Delegate
+
+`internal/delegate`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/delegate` package provides the deterministic "spec" generation for delegation mode — the mode where the user's own AI coding agent (not OCR's configured LLM) performs the review.
 

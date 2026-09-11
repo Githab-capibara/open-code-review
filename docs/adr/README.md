@@ -64,3 +64,9 @@ Use [`template.md`](template.md) as the starting point.
 | [01](01-record-architecture-decisions.md) | Record architecture decisions | Accepted |
 
 Keep this index in sync when you land a new ADR.
+
+## Links
+
+- [Architecture Overview](../architecture/01-overview.md)
+- [Design Documents](../design/README.md)
+- [Internal Packages](../internal/README.md)

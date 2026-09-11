@@ -1,4 +1,4 @@
-# 01. Design overview
+# 01. Design Overview
 
 - **Status:** Accepted
 - **Date:** 2026-08-23

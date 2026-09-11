@@ -1,4 +1,9 @@
-# 06. Path Utility Package
+# 06. Pathutil
+
+`internal/pathutil`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/pathutil` package provides safe, repository-scoped path handling used across file-reading tools and session storage.
 

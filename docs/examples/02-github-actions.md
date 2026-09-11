@@ -1,4 +1,11 @@
-# OpenCodeReview - GitHub Actions Workflow
+# 02. GitHub Actions
+
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
 
 This directory provides a ready-to-use GitHub Actions workflow demo that integrates OpenCodeReview into your repository to automatically review Pull Requests and post inline review comments. Copy it into `.github/workflows/` and configure the required secrets/vars.
 

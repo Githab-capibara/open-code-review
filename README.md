@@ -25,9 +25,7 @@
   <a href="#supported-platforms"><img alt="Windows" src="https://img.shields.io/badge/Windows-supported-blue.svg" /></a>
   <a href="#supported-platforms"><img alt="macOS" src="https://img.shields.io/badge/macOS-supported-blue.svg" /></a>
   <a href="#supported-platforms"><img alt="Linux" src="https://img.shields.io/badge/Linux-supported-blue.svg" /></a>
-  <a href="#supported-agents"><img alt="Claude Code" src="https://img.shields.io/badge/Claude_Code-supported-blueviolet.svg" /></a>
   <a href="#supported-agents"><img alt="Codex" src="https://img.shields.io/badge/Codex-supported-blueviolet.svg" /></a>
-  <a href="#supported-agents"><img alt="Cursor" src="https://img.shields.io/badge/Cursor-supported-blueviolet.svg" /></a>
 </p>
 <p align="center">
   <a href="https://open-codereview.ai">Website</a> | <a href="https://discord.gg/opencode-review">Discord</a> | <a href="./docs/README.md">Docs</a> | <a href="https://open-codereview.ai">Live App</a>
@@ -170,9 +168,7 @@ Full documentation lives at **[open-codereview.ai/docs](https://open-codereview.
 - [Configuration](https://open-codereview.ai/docs/configuration) — config keys and environment variables
 - [MCP Server](https://open-codereview.ai/docs/mcp) — extend the review agent with external tools
 - Coding Agent Integrations — choose the platform you use
-  - [Claude Code](plugins/open-code-review/README.md#claude-code) — install a plugin with review slash commands
   - [Codex](plugins/open-code-review/README.md#codex) — install a plugin with callable review skills
-  - [Cursor](plugins/open-code-review/README.md#cursor) — install a plugin with portable review skills
   - [OpenCode](plugins/open-code-review/opencode/README.md) — install native review tools and slash commands
   - [QCA Forward](plugins/open-code-review/qca/README.md) — run delegation mode with the QCA host model and a ready-to-publish template
   - [Skill-compatible agents](https://open-codereview.ai/docs/agent-skill) — install the portable agent skill
@@ -186,7 +182,7 @@ Full documentation lives at **[open-codereview.ai/docs](https://open-codereview.
 
 ## Contributing
 
-This project exists thanks to all the people who contribute. See [Contributing](docs/development/02-contributing.md) for development setup, coding guidelines, and how to submit pull requests.
+This project exists thanks to all the people who contribute. See [Contributing](docs/development/01-contributing.md) for development setup, coding guidelines, and how to submit pull requests.
 
 <a href="https://github.com/alibaba/open-code-review/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=alibaba/open-code-review" />

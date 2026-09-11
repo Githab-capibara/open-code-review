@@ -1,4 +1,8 @@
-# 01. Agent Package
+# 01. Agent
+
+`internal/agent`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
 
 The `internal/agent` package implements the core review agent that orchestrates the code-review loop over a set of diffs.
 

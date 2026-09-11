@@ -1,5 +1,12 @@
 # 04. CLI Reference
 
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## What you'll learn
+
+
 The complete reference for every `ocr` subcommand, flag, and exit
 behaviour.
 
@@ -539,7 +546,7 @@ Examples:
 
 Starts an embedded HTTP server that reads
 `~/.opencodereview/sessions/...` and renders past review sessions in a
-browser-friendly UI. See [Session Viewer](../integration/06-viewer.md).
+browser-friendly UI. See [Session Viewer](../integration/05-viewer.md).
 
 ## `ocr version`
 

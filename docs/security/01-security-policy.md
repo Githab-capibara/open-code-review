@@ -1,5 +1,16 @@
 # 01. Security Policy
 
+**Status:** Active
+**Last Updated:** 2026-09-09
+**Maintainer:** @Githab-capibara
+
+## Purpose
+
+This document defines the security policy for OpenCodeReview (OCR): which
+versions receive security updates, how vulnerabilities are reported, and the
+response timeline for triage, fix, and disclosure.
+
+
 ## Supported Versions
 
 | Version | Supported          |

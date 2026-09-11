@@ -1,4 +1,9 @@
-# 09. MCP Package
+# 09. MCP
+
+`internal/mcp`
+
+**Status:** Active · **Date:** 2026-09-09 · **Maintainer:** @Githab-capibara
+
 
 The `internal/mcp` package connects OpenCodeReview to Model Context Protocol servers: it launches/connects to MCP servers, calls their tools, and registers those tools into the review agent's `tool.Registry`.
 
