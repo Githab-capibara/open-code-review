@@ -12,6 +12,7 @@ interface ReviewInput {
   to?: string
   resume?: string
   background?: string
+  backgroundFile?: string
   exclude?: string
   model?: string
   concurrency?: number
@@ -43,17 +44,20 @@ interface RunResult {
 
 class OcrExecutionError extends Error {
   readonly exitCode: number | null
+  readonly signal: NodeJS.Signals | null
   readonly stderr: string
   readonly stdout: string
 
   constructor(message: string, result: {
     exitCode: number | null
+    signal?: NodeJS.Signals | null
     stderr?: string
     stdout?: string
   }) {
     super(message)
     this.name = "OcrExecutionError"
     this.exitCode = result.exitCode
+    this.signal = result.signal ?? null
     this.stderr = result.stderr ?? ""
     this.stdout = result.stdout ?? ""
   }
@@ -79,6 +83,11 @@ function buildReviewArgs(input: ReviewInput, repo: string): string[] {
   if (input.preview && input.resume) {
     throw new Error("'preview' and 'resume' cannot be used together.")
   }
+  // OCR warns on stderr and lets the file win, but formatReviewResult drops
+  // stderr on exit 0, so the caller would never see it.
+  if (input.background && input.backgroundFile) {
+    throw new Error("Use either 'background' or 'backgroundFile', not both.")
+  }
 
   const args = ["review", "--audience", "agent"]
   if (!input.preview) {
@@ -91,6 +100,7 @@ function buildReviewArgs(input: ReviewInput, repo: string): string[] {
   pushValue(args, "--to", input.to)
   pushValue(args, "--resume", input.resume)
   pushValue(args, "--background", input.background)
+  pushValue(args, "--background-file", input.backgroundFile)
   pushValue(args, "--exclude", input.exclude)
   pushValue(args, "--model", input.model)
   pushValue(args, "--concurrency", input.concurrency)
@@ -205,23 +215,27 @@ async function runOcr(args: string[], options: RunOptions): Promise<RunResult> {
       finish(() => reject(new OcrExecutionError(message, { exitCode: null })))
     })
 
-    child.on("close", (exitCode) => {
+    child.on("close", (exitCode, signal) => {
       closed = true
       clearTimeout(forceKillTimer)
       finish(() => {
-        const result = {
-          stdout: Buffer.concat(stdoutChunks).toString("utf8").trim(),
-          stderr: Buffer.concat(stderrChunks).toString("utf8").trim(),
-          exitCode: exitCode ?? 1,
-        }
-        if (exitCode !== 0) {
-          reject(new OcrExecutionError(
-            result.stderr || result.stdout || `OpenCodeReview exited with code ${result.exitCode}.`,
-            result,
-          ))
+        const stdout = Buffer.concat(stdoutChunks).toString("utf8").trim()
+        const stderr = Buffer.concat(stderrChunks).toString("utf8").trim()
+        if (exitCode === 0) {
+          resolve({ stdout, stderr, exitCode })
           return
         }
-        resolve(result)
+        // A signal kill reports a null exit code. Naming the signal keeps it
+        // distinguishable from a genuine exit 1 when OCR wrote no output.
+        // `?? 1` keeps the message numeric: close always reports one of the
+        // two, but neither is typed as non-null.
+        const cause = signal
+          ? `was terminated by signal ${signal}`
+          : `exited with code ${exitCode ?? 1}`
+        reject(new OcrExecutionError(
+          stderr || stdout || `OpenCodeReview ${cause}.`,
+          { exitCode, signal, stdout, stderr },
+        ))
       })
     })
 
@@ -285,6 +299,11 @@ const reviewArgs = {
   to: optionalString("Target ref for a branch/range comparison. Must be paired with 'from'."),
   resume: optionalString("Resume a previous OCR review session by ID."),
   background: optionalString("Business or requirement context that the implementation should satisfy."),
+  backgroundFile: optionalString(
+    "Path to a Markdown file holding the review background, for context too long to pass inline. " +
+      "A relative path resolves against the repository root; an absolute path is used as given. " +
+      "Cannot be combined with 'background'.",
+  ),
   exclude: optionalString("Comma-separated gitignore-style exclusion patterns."),
   model: optionalString("Override the model configured in OpenCodeReview."),
   concurrency: optionalPositiveInt("Maximum concurrent file reviews."),
@@ -433,6 +452,7 @@ const reviewInputSchema = {
     to: { type: "string", description: "Target ref for a branch/range comparison. Must be paired with 'from'." },
     resume: { type: "string", description: "Resume a previous OCR review session by ID." },
     background: { type: "string", description: "Business or requirement context that the implementation should satisfy." },
+    backgroundFile: { type: "string", description: "Path to a Markdown file holding the review background, for context too long to pass inline. A relative path resolves against the repository root; an absolute path is used as given. Cannot be combined with 'background'." },
     exclude: { type: "string", description: "Comma-separated gitignore-style exclusion patterns." },
     model: { type: "string", description: "Override the model configured in OpenCodeReview." },
     concurrency: { type: "integer", minimum: 1, description: "Maximum concurrent file reviews." },
