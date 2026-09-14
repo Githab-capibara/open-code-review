@@ -544,10 +544,8 @@ func (a *Agent) recordWarning(warningType, file, message string) {
 	a.runner.RecordWarning(warningType, file, message)
 }
 
-// loadDiffs populates the diff-related fields.
-func (a *Agent) loadDiffs(ctx context.Context) error {
-	var provider *diff.Provider
-
+// newDiffProvider resolves the configured input to a diff provider.
+func (a *Agent) newDiffProvider() *diff.Provider {
 	// A sealed input substitutes the commit SHAs a pre-flight resolve already froze
 	// for the refs the user typed. Both loads then read the same immutable objects,
 	// which is what makes this run's input provably the admitted one: a ref moving
@@ -569,12 +567,17 @@ func (a *Agent) loadDiffs(ctx context.Context) error {
 
 	switch {
 	case commit != "":
-		provider = diff.NewCommitProvider(a.args.RepoDir, commit, a.args.GitRunner)
+		return diff.NewCommitProvider(a.args.RepoDir, commit, a.args.GitRunner)
 	case from != "" && to != "":
-		provider = diff.NewProvider(a.args.RepoDir, from, to, a.args.GitRunner)
+		return diff.NewProvider(a.args.RepoDir, from, to, a.args.GitRunner)
 	default:
-		provider = diff.NewWorkspaceProvider(a.args.RepoDir, a.args.GitRunner)
+		return diff.NewWorkspaceProvider(a.args.RepoDir, a.args.GitRunner)
 	}
+}
+
+// loadDiffs populates the diff-related fields used by normal review runs.
+func (a *Agent) loadDiffs(ctx context.Context) error {
+	provider := a.newDiffProvider()
 
 	parsed, err := provider.GetDiff(ctx)
 	if err != nil {
@@ -590,8 +593,8 @@ func (a *Agent) loadDiffs(ctx context.Context) error {
 	a.inputResolution = provider.ResolveInput(ctx)
 	a.repoRemoteIdentity = provider.RemoteIdentity(ctx)
 
-	for i := range parsed {
-		d := &parsed[i]
+	for i := range a.diffs {
+		d := &a.diffs[i]
 		a.totalInsertions += d.Insertions
 		a.totalDeletions += d.Deletions
 	}

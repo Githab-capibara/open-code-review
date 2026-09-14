@@ -99,7 +99,7 @@ candidate file with the **reason** it was kept or dropped:
 ```
 src/foo.go              modified
 src/foo_test.go         modified  (excluded: user_exclude)
-node_modules/lib.js     added     (excluded: default_path)
+node_modules/lib.js     added     (excluded: provider_directory)
 imgs/logo.png           binary    (excluded: unsupported_ext)
 ```
 
@@ -112,6 +112,7 @@ The exclusion reasons map to gates in the
 | `user_exclude` | Remove the pattern from your `exclude` list. |
 | `unsupported_ext` | Add the extension to your `include` list to bypass the allowlist gate. |
 | `default_path` | Add the file to `include` — that overrides built-in test-file exclude patterns. |
+| `provider_directory` | Nothing to do — provider directories such as `vendor/` and `node_modules/` are never reviewable, even when included. |
 | `deleted` | Nothing to do — there's no new content to review. |
 | `too_large` | The diff alone exceeds 80% of `max_tokens`. Raise `--max-tokens` (or the saved `max_tokens`), or split the change into smaller commits. |
 
