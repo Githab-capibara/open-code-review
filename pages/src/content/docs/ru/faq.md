@@ -98,15 +98,17 @@ curl http://127.0.0.1:11434/v1/chat/completions -H "Content-Type: application/js
 
 ### Мой файл не проверяется
 
-Запустите `ocr review --preview` (без затрат на LLM). В выводе перечислены все
-файлы-кандидаты с **причиной**, по которой каждый из них был оставлен или
-исключён:
+Запустите `ocr review --preview` (без затрат на LLM). В выводе для каждого
+файла-кандидата указана **причина**, по которой он был оставлен или
+исключён. Файлы в каталогах provider, например `vendor/` и `node_modules/`,
+в терминале сворачиваются в одну строку; `ocr review --preview --format json`
+по-прежнему перечисляет каждую запись:
 
 ```
 src/foo.go              modified
 src/foo_test.go         modified  (excluded: user_exclude)
-node_modules/lib.js     added     (excluded: provider_directory)
 imgs/logo.png           binary    (excluded: unsupported_ext)
+3 file(s) in provider directories (node_modules/) — not reviewable
 ```
 
 Причины исключения соответствуют этапам
