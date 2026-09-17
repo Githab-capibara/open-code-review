@@ -1,3 +1,5 @@
+- **Authors:** @Githab-capibara
+
 <div align="center">
   <a href="https://open-codereview.ai">
     <img src="../../imgs/logo-core.svg" alt="OpenCodeReview logo" width="180" />

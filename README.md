@@ -1,3 +1,5 @@
+- **Authors:** @Githab-capibara
+
 <div align="center">
   <a href="https://open-codereview.ai">
     <img src="imgs/logo-core.svg" alt="OpenCodeReview logo" width="180" />
@@ -168,6 +170,8 @@ ocr delegate rule src/main.go src/handler.go
 
 ## Documentation
 
+Repository documentation lives in **[docs/](docs/README.md)** — [master index](docs/README.md) with guides, architecture, ADRs, and security docs.
+
 Full documentation lives at **[open-codereview.ai/docs](https://open-codereview.ai/docs)**:
 
 - [Quickstart](https://open-codereview.ai/docs/quickstart) — install and run your first review
@@ -193,7 +197,7 @@ Full documentation lives at **[open-codereview.ai/docs](https://open-codereview.
 
 ## Contributing
 
-This project exists thanks to all the people who contribute. See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, coding guidelines, and how to submit pull requests.
+This project exists thanks to all the people who contribute. See [docs/08-guides/01-contributing.md](docs/08-guides/01-contributing.md) for development setup, coding guidelines, and how to submit pull requests.
 
 <a href="https://github.com/alibaba/open-code-review/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=alibaba/open-code-review" />

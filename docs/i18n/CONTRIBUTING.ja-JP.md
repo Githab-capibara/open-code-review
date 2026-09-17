@@ -1,8 +1,10 @@
 # OpenCodeReviewへのコントリビューション
 
+- **Authors:** @Githab-capibara
+
 OpenCodeReviewへのコントリビューションに興味を持っていただきありがとうございます！タイポの修正、バグ報告、新機能の実装など、あらゆる貢献が重要です。
 
-[English Version](../../CONTRIBUTING.md) | [简体中文版](CONTRIBUTING.zh-CN.md) | [한국어](CONTRIBUTING.ko-KR.md) | [Русский](CONTRIBUTING.ru-RU.md)
+[English Version](../08-guides/01-contributing.md) | [简体中文版](CONTRIBUTING.zh-CN.md) | [한국어](CONTRIBUTING.ko-KR.md) | [Русский](CONTRIBUTING.ru-RU.md)
 
 ## 行動規範
 
@@ -177,7 +179,7 @@ AI を開発に使った場合は、下記のルールに従ってください�
 | --------------------------------- | ---------------------------------------- |
 | `README.md`                       | メインのプロジェクトドキュメント（英語） |
 | `docs/i18n/README.zh-CN.md`       | 中国語訳                                 |
-| `CONTRIBUTING.md`                 | コントリビューションガイド（英語）       |
+| `docs/08-guides/01-contributing.md` | コントリビューションガイド（英語） |
 | `docs/i18n/CONTRIBUTING.zh-CN.md` | コントリビューションガイド（中国語）     |
 
 ## 変更の提出

@@ -1,8 +1,10 @@
 # 贡献指南
 
+- **Authors:** @Githab-capibara
+
 感谢你对 OpenCodeReview 的关注！无论是修复拼写错误、报告 Bug，还是实现新功能，每一份贡献都很有价值。
 
-[English version](../../CONTRIBUTING.md) | [日本語版](CONTRIBUTING.ja-JP.md) | [한국어](CONTRIBUTING.ko-KR.md) | [Русский](CONTRIBUTING.ru-RU.md)
+[English version](../08-guides/01-contributing.md) | [日本語版](CONTRIBUTING.ja-JP.md) | [한국어](CONTRIBUTING.ko-KR.md) | [Русский](CONTRIBUTING.ru-RU.md)
 
 ## 行为准则
 
@@ -177,7 +179,7 @@ make build
 | --------------------------------- | ------------------ |
 | `README.md`                       | 项目主文档（英文） |
 | `docs/i18n/README.zh-CN.md`       | 中文翻译           |
-| `CONTRIBUTING.md`                 | 贡献指南（英文）   |
+| `docs/08-guides/01-contributing.md` | 贡献指南（英文） |
 | `docs/i18n/CONTRIBUTING.zh-CN.md` | 贡献指南（中文）   |
 
 ## 提交变更

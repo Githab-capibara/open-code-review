@@ -1,0 +1,250 @@
+# 01. OpenCodeReview Governance
+
+- **Authors:** @Githab-capibara
+
+- **Status:** Accepted
+- **Date:** 2026-09-16
+- **Deciders:** @lizhengfeng101
+- **Related:** [Code of Conduct](../08-guides/02-code-of-conduct.md), [Contributing](../08-guides/01-contributing.md), [Security Policy](../07-security/02-security-policy.md)
+
+## Context
+
+OpenCodeReview (OCR) is an open-source project with multiple components
+and maintainers. It needs a governance model that keeps the project open
+to contributors, pragmatic in day-to-day decision making, transparent in
+technical direction, and safe for public API and security-sensitive
+changes.
+
+## Decision
+
+We document how OpenCodeReview is governed today and how technical
+decisions are made, reflecting the project's current open development
+practice. As OCR grows, this document may evolve to support a more
+formal governance model.
+
+## Goals
+
+OpenCodeReview governance is designed to keep the project:
+
+- open to contributors and users
+- pragmatic in day-to-day decision making
+- transparent in technical direction
+- safe for public API and security-sensitive changes
+- sustainable across multiple components and maintainers
+
+## Scope
+
+This document applies to the OpenCodeReview repository and its major
+public surfaces, including:
+
+- the CLI tool and its subcommands
+- LLM integration and provider interfaces
+- diff parsing and code review engine
+- configuration and plugin system
+- SDKs, examples, and project documentation
+
+## Project values
+
+OpenCodeReview maintainers and contributors are expected to act
+consistently with these principles:
+
+- **Open development**: design discussion, issue tracking, and code
+  review happen in public whenever possible.
+- **Compatibility awareness**: CLI behavior, configuration formats, and
+  documented user workflows should not change casually.
+- **Security first**: changes affecting credentials, API keys, or
+  execution safety require extra scrutiny.
+- **Component ownership with cross-project accountability**: subsystem
+  maintainers own their areas, while cross-cutting changes require
+  broader review.
+- **Documentation and implementation alignment**: public contracts, code,
+  examples, and docs should stay consistent.
+
+## Roles
+
+### Contributors
+
+Contributors are anyone who participates in the project, including by:
+
+- opening issues or discussions
+- submitting pull requests
+- reviewing code
+- improving docs, tests, examples, or tooling
+
+Contributors are expected to follow:
+
+- the [Code of Conduct](../08-guides/02-code-of-conduct.md)
+- the [Contributing guide](../08-guides/01-contributing.md)
+- the [Security Policy](../07-security/02-security-policy.md) for
+  vulnerability reporting
+
+### Maintainers
+
+Maintainers are trusted contributors who have demonstrated sustained,
+high-quality contributions and a solid understanding of the codebase.
+They have:
+
+- write access to the repository
+- authority to review and merge pull requests
+- responsibility to uphold code quality and project standards
+
+Maintainer responsibilities include:
+
+- reviewing pull requests for owned areas
+- helping preserve code quality, compatibility, and security
+- requesting cross-component review when a change affects other surfaces
+- keeping implementation, tests, docs, and examples aligned when needed
+- helping contributors land changes successfully
+
+New Maintainers are nominated by existing Maintainers and approved by
+the Project Lead.
+
+### Project Lead
+
+The Project Lead provides overall direction for the project and has
+final authority on decisions when consensus cannot be reached. The
+current Project Lead is [@lizhengfeng101](https://github.com/lizhengfeng101).
+
+## Decision making
+
+### Day-to-day changes
+
+Most changes are made through the normal pull request workflow described
+in the [Contributing guide](../08-guides/01-contributing.md):
+
+1. discuss the change in an issue when appropriate
+2. submit a pull request
+3. pass automated checks
+4. receive maintainer review for affected areas
+5. address feedback
+6. merge once approved
+
+Normal changes are decided by maintainer review and rough consensus.
+
+### Significant changes
+
+Changes with broader impact require wider review. This includes changes
+to:
+
+- CLI behavior or command interfaces
+- LLM provider integration interfaces
+- configuration formats or defaults
+- diff parsing or review engine behavior
+- security-sensitive areas such as credential handling
+
+For these changes, maintainers should seek explicit review from all
+materially affected areas, not just the first area touched by the patch.
+
+Significant changes (new features, architectural changes, breaking
+changes) should be proposed via a GitHub Issue before implementation to
+allow community discussion.
+
+### Consensus and voting
+
+OpenCodeReview prefers **lazy consensus** for most technical decisions:
+
+- if affected maintainers agree, the change may proceed
+- if concerns are raised, they should be addressed in the PR or issue
+  discussion
+
+If consensus cannot be reached in a reasonable time, the Project Lead
+has final decision-making authority.
+
+## Reviews and merge expectations
+
+The following expectations apply before merge:
+
+- relevant CI checks should pass, or failures must be understood and
+  accepted by maintainers
+- at least one maintainer of the affected area should review the change
+- cross-cutting changes should be reviewed by all materially affected
+  areas when practical
+- breaking changes should be clearly called out, with migration guidance
+  where needed
+- docs and tests should be updated when behavior changes
+
+Maintainers may decline or defer a change if it:
+
+- conflicts with approved design direction
+- introduces unnecessary compatibility risk
+- weakens security without a strong justification
+- mixes unrelated work into a single change
+
+## Communication channels
+
+The project's public collaboration channels are:
+
+- GitHub Issues for bugs, feature requests, and implementation questions
+- GitHub Discussions for broader design discussion and community help
+- pull requests for concrete code and documentation review
+
+Security issues should follow the private reporting guidance in the
+[Security Policy](../07-security/02-security-policy.md).
+
+## Continuity
+
+OpenCodeReview is hosted under the
+[Alibaba](https://github.com/alibaba) GitHub organization. Multiple
+members of the organization have administrative access to the
+repository, ensuring that the project can continue to operate even if
+any single individual becomes unavailable.
+
+Additionally:
+
+- Multiple Maintainers are familiar with the full codebase, ensuring no
+  single point of failure in terms of project knowledge.
+- The bus factor of the project is greater than one — critical
+  subsystems (agent, LLM integration, diff parsing, configuration) are
+  understood by more than one person.
+- Repository credentials, CI/CD pipelines, and release processes are
+  accessible to multiple team members within the Alibaba organization.
+
+## Becoming a maintainer
+
+New maintainers are selected based on sustained, high-quality
+contribution to the project.
+
+Signals that someone may be ready for maintainership include:
+
+- repeated high-quality code or documentation contributions
+- strong reviews and constructive technical feedback
+- reliable follow-through on owned work
+- good judgment on compatibility, security, and project direction
+- collaborative behavior with contributors and maintainers
+
+The typical process is:
+
+1. nomination by an existing Maintainer
+2. discussion among Maintainers and the Project Lead
+3. no unresolved objections after a reasonable review period
+4. granting of write access and update of any relevant maintainer
+   records
+
+## Maintainer inactivity and removal
+
+Maintainers may step down at any time by notifying the project.
+
+The Project Lead may also update maintainer status when someone has been
+inactive for an extended period, for example several months without
+meaningful review or maintenance activity.
+
+Removal should be handled respectfully and pragmatically, with the goal
+of keeping ownership accurate rather than punitive.
+
+Maintainers may also be removed for serious violations of project
+expectations, including repeated abuse of project privileges or
+violations of the [Code of Conduct](../08-guides/02-code-of-conduct.md).
+
+## Changes to governance
+
+Changes to this governance document should be made through a public pull
+request.
+
+Governance changes should receive review from Maintainers and the
+Project Lead, and should not be merged without giving maintainers and
+contributors a reasonable opportunity to comment.
+
+## Related
+
+- [Roadmap](../10-roadmap/01-roadmap.md)
+- [AI contributor policy](../08-guides/04-ai-contributor-policy.md)

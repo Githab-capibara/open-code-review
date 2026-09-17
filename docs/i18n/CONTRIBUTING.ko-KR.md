@@ -1,8 +1,10 @@
 # OpenCodeReview 기여 가이드
 
+- **Authors:** @Githab-capibara
+
 OpenCodeReview에 기여해 주셔서 감사합니다. 오타 수정, bug report, 새 기능 구현 등 모든 기여는 프로젝트에 도움이 됩니다.
 
-[English](../../CONTRIBUTING.md) | [简体中文版](CONTRIBUTING.zh-CN.md) | [日本語版](CONTRIBUTING.ja-JP.md) | 한국어 | [Русский](CONTRIBUTING.ru-RU.md)
+[English](../08-guides/01-contributing.md) | [简体中文版](CONTRIBUTING.zh-CN.md) | [日本語版](CONTRIBUTING.ja-JP.md) | 한국어 | [Русский](CONTRIBUTING.ru-RU.md)
 
 ## Code of Conduct
 
@@ -180,7 +182,7 @@ AI가 개발 과정에 관여했다면 아래 규칙을 따라 주세요.
 | `docs/i18n/README.zh-CN.md` | Chinese translation |
 | `docs/i18n/README.ja-JP.md` | Japanese translation |
 | `docs/i18n/README.ko-KR.md` | Korean translation |
-| `CONTRIBUTING.md` | contribution guide (English) |
+| `docs/08-guides/01-contributing.md` | contribution guide (English) |
 | `docs/i18n/CONTRIBUTING.zh-CN.md` | contribution guide (Chinese) |
 | `docs/i18n/CONTRIBUTING.ja-JP.md` | contribution guide (Japanese) |
 | `docs/i18n/CONTRIBUTING.ko-KR.md` | contribution guide (Korean) |
